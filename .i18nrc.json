@@ -1,0 +1,7 @@
+{
+  "prefix": "bpmining",
+  "paths": {
+    "bpmining": "."
+  },
+  "translations": ["translations/ja-JP.json"]
+}
