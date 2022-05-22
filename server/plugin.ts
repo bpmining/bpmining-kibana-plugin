@@ -4,12 +4,14 @@ import {
   CoreStart,
   Plugin,
   Logger,
-} from '../../../src/core/server';
+} from "../../../src/core/server";
 
-import { BpminingPluginSetup, BpminingPluginStart } from './types';
-import { defineRoutes } from './routes';
+import { BpminingPluginSetup, BpminingPluginStart } from "./types";
+import { defineRoutes } from "./routes";
 
-export class BpminingPlugin implements Plugin<BpminingPluginSetup, BpminingPluginStart> {
+export class BpminingPlugin
+  implements Plugin<BpminingPluginSetup, BpminingPluginStart>
+{
   private readonly logger: Logger;
 
   constructor(initializerContext: PluginInitializerContext) {
@@ -17,7 +19,7 @@ export class BpminingPlugin implements Plugin<BpminingPluginSetup, BpminingPlugi
   }
 
   public setup(core: CoreSetup) {
-    this.logger.debug('bpmining: Setup');
+    this.logger.debug("bpmining: Setup");
     const router = core.http.createRouter();
 
     // Register server side APIs
@@ -27,7 +29,7 @@ export class BpminingPlugin implements Plugin<BpminingPluginSetup, BpminingPlugi
   }
 
   public start(core: CoreStart) {
-    this.logger.debug('bpmining: Started');
+    this.logger.debug("bpmining: Started");
     return {};
   }
 

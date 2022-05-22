@@ -16,7 +16,10 @@
   "scripts": {
     "build": "yarn plugin-helpers build",
     "plugin-helpers": "node ../../scripts/plugin_helpers",
-    "kbn": "node ../../scripts/kbn"
+    "kbn": "node ../../scripts/kbn",
+    "prettier": "npx prettier '{common,public,server}/**/*.{js,jsx,ts,tsx,json,css,scss,md}' --check",
+    "lint-fix": "npm run prettier -- --write",
+    "prepare": "husky install"
   },
   "engines": {
     "node": ">=16.0.0",
@@ -34,10 +37,12 @@
     "@testing-library/user-event": "^14.2.0",
     "@types/react": "^18.0.9",
     "@types/react-dom": "^18.0.4",
+    "husky": "^8.0.1",
     "typescript": "^4.6.4"
   },
   "dependencies": {
     "@types/react-router-dom": "^5.3.3",
+    "prettier": "^2.6.2",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
     "react-router-dom": "^6.3.0"
