@@ -1,8 +1,8 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import { AppMountParameters, CoreStart } from "../../../src/core/public";
-import { AppPluginStartDependencies } from "./types";
-import { BpminingApp } from "./components/app";
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { AppMountParameters, CoreStart } from '../../../src/core/public';
+import { AppPluginStartDependencies } from './types';
+import { BpminingApp } from './components/app';
 
 export const renderApp = (
   { notifications, http }: CoreStart,

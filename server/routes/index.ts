@@ -1,9 +1,9 @@
-import { IRouter } from "../../../../src/core/server";
+import { IRouter } from '../../../../src/core/server';
 
 export function defineRoutes(router: IRouter) {
   router.get(
     {
-      path: "/api/bpmining/example",
+      path: '/api/bpmining/example',
       validate: false,
     },
     async (context, request, response) => {

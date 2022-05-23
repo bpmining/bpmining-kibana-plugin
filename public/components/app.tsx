@@ -1,7 +1,7 @@
-import React, { useState } from "react";
-import { i18n } from "@kbn/i18n";
-import { FormattedMessage, I18nProvider } from "@kbn/i18n-react";
-import { BrowserRouter as Router } from "react-router-dom";
+import React, { useState } from 'react';
+import { i18n } from '@kbn/i18n';
+import { FormattedMessage, I18nProvider } from '@kbn/i18n-react';
+import { BrowserRouter as Router } from 'react-router-dom';
 
 import {
   EuiButton,
@@ -14,37 +14,32 @@ import {
   EuiPageHeader,
   EuiTitle,
   EuiText,
-} from "@elastic/eui";
+} from '@elastic/eui';
 
-import { CoreStart } from "../../../../src/core/public";
-import { NavigationPublicPluginStart } from "../../../../src/plugins/navigation/public";
+import { CoreStart } from '../../../../src/core/public';
+import { NavigationPublicPluginStart } from '../../../../src/plugins/navigation/public';
 
-import { PLUGIN_ID, PLUGIN_NAME } from "../../common";
+import { PLUGIN_ID, PLUGIN_NAME } from '../../common';
 
 interface BpminingAppDeps {
   basename: string;
-  notifications: CoreStart["notifications"];
-  http: CoreStart["http"];
+  notifications: CoreStart['notifications'];
+  http: CoreStart['http'];
   navigation: NavigationPublicPluginStart;
 }
 
-export const BpminingApp = ({
-  basename,
-  notifications,
-  http,
-  navigation,
-}: BpminingAppDeps) => {
+export const BpminingApp = ({ basename, notifications, http, navigation }: BpminingAppDeps) => {
   // Use React hooks to manage state.
   const [timestamp, setTimestamp] = useState<string | undefined>();
 
   const onClickHandler = () => {
     // Use the core http service to make a response to the server API.
-    http.get("/api/bpmining/example").then((res) => {
+    http.get('/api/bpmining/example').then((res) => {
       setTimestamp(res.time);
       // Use the core notifications service to display a success message.
       notifications.toasts.addSuccess(
-        i18n.translate("bpmining.dataUpdated", {
-          defaultMessage: "Data updated",
+        i18n.translate('bpmining.dataUpdated', {
+          defaultMessage: 'Data updated',
         })
       );
     });
@@ -98,14 +93,11 @@ export const BpminingApp = ({
                       <FormattedMessage
                         id="bpmining.timestampText"
                         defaultMessage="Last timestamp: {time}"
-                        values={{ time: timestamp ? timestamp : "Unknown" }}
+                        values={{ time: timestamp ? timestamp : 'Unknown' }}
                       />
                     </p>
                     <EuiButton type="primary" size="s" onClick={onClickHandler}>
-                      <FormattedMessage
-                        id="bpmining.buttonText"
-                        defaultMessage="Get data"
-                      />
+                      <FormattedMessage id="bpmining.buttonText" defaultMessage="Get data" />
                     </EuiButton>
                   </EuiText>
                 </EuiPageContentBody>

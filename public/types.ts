@@ -1,4 +1,4 @@
-import { NavigationPublicPluginStart } from "../../../src/plugins/navigation/public";
+import { NavigationPublicPluginStart } from '../../../src/plugins/navigation/public';
 
 export interface BpminingPluginSetup {
   getGreeting: () => string;
