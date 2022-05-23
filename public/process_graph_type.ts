@@ -15,8 +15,8 @@ export const createProcessGraphTypeDefinition = (): VisTypeDefinition<ProcessGra
   title: 'bpmining',
   icon: 'controlsHorizontal',
   group: VisGroups.PROMOTED,
-  description:i18n.translate('process_graph.vis.processGraphDescription', {
-    defaultMessage:  'Kibana Process Mining Tool.',
+  description: i18n.translate('process_graph.vis.processGraphDescription', {
+    defaultMessage: 'Kibana Process Mining Tool.',
   }),
   visConfig: {
     defaults: {

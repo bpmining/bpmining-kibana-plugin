@@ -42,8 +42,7 @@ export class BpminingPlugin implements Plugin<BpminingPluginSetup, BpminingPlugi
     expressions.registerRenderer(processGraphVisRenderer);
 
     // Create the visualization type with definition
-    visualizations.createBaseVisualization(createProcessGraphTypeDefinition())
-
+    visualizations.createBaseVisualization(createProcessGraphTypeDefinition());
   }
 
   public start(core: CoreStart, { data }: StartDependencies) {

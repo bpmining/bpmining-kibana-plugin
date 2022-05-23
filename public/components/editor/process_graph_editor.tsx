@@ -9,16 +9,12 @@
 import React from 'react';
 
 import { VisEditorOptionsProps } from 'src/plugins/visualizations/public';
-import { ProcessGraphVisParams } from '../../types'
+import { ProcessGraphVisParams } from '../../types';
 
-
-export class ProcessGraphEditor extends React.Component<VisEditorOptionsProps<ProcessGraphVisParams>> {
-
+export class ProcessGraphEditor extends React.Component<
+  VisEditorOptionsProps<ProcessGraphVisParams>
+> {
   render() {
-    return(
-      <div>
-        Not needed.
-      </div>
-    );
+    return <div>Not needed.</div>;
   }
 }
