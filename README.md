@@ -48,6 +48,6 @@ git subtree push --prefix plugins/bpmining bpmining <branch>
   <dt><code>yarn kbn bootstrap</code></dt>
   <dd>Execute this to install node_modules and setup the dependencies in your plugin and in Kibana</dd>
 
-  <dt><code>yarn plugin-helpers build</code></dt>
+  <dt><code>yarn run build</code></dt>
   <dd>Execute this to create a distributable version of this plugin that can be installed in Kibana</dd>
 </dl>
