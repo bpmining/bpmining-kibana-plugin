@@ -2,10 +2,12 @@ import { CoreSetup, CoreStart, Plugin } from 'src/core/public';
 import { DataPublicPluginSetup, DataPublicPluginStart } from 'src/plugins/data/public';
 import { Plugin as ExpressionsPlugin } from 'src/plugins/expressions/public';
 import { VisualizationsSetup } from 'src/plugins/visualizations/public';
+
+import { processGraphVisFn } from './process_graph_vis_fn';
 import { setData } from './services';
 
 /** @internal */
-export interface BpminingVisualizationDependencies {
+export interface ProcessGraphVisualizationDependencies {
   core: CoreSetup;
   plugins: { data: DataPublicPluginSetup };
 }
@@ -23,7 +25,17 @@ export interface StartDependencies {
 }
 
 export class BpminingPlugin implements Plugin<BpminingPluginSetup, BpminingPluginStart> {
-  public setup(core: CoreSetup, { data, expressions, visualizations }: SetupDependencies) {}
+  public setup(core: CoreSetup, { data, expressions, visualizations }: SetupDependencies) {
+    const visualizationDependencies: Readonly<ProcessGraphVisualizationDependencies> = {
+      core,
+      plugins: {
+        data,
+      },
+    };
+
+    //Register an expression function with type "render" for the visualization
+    expressions.registerFunction( () => processGraphVisFn(visualizationDependencies));
+  }
 
   public start(core: CoreStart, { data }: StartDependencies) {
     setData(data);
