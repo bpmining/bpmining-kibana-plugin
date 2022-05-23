@@ -17,7 +17,7 @@
     "build": "node scripts/build.js",
     "plugin-helpers": "node ../../scripts/plugin_helpers",
     "kbn": "node ../../scripts/kbn",
-    "prettier": "npx prettier '{common,public,server}/**/*.{js,jsx,ts,tsx,json,css,scss,md}' --check",
+    "prettier": "npx prettier \"{common,public,server}/**/*.{js,jsx,ts,tsx,json,css,scss,md}\" --check",
     "lint-fix": "npm run prettier -- --write",
     "prepare": "husky install"
   },
