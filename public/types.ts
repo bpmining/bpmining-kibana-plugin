@@ -1,25 +1,25 @@
-import { AggExpressionType } from "src/plugins/data/common";
+import { AggExpressionType } from 'src/plugins/data/common';
 
 export interface ProcessGraphVisParams {
-    indexPatternId: string;
-    aggs?: AggExpressionType[];
+  indexPatternId: string;
+  aggs?: AggExpressionType[];
 }
-  
+
 export interface Node {
-    id: string;
-    label: string;
+  id: string;
+  label: string;
 }
-  
+
 export interface Edge {
-    from: string;
-    to: string;
+  from: string;
+  to: string;
 }
-  
+
 export interface DataItem {
-    id: number; 
-    label: string;
+  id: number;
+  label: string;
 }
 
 export interface VisData {
-    data: DataItem[];
+  data: DataItem[];
 }

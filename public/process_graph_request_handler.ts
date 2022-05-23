@@ -14,7 +14,7 @@ interface ProcessGraphRequestHandlerParams {
 }
 
 export function createProcessGraphRequestHandler({
-  core: { http, uiSettings }
+  core: { http, uiSettings },
 }: ProcessGraphVisualizationDependencies) {
   const { dataViews } = getData();
 

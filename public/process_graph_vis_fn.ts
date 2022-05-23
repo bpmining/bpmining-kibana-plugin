@@ -9,7 +9,7 @@
 import { ExpressionFunctionDefinition, Render } from 'src/plugins/expressions/public';
 import { KibanaContext, TimeRange, Query } from 'src/plugins/data/public';
 import { VisData, ProcessGraphVisParams } from './types';
-import { ProcessGraphVisualizationDependencies } from './plugin'
+import { ProcessGraphVisualizationDependencies } from './plugin';
 import { createProcessGraphRequestHandler } from './process_graph_request_handler';
 import { get } from 'lodash';
 
@@ -30,7 +30,7 @@ export type ProcessGraphVisExpressionFunctionDefinition = ExpressionFunctionDefi
   Output
 >;
 
-export const processGraphVisFn=(
+export const processGraphVisFn = (
   dependencies: ProcessGraphVisualizationDependencies
 ): ProcessGraphVisExpressionFunctionDefinition => ({
   name: 'process_graph',
@@ -44,7 +44,7 @@ export const processGraphVisFn=(
       help: '',
     },
   },
- async fn(input, args) {
+  async fn(input, args) {
     const processGraphRequestHandler = createProcessGraphRequestHandler(dependencies);
 
     const response = await processGraphRequestHandler({
@@ -53,16 +53,16 @@ export const processGraphVisFn=(
       filters: get(input, 'filters') as any,
       visParams: args,
     });
-    console.log("In Graph Function")
-    console.log(response)
+    console.log('In Graph Function');
+    console.log(response);
     return {
       type: 'render',
       as: 'process_graph_vis',
       value: {
         visParams: args,
         visData: response,
-        visType: 'process_graph'  
+        visType: 'process_graph',
       },
     };
-  }, 
+  },
 });

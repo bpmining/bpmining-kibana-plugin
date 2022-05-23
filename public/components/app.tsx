@@ -1,111 +1,58 @@
-import React, { useState } from 'react';
-import { i18n } from '@kbn/i18n';
-import { FormattedMessage, I18nProvider } from '@kbn/i18n-react';
-import { BrowserRouter as Router } from 'react-router-dom';
+/*
+ * Copyright Elasticsearch B.V. and/or licensed to Elasticsearch B.V. under one
+ * or more contributor license agreements. Licensed under the Elastic License
+ * 2.0 and the Server Side Public License, v 1; you may not use this file except
+ * in compliance with, at your election, the Elastic License 2.0 or the Server
+ * Side Public License, v 1.
+ */
 
-import {
-  EuiButton,
-  EuiHorizontalRule,
-  EuiPage,
-  EuiPageBody,
-  EuiPageContent,
-  EuiPageContentBody,
-  EuiPageContentHeader,
-  EuiPageHeader,
-  EuiTitle,
-  EuiText,
-} from '@elastic/eui';
+import React, { useEffect } from 'react';
+import { ProcessGraphVisParams } from '../types';
+import { MemoryRouter } from 'react-router-dom';
 
-import { CoreStart } from '../../../../src/core/public';
-import { NavigationPublicPluginStart } from '../../../../src/plugins/navigation/public';
-
-import { PLUGIN_ID, PLUGIN_NAME } from '../../common';
-
-interface BpminingAppDeps {
-  basename: string;
-  notifications: CoreStart['notifications'];
-  http: CoreStart['http'];
-  navigation: NavigationPublicPluginStart;
+export interface VisNode {
+  id: number;
+  label: string;
 }
 
-export const BpminingApp = ({ basename, notifications, http, navigation }: BpminingAppDeps) => {
-  // Use React hooks to manage state.
-  const [timestamp, setTimestamp] = useState<string | undefined>();
+export interface VisEdge {
+  from: number;
+  to: number;
+}
 
-  const onClickHandler = () => {
-    // Use the core http service to make a response to the server API.
-    http.get('/api/bpmining/example').then((res) => {
-      setTimestamp(res.time);
-      // Use the core notifications service to display a success message.
-      notifications.toasts.addSuccess(
-        i18n.translate('bpmining.dataUpdated', {
-          defaultMessage: 'Data updated',
-        })
-      );
-    });
-  };
+export interface RawVisData {
+  data: VisNode[];
+}
 
-  // Render the application DOM.
-  // Note that `navigation.ui.TopNavMenu` is a stateful component exported on the `navigation` plugin's start contract.
-  return (
-    <Router basename={basename}>
-      <I18nProvider>
-        <>
-          <navigation.ui.TopNavMenu
-            appName={PLUGIN_ID}
-            showSearchBar={true}
-            useDefaultBehaviors={true}
-          />
-          <EuiPage restrictWidth="1000px">
-            <EuiPageBody>
-              <EuiPageHeader>
-                <EuiTitle size="l">
-                  <h1>
-                    <FormattedMessage
-                      id="bpmining.helloWorldText"
-                      defaultMessage="{name}"
-                      values={{ name: PLUGIN_NAME }}
-                    />
-                  </h1>
-                </EuiTitle>
-              </EuiPageHeader>
-              <EuiPageContent>
-                <EuiPageContentHeader>
-                  <EuiTitle>
-                    <h2>
-                      <FormattedMessage
-                        id="bpmining.congratulationsTitle"
-                        defaultMessage="Congratulations, you have successfully created a new Kibana Plugin!"
-                      />
-                    </h2>
-                  </EuiTitle>
-                </EuiPageContentHeader>
-                <EuiPageContentBody>
-                  <EuiText>
-                    <p>
-                      <FormattedMessage
-                        id="bpmining.content"
-                        defaultMessage="Look through the generated code and check out the plugin development documentation."
-                      />
-                    </p>
-                    <EuiHorizontalRule />
-                    <p>
-                      <FormattedMessage
-                        id="bpmining.timestampText"
-                        defaultMessage="Last timestamp: {time}"
-                        values={{ time: timestamp ? timestamp : 'Unknown' }}
-                      />
-                    </p>
-                    <EuiButton type="primary" size="s" onClick={onClickHandler}>
-                      <FormattedMessage id="bpmining.buttonText" defaultMessage="Get data" />
-                    </EuiButton>
-                  </EuiText>
-                </EuiPageContentBody>
-              </EuiPageContent>
-            </EuiPageBody>
-          </EuiPage>
-        </>
-      </I18nProvider>
-    </Router>
-  );
-};
+interface ProcessGraphComponentProps {
+  renderComplete(): void;
+  visParams: ProcessGraphVisParams;
+  visData: RawVisData;
+}
+
+export function BpminingApp(props: ProcessGraphComponentProps) {
+  useEffect(() => {
+    props.renderComplete();
+  });
+
+  let nodes: VisNode[] = props.visData.data;
+  console.log(nodes);
+  if (nodes === undefined) {
+    console.log('no nodes');
+    return <div> No graph can be shown.</div>;
+  } else {
+    let edges: VisEdge[] = [];
+    for (let i = 0; i < nodes.length - 1; i++) {
+      let fromId = nodes[i].id;
+      let toId = nodes[i].id + 1;
+      edges.push({ from: fromId, to: toId });
+      console.log(edges);
+    }
+
+    return (
+      <MemoryRouter>
+        <div></div>
+      </MemoryRouter>
+    );
+  }
+}

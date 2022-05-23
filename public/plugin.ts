@@ -4,6 +4,7 @@ import { Plugin as ExpressionsPlugin } from 'src/plugins/expressions/public';
 import { VisualizationsSetup } from 'src/plugins/visualizations/public';
 
 import { processGraphVisFn } from './process_graph_vis_fn';
+import { processGraphVisRenderer } from './process_graph_vis_renderer';
 import { setData } from './services';
 
 /** @internal */
@@ -33,8 +34,11 @@ export class BpminingPlugin implements Plugin<BpminingPluginSetup, BpminingPlugi
       },
     };
 
-    //Register an expression function with type "render" for the visualization
-    expressions.registerFunction( () => processGraphVisFn(visualizationDependencies));
+    // Register an expression function with type "render" for the visualization
+    expressions.registerFunction(() => processGraphVisFn(visualizationDependencies));
+
+    // Register a renderer for the visualization
+    expressions.registerRenderer(processGraphVisRenderer);
   }
 
   public start(core: CoreStart, { data }: StartDependencies) {
