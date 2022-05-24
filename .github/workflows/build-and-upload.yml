@@ -1,0 +1,59 @@
+name: Build Kibana Plugin & Upload to Release
+
+on:
+  push:
+    tags:
+    - 'v*'
+
+jobs:
+  build-and-upload:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout bpmining Kibana Plugin
+      uses: actions/checkout@v2
+      with:
+        repository: bpmining/bpmining-kibana-plugin
+        path: ./plugin
+    - name: Get Kibana version
+      id: set_var
+      run: |
+        content=`cat ./plugin/kibana.json`
+        # the following lines are only required for multi line json
+        content="${content//'%'/'%25'}"
+        content="${content//$'\n'/'%0A'}"
+        content="${content//$'\r'/'%0D'}"
+        # end of optional handling for multi line json
+        echo "::set-output name=kibanaJson::$content"
+    - name: Checkout Kibana codebase
+      uses: actions/checkout@v2
+      with:
+        repository: elastic/kibana
+        path: ./kibana
+        ref: "v${{fromJson(steps.set_var.outputs.kibanaJson).kibanaVersion}}"
+    - name: Move plugin to Kibana directory
+      run: |
+        mv ./plugin ./kibana/plugins/${{fromJson(steps.set_var.outputs.kibanaJson).id}}
+    - name: Use Node.js (.nvmrc)
+      uses: actions/setup-node@v2
+      with:
+        node-version-file: './kibana/.nvmrc'
+        cache: 'yarn'
+        cache-dependency-path: '**/yarn.lock'
+    - name: Bootstrap Kibana
+      run: cd ./kibana/plugins/${{fromJson(steps.set_var.outputs.kibanaJson).id}} && yarn kbn bootstrap
+    - name: Build bpmining plugin
+      run: cd ./kibana/plugins/${{fromJson(steps.set_var.outputs.kibanaJson).id}} && yarn build
+    - name: Archive production artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: plugin-zip
+        path: |
+          ./kibana/plugins/${{fromJson(steps.set_var.outputs.kibanaJson).id}}/build/*.zip
+    - name: Upload zip to release
+      uses: svenstaro/upload-release-action@v2
+      with:
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        file: ./kibana/plugins/${{fromJson(steps.set_var.outputs.kibanaJson).id}}/build/*.zip
+        tag: ${{ github.ref }}
+        overwrite: true
+        file_glob: true

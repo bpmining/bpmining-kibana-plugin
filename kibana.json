@@ -1,7 +1,7 @@
 {
   "id": "bpmining",
-  "version": "1.0.0",
-  "kibanaVersion": "kibana",
+  "version": "0.0.0",
+  "kibanaVersion": "8.2.0",
   "owner": {
     "name": "Anne Schlangstedt, Luc Weinbrecht",
     "githubTeam": "https://github.com/bpmining"
