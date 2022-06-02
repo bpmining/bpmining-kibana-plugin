@@ -1,0 +1,51 @@
+.layer-container {
+    position:absolute;
+    top: 10px;
+    right: 20px;
+}
+
+.layer-panel {
+    position: relative;
+    z-index: 1;
+    width: 130px;
+    height: 140px;
+}
+
+/* .layer-stack {
+    display:inline-block;
+    vertical-align:top;
+    margin: 0% 28%;
+} */
+
+.layer-1 {
+    position: absolute;
+    z-index: 3;
+    top: 40px;
+    right: 40px;
+    width: 50px;
+	height: 50px;
+	transform: rotate(-45deg) skew(20deg, 20deg);
+	background: #C7C7CC;
+    opacity: 50%;
+}
+.layer-1:hover {
+	background: #5B4897;
+    opacity: 50%;
+}
+
+.layer-2 {
+    position: absolute;
+    z-index: 2;
+    top: 65px;
+    right: 40px;
+    width: 50px;
+	height: 50px;
+	transform: rotate(-45deg) skew(20deg, 20deg);
+	background: #C7C7CC;
+    opacity: 50%;
+}
+
+.layer-2:hover{
+	background: #F39000;
+    opacity: 50%;
+}

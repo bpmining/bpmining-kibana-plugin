@@ -5,7 +5,7 @@ import { IRouter } from '../../../../src/core/server';
 import { SERVER_SEARCH_ROUTE_PATH } from '../../common';
 
 export function registerServerSearchRoute(router: IRouter) {
-  console.log('in Server Search Route')
+  console.log('in Server Search Route');
   router.post(
     {
       path: SERVER_SEARCH_ROUTE_PATH,
@@ -20,13 +20,7 @@ export function registerServerSearchRoute(router: IRouter) {
       },
     },
     async (context, request, response) => {
-      const {
-        index,
-        filtersDsl,
-        timeFieldName,
-        timeRangeFrom,
-        timeRangeTo,
-      } = request.body;
+      const { index, filtersDsl, timeFieldName, timeRangeFrom, timeRangeTo } = request.body;
 
       const params = {
         index,
@@ -51,20 +45,20 @@ export function registerServerSearchRoute(router: IRouter) {
       const res = await context.search!.search({ params } as IEsSearchRequest, {}).toPromise();
       const nodes = [];
       let hits = (res as IEsSearchResponse).rawResponse.hits.hits;
-      for(let i=0; i < hits.length; i++){
+      for (let i = 0; i < hits.length; i++) {
         let node = hits[i];
-        console.log(" 1 NODE: ")
-        console.log(node)
-        let id = parseInt(node._source.id)
-        let label = node._source.label
-        
-       nodes.push({id: id, label: label})
+        console.log(' 1 NODE: ');
+        console.log(node);
+        let id = parseInt(node._source.id);
+        let label = node._source.label;
+
+        nodes.push({ id: id, label: label });
       }
 
       return response.ok({
         body: {
           timeFieldName: timeFieldName,
-          data: nodes
+          data: nodes,
         },
       });
     }

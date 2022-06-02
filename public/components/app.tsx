@@ -9,6 +9,7 @@
 import React, { useEffect } from 'react';
 import { ProcessGraphVisParams } from '../types';
 import { MemoryRouter } from 'react-router-dom';
+import { DashboardComponent } from './dashboard';
 
 export interface VisNode {
   id: number;
@@ -51,7 +52,7 @@ export function BpminingApp(props: ProcessGraphComponentProps) {
 
     return (
       <MemoryRouter>
-        <div></div>
+        <DashboardComponent nodes={nodes} edges={edges}/>
       </MemoryRouter>
     );
   }
