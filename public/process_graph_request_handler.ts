@@ -1,4 +1,6 @@
-import { Filter, esQuery, TimeRange, Query } from '../../../src/plugins/data/public';
+import { Filter } from '@kbn/es-query';
+import {  esQuery, TimeRange, Query } from '../../../src/plugins/data/public';
+// import { Filter } from ''
 
 import { SERVER_SEARCH_ROUTE_PATH } from '../common';
 

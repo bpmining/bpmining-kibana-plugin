@@ -9,18 +9,12 @@
 import React from 'react';
 import { EuiListGroup, EuiListGroupItem, EuiPanel } from '@elastic/eui';
 
-
 export function PanelComponent() {
-
-    return (
-        <EuiPanel paddingSize="s" style={{ minHeight: "100%" }}>
-            <EuiListGroup flush>
-                  <EuiListGroupItem
-                    key={1}
-                    label="test"
-                    size="s"
-                  /> 
-            </EuiListGroup>
-        </EuiPanel>
-    );  
+  return (
+    <EuiPanel paddingSize="s" style={{ minHeight: '100%' }}>
+      <EuiListGroup flush>
+        <EuiListGroupItem key={1} label="test" size="s" />
+      </EuiListGroup>
+    </EuiPanel>
+  );
 }

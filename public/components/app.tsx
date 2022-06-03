@@ -52,7 +52,7 @@ export function BpminingApp(props: ProcessGraphComponentProps) {
 
     return (
       <MemoryRouter>
-        <DashboardComponent nodes={nodes} edges={edges}/>
+        <DashboardComponent nodes={nodes} edges={edges} />
       </MemoryRouter>
     );
   }
