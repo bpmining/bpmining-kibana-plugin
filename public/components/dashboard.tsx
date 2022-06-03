@@ -16,7 +16,7 @@ export function DashboardComponent({ nodes, edges }: Props) {
 
   const handleRouting = (route: string) => {
     history.push(route);
-  }
+  };
   return (
     <EuiPage paddingSize="none">
       <EuiResizableContainer style={{ height: 650, width: '100%' }}>
@@ -30,8 +30,12 @@ export function DashboardComponent({ nodes, edges }: Props) {
 
             <EuiResizablePanel mode="main" initialSize={80} minSize="500px">
               <Switch>
-                <Route exact path='/'><VisGraphComponent nodes={nodes} edges={edges} color={'#5B4897'}/></Route> 
-                <Route path='/layer2'><VisGraphComponent nodes={nodes} edges={edges} color={'#F39000'}/></Route> 
+                <Route exact path="/">
+                  <VisGraphComponent nodes={nodes} edges={edges} color={'#5B4897'} />
+                </Route>
+                <Route path="/layer2">
+                  <VisGraphComponent nodes={nodes} edges={edges} color={'#F39000'} />
+                </Route>
               </Switch>
 
               <div className="layer-container">

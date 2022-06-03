@@ -1,6 +1,5 @@
-import { Filter } from '@kbn/es-query';
-import {  esQuery, TimeRange, Query } from '../../../src/plugins/data/public';
-// import { Filter } from ''
+import { Filter, buildEsQuery } from '@kbn/es-query';
+import { TimeRange, Query, getEsQueryConfig } from '../../../src/plugins/data/public';
 
 import { SERVER_SEARCH_ROUTE_PATH } from '../common';
 
@@ -22,8 +21,8 @@ export function createProcessGraphRequestHandler({
 
   return async ({ timeRange, filters, query, visParams }: ProcessGraphRequestHandlerParams) => {
     const index = await dataViews.get(visParams.indexPatternId);
-    const esQueryConfigs = esQuery.getEsQueryConfig(uiSettings);
-    const filtersDsl = esQuery.buildEsQuery(undefined, query, filters, esQueryConfigs);
+    const esQueryConfigs = getEsQueryConfig(uiSettings);
+    const filtersDsl = buildEsQuery(undefined, query, filters, esQueryConfigs);
 
     return await http.post(SERVER_SEARCH_ROUTE_PATH, {
       body: JSON.stringify({
