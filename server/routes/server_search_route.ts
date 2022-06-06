@@ -40,24 +40,41 @@ export function registerServerSearchRoute(router: IRouter) {
               ],
             },
           },
+          size: 100,
         },
+        wait_for_completion_timeout: '5m',
+        keep_alive: '5m',
       };
       const res = await context.search!.search({ params } as IEsSearchRequest, {}).toPromise();
-      const nodes = [];
       let hits = (res as IEsSearchResponse).rawResponse.hits.hits;
+      console.log(hits.length);
+      const nodes = [];
       for (let i = 0; i < hits.length; i++) {
         let node = hits[i];
         console.log(' 1 NODE: ');
         console.log(node);
-        let id = parseInt(node._source.id);
+        
+        let typ = node._source.typ;
         let label = node._source.label;
+        let system = node._source.system;
+        let contextInfo = node._source.contextInfo;
+        let caseID = node._source.caseID;
+        let startTime = node._source.startTime;
+        let endTime = node._source.endTime;
 
-        nodes.push({ id: id, label: label });
+        nodes.push({ 
+          typ: typ, 
+          label: label,
+          system: system,
+          contextInfo: contextInfo,
+          caseID: caseID,
+          startTime: startTime,
+          endTime: endTime
+        });
       }
 
       return response.ok({
         body: {
-          timeFieldName: timeFieldName,
           data: nodes,
         },
       });
