@@ -35,12 +35,6 @@ export function BpminingApp(props: ProcessGraphComponentProps) {
     return <div> No graph can be shown.</div>;
   } else {
     let edges: VisEdge[] = [];
-    for (let i = 0; i < nodes.length - 1; i++) {
-      let fromId = nodes[i].id;
-      let toId = nodes[i].id + 1;
-      edges.push({ from: fromId, to: toId });
-      console.log(edges);
-    }
 
     return (
       <MemoryRouter>
