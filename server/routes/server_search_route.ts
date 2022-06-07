@@ -7,7 +7,7 @@ interface VisNode {
   label: string;
   caseID: string;
 
-  startTime?: number; 
+  startTime?: number;
   endTime?: number;
 
   system?: string;
@@ -16,19 +16,19 @@ interface VisNode {
 }
 
 type ResponseObject = {
-  _index: string; 
-  _type: string; 
-  _id: string; 
-  _score: number; 
-  _source: VisNode; 
-  _version?: number | undefined; 
+  _index: string;
+  _type: string;
+  _id: string;
+  _score: number;
+  _source: VisNode;
+  _version?: number | undefined;
   _explanation?: Explanation | undefined;
   fields?: any;
-  highlight?: any; 
-  inner_hits?: any; 
-  matched_queries?: string[] | undefined; 
+  highlight?: any;
+  inner_hits?: any;
+  matched_queries?: string[] | undefined;
   sort?: unknown[] | undefined;
-}
+};
 
 export function registerServerSearchRoute(router: IRouter) {
   router.post(
@@ -65,7 +65,7 @@ export function registerServerSearchRoute(router: IRouter) {
             },
           },
           size: 100,
-        }
+        },
       };
 
       const res = await context.core.elasticsearch.client.asCurrentUser.search(params);
@@ -87,7 +87,7 @@ export function registerServerSearchRoute(router: IRouter) {
           label: label,
           caseID: caseID,
           startTime: startTime,
-          endTime: endTime, 
+          endTime: endTime,
           system: system,
           typ: typ,
           contextInfo: contextInfo,

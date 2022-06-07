@@ -1,25 +1,29 @@
-import { ExpressionFunctionDefinition, Render } from 'src/plugins/expressions/public';
-import { KibanaContext, TimeRange, Query } from 'src/plugins/data/public';
+import { ExecutionContext, ExpressionFunctionDefinition, Render } from 'src/plugins/expressions/public';
+import { KibanaContext, TimeRange, Query, ExecutionContextSearch } from 'src/plugins/data/public';
 import { VisData, ProcessGraphVisParams } from './types';
 import { ProcessGraphVisualizationDependencies } from './plugin';
 import { createProcessGraphRequestHandler } from './process_graph_request_handler';
 import { get } from 'lodash';
+import { Adapters } from 'src/plugins/inspector';
 
 export type VisParams = Required<ProcessGraphVisParams>;
 
 export interface ProcessGraphVisRenderValue {
-  visParams: VisParams;
   visData: VisData;
   visType: 'process_graph';
+  visConfig: VisParams;
 }
+
+type Input = KibanaContext | { type: 'null' };
 
 type Output = Promise<Render<ProcessGraphVisRenderValue>>;
 
 export type ProcessGraphVisExpressionFunctionDefinition = ExpressionFunctionDefinition<
   'process_graph',
-  KibanaContext,
+  Input,
   ProcessGraphVisParams,
-  Output
+  Output,
+  ExecutionContext<Adapters, ExecutionContextSearch>
 >;
 
 export const processGraphVisFn = (
@@ -27,7 +31,7 @@ export const processGraphVisFn = (
 ): ProcessGraphVisExpressionFunctionDefinition => ({
   name: 'process_graph',
   type: 'render',
-  inputTypes: ['kibana_context'],
+  inputTypes: ['kibana_context', 'null'],
   help: 'The expression function definition should be registered for a custom visualization to be rendered',
   args: {
     indexPatternId: {
@@ -36,7 +40,7 @@ export const processGraphVisFn = (
       help: '',
     },
   },
-  async fn(input, args) {
+  async fn(input, args): Output {
     const processGraphRequestHandler = createProcessGraphRequestHandler(dependencies);
     const response = await processGraphRequestHandler({
       timeRange: get(input, 'timeRange') as TimeRange,
@@ -50,9 +54,9 @@ export const processGraphVisFn = (
       type: 'render',
       as: 'process_graph_vis',
       value: {
-        visParams: args,
-        visData: response,
+        visData: response as VisData,
         visType: 'process_graph',
+        visConfig: args,
       },
     };
   },

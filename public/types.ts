@@ -1,8 +1,23 @@
-import { AggExpressionType } from 'src/plugins/data/common';
+
 
 export interface ProcessGraphVisParams {
   indexPatternId: string;
-  aggs?: AggExpressionType[];
+}
+
+export interface VisData {
+  data: VisNode[];
+}
+
+interface VisNode {
+  label: string;
+  caseID: string;
+
+  startTime?: number;
+  endTime?: number;
+
+  system?: string;
+  typ?: 'process' | 'third-party';
+  contextInfo?: object;
 }
 
 export interface Node {
@@ -20,6 +35,4 @@ export interface DataItem {
   label: string;
 }
 
-export interface VisData {
-  data: DataItem[];
-}
+
