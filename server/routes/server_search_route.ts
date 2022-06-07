@@ -53,7 +53,7 @@ export function registerServerSearchRoute(router: IRouter) {
         let node = hits[i];
         console.log(' 1 NODE: ');
         console.log(node);
-        
+
         let typ = node._source.typ;
         let label = node._source.label;
         let system = node._source.system;
@@ -62,14 +62,14 @@ export function registerServerSearchRoute(router: IRouter) {
         let startTime = node._source.startTime;
         let endTime = node._source.endTime;
 
-        nodes.push({ 
-          typ: typ, 
+        nodes.push({
+          typ: typ,
           label: label,
           system: system,
           contextInfo: contextInfo,
           caseID: caseID,
           startTime: startTime,
-          endTime: endTime
+          endTime: endTime,
         });
       }
 

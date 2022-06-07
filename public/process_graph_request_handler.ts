@@ -23,7 +23,7 @@ export function createProcessGraphRequestHandler({
     const index = await dataViews.get(visParams.indexPatternId);
     const esQueryConfigs = getEsQueryConfig(uiSettings);
     const filtersDsl = buildEsQuery(undefined, query, filters, esQueryConfigs);
-  
+
     return await http.post(SERVER_SEARCH_ROUTE_PATH, {
       body: JSON.stringify({
         index: index.title,
