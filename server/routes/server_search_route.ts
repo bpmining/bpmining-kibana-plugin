@@ -1,11 +1,36 @@
-import { IEsSearchRequest } from 'src/plugins/data/server';
 import { schema } from '@kbn/config-schema';
-import { IEsSearchResponse } from 'src/plugins/data/common';
-import { IRouter } from '../../../../src/core/server';
+import { Explanation } from 'src/core/server/elasticsearch/client/types';
+import { IRouter, SearchResponse } from '../../../../src/core/server';
 import { SERVER_SEARCH_ROUTE_PATH } from '../../common';
 
+interface VisNode {
+  label: string;
+  caseID: string;
+
+  startTime?: number; 
+  endTime?: number;
+
+  system?: string;
+  typ?: 'process' | 'third-party';
+  contextInfo?: object;
+}
+
+type ResponseObject = {
+  _index: string; 
+  _type: string; 
+  _id: string; 
+  _score: number; 
+  _source: VisNode; 
+  _version?: number | undefined; 
+  _explanation?: Explanation | undefined;
+  fields?: any;
+  highlight?: any; 
+  inner_hits?: any; 
+  matched_queries?: string[] | undefined; 
+  sort?: unknown[] | undefined;
+}
+
 export function registerServerSearchRoute(router: IRouter) {
-  console.log('in Server Search Route');
   router.post(
     {
       path: SERVER_SEARCH_ROUTE_PATH,
@@ -21,7 +46,6 @@ export function registerServerSearchRoute(router: IRouter) {
     },
     async (context, request, response) => {
       const { index, filtersDsl, timeFieldName, timeRangeFrom, timeRangeTo } = request.body;
-
       const params = {
         index,
         body: {
@@ -41,18 +65,15 @@ export function registerServerSearchRoute(router: IRouter) {
             },
           },
           size: 100,
-        },
-        wait_for_completion_timeout: '5m',
-        keep_alive: '5m',
+        }
       };
-      const res = await context.search!.search({ params } as IEsSearchRequest, {}).toPromise();
-      let hits = (res as IEsSearchResponse).rawResponse.hits.hits;
-      console.log(hits.length);
-      const nodes = [];
+
+      const res = await context.core.elasticsearch.client.asCurrentUser.search(params);
+      let hits = (res as SearchResponse).hits.hits;
+
+      const nodes: VisNode[] = [];
       for (let i = 0; i < hits.length; i++) {
-        let node = hits[i];
-        console.log(' 1 NODE: ');
-        console.log(node);
+        let node: ResponseObject = hits[i] as ResponseObject;
 
         let typ = node._source.typ;
         let label = node._source.label;
@@ -63,13 +84,13 @@ export function registerServerSearchRoute(router: IRouter) {
         let endTime = node._source.endTime;
 
         nodes.push({
-          typ: typ,
           label: label,
-          system: system,
-          contextInfo: contextInfo,
           caseID: caseID,
           startTime: startTime,
-          endTime: endTime,
+          endTime: endTime, 
+          system: system,
+          typ: typ,
+          contextInfo: contextInfo,
         });
       }
 
