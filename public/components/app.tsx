@@ -2,16 +2,8 @@ import React, { useEffect } from 'react';
 import { ProcessGraphVisParams } from '../types';
 import { MemoryRouter } from 'react-router-dom';
 import { DashboardComponent } from './dashboard';
+import { VisNode, VisEdge } from '../types';
 
-export interface VisNode {
-  id: number;
-  label: string;
-}
-
-export interface VisEdge {
-  from: number;
-  to: number;
-}
 
 export interface RawVisData {
   data: VisNode[];

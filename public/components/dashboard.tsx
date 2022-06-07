@@ -4,7 +4,7 @@ import { VisGraphComponent } from './vis_graph_component';
 import { EuiPage, EuiPanel, EuiResizableContainer } from '@elastic/eui';
 import { Route, Switch, useHistory } from 'react-router-dom';
 import { PanelComponent } from './menu/panel';
-import { VisNode, VisEdge } from './app';
+import { VisNode, VisEdge } from '../types';
 
 type Props = {
   nodes: VisNode[];

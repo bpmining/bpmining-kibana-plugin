@@ -1,4 +1,8 @@
-import { ExecutionContext, ExpressionFunctionDefinition, Render } from 'src/plugins/expressions/public';
+import {
+  ExecutionContext,
+  ExpressionFunctionDefinition,
+  Render,
+} from 'src/plugins/expressions/public';
 import { KibanaContext, TimeRange, Query, ExecutionContextSearch } from 'src/plugins/data/public';
 import { VisData, ProcessGraphVisParams } from './types';
 import { ProcessGraphVisualizationDependencies } from './plugin';
@@ -11,7 +15,7 @@ export type VisParams = Required<ProcessGraphVisParams>;
 export interface ProcessGraphVisRenderValue {
   visData: VisData;
   visType: 'process_graph';
-  visConfig: VisParams;
+  visParams: VisParams;
 }
 
 type Input = KibanaContext | { type: 'null' };
@@ -56,7 +60,7 @@ export const processGraphVisFn = (
       value: {
         visData: response as VisData,
         visType: 'process_graph',
-        visConfig: args,
+        visParams: args,
       },
     };
   },

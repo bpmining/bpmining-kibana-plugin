@@ -1,5 +1,3 @@
-
-
 export interface ProcessGraphVisParams {
   indexPatternId: string;
 }
@@ -8,7 +6,7 @@ export interface VisData {
   data: VisNode[];
 }
 
-interface VisNode {
+export interface VisNode {
   label: string;
   caseID: string;
 
@@ -20,19 +18,7 @@ interface VisNode {
   contextInfo?: object;
 }
 
-export interface Node {
-  id: string;
-  label: string;
+export interface VisEdge {
+  from: number;
+  to: number;
 }
-
-export interface Edge {
-  from: string;
-  to: string;
-}
-
-export interface DataItem {
-  id: number;
-  label: string;
-}
-
-
