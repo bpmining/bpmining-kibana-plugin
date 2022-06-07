@@ -29,12 +29,12 @@ export function VisGraphComponent(props: VisGraphComponentProps) {
     height: '980px',
   };
 
-  const events = {
+  /* const events = {
     select(event: { nodes: any; edges: any }) {
-      // eslint-disable-next-line no-unused-vars
       const { nodes, edges } = event;
     },
-  };
+  }; */
 
-  return <Graph graph={graph} options={options} events={events} />;
+  // return <Graph graph={graph} options={options} events={events} />;
+  return <Graph graph={graph} options={options} />;
 }
