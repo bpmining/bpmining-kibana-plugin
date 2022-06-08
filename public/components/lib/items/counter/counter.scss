@@ -1,0 +1,13 @@
+@import '../../../base';
+
+.number {
+    color: $color-violett-100;
+    font-size: $font-size-counter;
+    font-weight: $font-weight-bold;
+}
+
+.text {
+    color: $color-text;
+    font-size: $font-size-headline;
+    font-weight: $font-weight-bold;
+}

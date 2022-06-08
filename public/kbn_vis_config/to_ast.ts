@@ -1,5 +1,8 @@
 import { VisToExpressionAst } from 'src/plugins/visualizations/public';
-import { buildExpression, buildExpressionFunction } from '../../../../src/plugins/expressions/public';
+import {
+  buildExpression,
+  buildExpressionFunction,
+} from '../../../../src/plugins/expressions/public';
 import { ProcessGraphVisExpressionFunctionDefinition } from './process_graph_vis_fn';
 import { ProcessGraphVisParams } from '../types';
 

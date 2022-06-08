@@ -1,8 +1,20 @@
 @import '../../base';
 
-#roboto {
-    color: $color-red-75;
-    font-family: $font-family;
-    font-weight: $font-weight-light;
-    font-size: $font-size-headline;
+.logo {
+    width: 75%;
+    height: auto;
+}
+
+.counter-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.frequency-map-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-top: 20px;
 }
