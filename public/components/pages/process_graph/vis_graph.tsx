@@ -3,7 +3,7 @@ import Graph from 'react-graph-vis';
 import React from 'react';
 import { VisNode, VisEdge } from '../../../types';
 
-interface VisGraphComponentProps {
+export interface VisGraphComponentProps {
   nodes: VisNode[];
   edges: VisEdge[];
   color: string;

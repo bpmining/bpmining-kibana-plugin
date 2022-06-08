@@ -1,10 +1,9 @@
 import React from 'react';
-import { VisGraphComponent } from './process_graph/vis_graph';
 import { EuiPage, EuiResizableContainer } from '@elastic/eui';
-import { Route, Switch } from 'react-router-dom';
 import { PanelComponent } from './side_panel/panel';
 import { VisNode, VisEdge } from '../../types';
 import { LayerPanelComponent } from './layer_panel/layer_panel';
+import { GraphRouter } from '../routers';
 
 type Props = {
   nodes: VisNode[];
@@ -24,15 +23,7 @@ export function LayoutComponent({ nodes, edges }: Props) {
             <EuiResizableButton />
 
             <EuiResizablePanel mode="main" initialSize={80} minSize="500px">
-              <Switch>
-                <Route exact path="/">
-                  <VisGraphComponent nodes={nodes} edges={edges} color={'#5B4897'} />
-                </Route>
-                <Route path="/layer2">
-                  <VisGraphComponent nodes={nodes} edges={edges} color={'#F39000'} />
-                </Route>
-              </Switch>
-
+              <GraphRouter nodes={nodes} edges={edges} />
               <div className="layer-container">
                 <LayerPanelComponent />
               </div>

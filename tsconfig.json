@@ -3,7 +3,7 @@
   "compilerOptions": {
     "outDir": "./target/types",
     "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true,
+    "esModuleInterop": true
   },
   "include": [
     "index.ts",
