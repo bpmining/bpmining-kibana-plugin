@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 import { ExpressionRenderDefinition } from 'src/plugins/expressions';
-import { BpminingApp } from './components/app';
+import { BpminingApp } from '../components/app';
 import { ProcessGraphVisRenderValue } from './process_graph_vis_fn';
 
 export const processGraphVisRenderer: ExpressionRenderDefinition<ProcessGraphVisRenderValue> = {

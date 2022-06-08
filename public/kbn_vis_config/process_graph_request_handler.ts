@@ -1,11 +1,11 @@
 import { Filter, buildEsQuery } from '@kbn/es-query';
-import { TimeRange, Query, getEsQueryConfig } from '../../../src/plugins/data/public';
+import { TimeRange, Query, getEsQueryConfig } from '../../../../src/plugins/data/public';
 
-import { SERVER_SEARCH_ROUTE_PATH } from '../common';
+import { SERVER_SEARCH_ROUTE_PATH } from '../../common';
 
-import { ProcessGraphVisualizationDependencies } from './plugin';
-import { getData } from './services';
-import { ProcessGraphVisParams } from './types';
+import { ProcessGraphVisualizationDependencies } from '../plugin';
+import { getData } from '../services';
+import { ProcessGraphVisParams } from '../types';
 
 interface ProcessGraphRequestHandlerParams {
   query: Query;

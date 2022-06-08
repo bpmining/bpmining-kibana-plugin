@@ -1,22 +1,18 @@
 import React from 'react';
-import './layers.scss';
-import { VisGraphComponent } from './vis_graph_component';
-import { EuiPage, EuiPanel, EuiResizableContainer } from '@elastic/eui';
-import { Route, Switch, useHistory } from 'react-router-dom';
-import { PanelComponent } from './menu/panel';
-import { VisNode, VisEdge } from '../types';
+import { VisGraphComponent } from './process_graph/vis_graph';
+import { EuiPage, EuiResizableContainer } from '@elastic/eui';
+import { Route, Switch, } from 'react-router-dom';
+import { PanelComponent } from './side_panel/panel';
+import { VisNode, VisEdge } from '../../types';
+import { LayerPanelComponent } from './layer_panel/layer_panel';
 
 type Props = {
   nodes: VisNode[];
   edges: VisEdge[];
 };
 
-export function DashboardComponent({ nodes, edges }: Props) {
-  let history = useHistory();
-
-  const handleRouting = (route: string) => {
-    history.push(route);
-  };
+export function LayoutComponent({ nodes, edges }: Props) {
+  
   return (
     <EuiPage paddingSize="none">
       <EuiResizableContainer style={{ height: 650, width: '100%' }}>
@@ -39,16 +35,7 @@ export function DashboardComponent({ nodes, edges }: Props) {
               </Switch>
 
               <div className="layer-container">
-                <EuiPanel className="layer-panel" paddingSize="s">
-                  <p>
-                    <b>Layers</b>
-                  </p>
-                  <br></br>
-                  <div className="layer-stack">
-                    <div className="layer-1" onClick={() => handleRouting('/')}></div>
-                    <div className="layer-2" onClick={() => handleRouting('/layer2')}></div>
-                  </div>
-                </EuiPanel>
+                <LayerPanelComponent />
               </div>
             </EuiResizablePanel>
           </>

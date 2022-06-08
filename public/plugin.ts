@@ -3,9 +3,9 @@ import { DataPublicPluginSetup, DataPublicPluginStart } from 'src/plugins/data/p
 import { Plugin as ExpressionsPlugin } from 'src/plugins/expressions/public';
 import { VisualizationsSetup } from 'src/plugins/visualizations/public';
 
-import { createProcessGraphTypeDefinition } from './process_graph_type';
-import { processGraphVisFn } from './process_graph_vis_fn';
-import { processGraphVisRenderer } from './process_graph_vis_renderer';
+import { createProcessGraphTypeDefinition } from './kbn_vis_config/process_graph_type';
+import { processGraphVisFn } from './kbn_vis_config/process_graph_vis_fn';
+import { processGraphVisRenderer } from './kbn_vis_config/process_graph_vis_renderer';
 import { setData } from './services';
 
 /** @internal */

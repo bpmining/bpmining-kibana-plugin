@@ -4,11 +4,11 @@ import {
   VIS_EVENT_TO_TRIGGER,
   VisGroups,
   VisTypeDefinition,
-} from '../../../src/plugins/visualizations/public';
+} from '../../../../src/plugins/visualizations/public';
 
 import { toExpressionAst } from './to_ast';
-import { ProcessGraphVisParams } from './types';
-import { ProcessGraphEditor } from './components/editor/process_graph_editor';
+import { ProcessGraphVisParams } from '../types';
+import { ProcessGraphEditor } from '../components/kbn_editor/process_graph_editor';
 
 export const createProcessGraphTypeDefinition = (): VisTypeDefinition<ProcessGraphVisParams> => ({
   name: 'process_graph_vis',

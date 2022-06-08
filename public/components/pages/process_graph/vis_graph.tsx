@@ -1,7 +1,7 @@
 // @ts-ignore
 import Graph from 'react-graph-vis';
 import React from 'react';
-import { VisNode, VisEdge } from '../components/app';
+import { VisNode, VisEdge } from '../../../types';
 
 interface VisGraphComponentProps {
   nodes: VisNode[];

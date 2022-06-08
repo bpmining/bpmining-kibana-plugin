@@ -1,9 +1,8 @@
 import React, { useEffect } from 'react';
 import { ProcessGraphVisParams } from '../types';
 import { MemoryRouter } from 'react-router-dom';
-import { DashboardComponent } from './dashboard';
+import { LayoutComponent } from './pages/layout';
 import { VisNode, VisEdge } from '../types';
-
 
 export interface RawVisData {
   data: VisNode[];
@@ -30,7 +29,7 @@ export function BpminingApp(props: ProcessGraphComponentProps) {
 
     return (
       <MemoryRouter>
-        <DashboardComponent nodes={nodes} edges={edges} />
+        <LayoutComponent nodes={nodes} edges={edges} />
       </MemoryRouter>
     );
   }
