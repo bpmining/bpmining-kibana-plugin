@@ -3,7 +3,7 @@ import { EuiPanel, EuiSwitch } from '@elastic/eui';
 import logo from '../../../../common/logo/bpmining.svg';
 import './panel.scss';
 import { CaseCounterRouter, VariantCounterRouter } from '../../routers';
-// import { CaseSelector } from './case_selector/case_selector';
+import { CaseSelector } from './case_selector/case_selector';
 
 export function PanelComponent() {
   const [checked, setChecked] = useState(false);
@@ -29,6 +29,8 @@ export function PanelComponent() {
           onChange={(e) => onChange(e)}
         />
       </div>
+
+      <CaseSelector />
     </EuiPanel>
   );
 }
