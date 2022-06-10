@@ -1,10 +1,7 @@
-import './index.scss';
+import { PluginInitializer } from 'src/core/public';
+import { BpminingPlugin, BpminingPluginSetup, BpminingPluginStart } from './plugin';
 
-import { BpminingPlugin } from './plugin';
+export { BpminingPlugin as Plugin };
 
-// This exports static code and TypeScript types,
-// as well as, Kibana Platform `plugin()` initializer.
-export function plugin() {
-  return new BpminingPlugin();
-}
-export { BpminingPluginSetup, BpminingPluginStart } from './types';
+export const plugin: PluginInitializer<BpminingPluginSetup, BpminingPluginStart> = () =>
+  new BpminingPlugin();

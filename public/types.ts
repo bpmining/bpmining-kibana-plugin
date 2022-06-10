@@ -1,11 +1,24 @@
-import { NavigationPublicPluginStart } from '../../../src/plugins/navigation/public';
-
-export interface BpminingPluginSetup {
-  getGreeting: () => string;
+export interface ProcessGraphVisParams {
+  indexPatternId: string;
 }
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface BpminingPluginStart {}
 
-export interface AppPluginStartDependencies {
-  navigation: NavigationPublicPluginStart;
+export interface VisData {
+  data: VisNode[];
+}
+
+export interface VisNode {
+  label: string;
+  caseID: string;
+
+  startTime?: number;
+  endTime?: number;
+
+  system?: string;
+  typ?: 'process' | 'third-party';
+  contextInfo?: object;
+}
+
+export interface VisEdge {
+  from: number;
+  to: number;
 }

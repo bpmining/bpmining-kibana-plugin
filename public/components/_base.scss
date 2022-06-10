@@ -1,0 +1,39 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
+
+// Colors
+$color-violett-100: #5b4897;
+$color-violett-75: #8476b1;
+$color-violett-50: #ada4cb;
+$color-violett-25: #d6d1e5;
+
+$color-orange-100: #f39000;
+$color-orange-75: #f6ac40;
+$color-orange-50: #f9c880;
+$color-orange-25: #fce3bf;
+
+$color-red-100: #e9454e;
+$color-red-75: #ef747a;
+$color-red-50: #f4a2a7;
+$color-red-25: #f9d0d2;
+
+$color-text: #2c2c2c;
+$color-dark-grey: #828282;
+$color-light-grey: #c7c7cc;
+
+// Fonts
+$font-family: 'Roboto', sans-serif;
+$font-weight-light: 300;
+$font-weight-regular: 400;
+$font-weight-medium: 500;
+$font-weight-bold: 700;
+
+$font-size-counter: 36px;
+$font-size-headline: 20px;
+$font-size-regular: 18px;
+$font-size-small: 14px;
+
+.design-scope p {
+  font-family: $font-family;
+  font-weight: $font-weight-bold;
+  font-size: $font-size-headline;
+}

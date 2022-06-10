@@ -3,7 +3,7 @@
   "compilerOptions": {
     "outDir": "./target/types",
     "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true,
+    "esModuleInterop": true
   },
   "include": [
     "index.ts",
@@ -11,7 +11,9 @@
     "public/**/*.ts",
     "public/**/*.tsx",
     "server/**/*.ts",
+    "model/**/*.ts",
     "../../typings/**/*"
   ],
   "exclude": ["node_modules"]
+  
 }

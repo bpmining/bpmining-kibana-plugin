@@ -1,0 +1,12 @@
+@import '../../base';
+
+.number {
+  font-size: $font-size-counter !important;
+  font-weight: $font-weight-bold;
+}
+
+.text {
+  color: $color-text;
+  font-size: $font-size-headline;
+  font-weight: $font-weight-bold;
+}
