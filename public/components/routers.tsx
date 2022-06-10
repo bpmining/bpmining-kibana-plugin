@@ -6,7 +6,6 @@ import { CaseCounterComponent } from './lib/counter/case_counter';
 import { VariantCounterComponent } from './lib/counter/variant_counter';
 import { VisGraphComponent } from './pages/process_graph/vis_graph';
 
-
 interface VisGraphRouterProps {
   nodes: VisNode[];
   edges: VisEdge[];

@@ -14,24 +14,24 @@ export function PanelComponent() {
 
   return (
     <EuiPanel paddingSize="m" style={{ minHeight: '100%' }}>
-      <div className='design-scope'>
-      <img src={logo} alt="Logo" className="logo" />
+      <div className="design-scope">
+        <img src={logo} alt="Logo" className="logo" />
 
-      <div className="counter-container">
-        <CaseCounterRouter cases={2} />
-        <VariantCounterRouter variants={2} />
-      </div>
+        <div className="counter-container">
+          <CaseCounterRouter cases={2} />
+          <VariantCounterRouter variants={2} />
+        </div>
 
-      <div className="frequency-map-container">
-        <p>Frequency Map</p>
-        <EuiSwitch
-          showLabel={false}
-          label="Frequency Map"
-          checked={checked}
-          onChange={(e) => onChange(e)}
-        />
-      </div>
-      <CaseSelector />
+        <div className="frequency-map-container">
+          <p>Frequency Map</p>
+          <EuiSwitch
+            showLabel={false}
+            label="Frequency Map"
+            checked={checked}
+            onChange={(e) => onChange(e)}
+          />
+        </div>
+        <CaseSelector />
       </div>
     </EuiPanel>
   );

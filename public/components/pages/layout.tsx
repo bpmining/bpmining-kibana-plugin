@@ -14,26 +14,26 @@ type Props = {
 export function LayoutComponent({ nodes, edges }: Props) {
   return (
     <EuiPage paddingSize="none">
-        <EuiResizableContainer style={{ height: 650, width: '100%' }}>
-          {(EuiResizablePanel, EuiResizableButton) => (
-            <>
-              <EuiResizablePanel mode="collapsible" initialSize={20} minSize="18%">
-                <PanelComponent />
-              </EuiResizablePanel>
+      <EuiResizableContainer style={{ height: 650, width: '100%' }}>
+        {(EuiResizablePanel, EuiResizableButton) => (
+          <>
+            <EuiResizablePanel mode="collapsible" initialSize={20} minSize="18%">
+              <PanelComponent />
+            </EuiResizablePanel>
 
-              <EuiResizableButton />
+            <EuiResizableButton />
 
-              <EuiResizablePanel mode="main" initialSize={80} minSize="500px">
-                <div className='design-scope'>
-                  <GraphRouter nodes={nodes} edges={edges} />
-                  <div className="layer-container">
-                    <LayerPanelComponent />
-                  </div>
+            <EuiResizablePanel mode="main" initialSize={80} minSize="500px">
+              <div className="design-scope">
+                <GraphRouter nodes={nodes} edges={edges} />
+                <div className="layer-container">
+                  <LayerPanelComponent />
                 </div>
-              </EuiResizablePanel>
-            </>
-          )}
-        </EuiResizableContainer>
+              </div>
+            </EuiResizablePanel>
+          </>
+        )}
+      </EuiResizableContainer>
     </EuiPage>
   );
 }
