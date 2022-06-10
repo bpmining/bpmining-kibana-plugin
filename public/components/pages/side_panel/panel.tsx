@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { EuiPanel, EuiSwitch } from '@elastic/eui';
 import logo from '../../../../common/logo/bpmining.svg';
+import '../../_base.scss';
 import './panel.scss';
 import { CaseCounterRouter, VariantCounterRouter } from '../../routers';
 import { CaseSelector } from './case_selector/case_selector';
@@ -13,6 +14,7 @@ export function PanelComponent() {
 
   return (
     <EuiPanel paddingSize="m" style={{ minHeight: '100%' }}>
+      <div className='design-scope'>
       <img src={logo} alt="Logo" className="logo" />
 
       <div className="counter-container">
@@ -30,6 +32,7 @@ export function PanelComponent() {
         />
       </div>
       <CaseSelector />
+      </div>
     </EuiPanel>
   );
 }

@@ -1,7 +1,7 @@
 import { schema } from '@kbn/config-schema';
 import { IRouter, SearchResponse } from '../../../../src/core/server';
 import { SERVER_SEARCH_ROUTE_PATH } from '../../common';
-import { ProcessEvent } from '../../model/process_event';
+import { ProcessEvent } from '../../model/event';
 
 export function registerServerSearchRoute(router: IRouter) {
   router.post(

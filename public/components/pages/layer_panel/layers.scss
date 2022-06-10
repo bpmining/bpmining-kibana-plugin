@@ -1,3 +1,5 @@
+@import '../../base';
+
 .layer-container {
   position: absolute;
   top: 10px;
@@ -19,11 +21,11 @@
   width: 60px;
   height: 60px;
   transform: rotate(-45deg) skew(20deg, 20deg);
-  background: #c7c7cc;
+  background: $color-light-grey;
   opacity: 50%;
 }
 .layer-1:hover {
-  background: #5b4897;
+  background: $color-violett-100;
   opacity: 50%;
 }
 
@@ -35,11 +37,11 @@
   width: 60px;
   height: 60px;
   transform: rotate(-45deg) skew(20deg, 20deg);
-  background: #c7c7cc;
+  background: $color-light-grey;
   opacity: 50%;
 }
 
 .layer-2:hover {
-  background: #f39000;
+  background: $color-orange-100;
   opacity: 50%;
 }

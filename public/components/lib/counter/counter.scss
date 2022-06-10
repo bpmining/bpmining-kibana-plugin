@@ -1,7 +1,7 @@
 @import '../../base';
 
 .number {
-  font-size: $font-size-counter;
+  font-size: $font-size-counter !important;
   font-weight: $font-weight-bold;
 }
 
