@@ -1,34 +1,7 @@
 import { schema } from '@kbn/config-schema';
-import { Explanation } from 'src/core/server/elasticsearch/client/types';
 import { IRouter, SearchResponse } from '../../../../src/core/server';
 import { SERVER_SEARCH_ROUTE_PATH } from '../../common';
-
-interface VisNode {
-  label: string;
-  caseID: string;
-
-  startTime?: number;
-  endTime?: number;
-
-  system?: string;
-  typ?: 'process' | 'third-party';
-  contextInfo?: object;
-}
-
-type ResponseObject = {
-  _index: string;
-  _type: string;
-  _id: string;
-  _score: number;
-  _source: VisNode;
-  _version?: number | undefined;
-  _explanation?: Explanation | undefined;
-  fields?: any;
-  highlight?: any;
-  inner_hits?: any;
-  matched_queries?: string[] | undefined;
-  sort?: unknown[] | undefined;
-};
+import { ProcessEvent } from '../../model/process_event';
 
 export function registerServerSearchRoute(router: IRouter) {
   router.post(
@@ -69,30 +42,9 @@ export function registerServerSearchRoute(router: IRouter) {
       };
 
       const res = await context.core.elasticsearch.client.asCurrentUser.search(params);
-      let hits = (res as SearchResponse).hits.hits;
+      const hits = (res as SearchResponse<ProcessEvent>).hits.hits;
 
-      const nodes: VisNode[] = [];
-      for (let i = 0; i < hits.length; i++) {
-        let node: ResponseObject = hits[i] as ResponseObject;
-
-        let typ = node._source.typ;
-        let label = node._source.label;
-        let system = node._source.system;
-        let contextInfo = node._source.contextInfo;
-        let caseID = node._source.caseID;
-        let startTime = node._source.startTime;
-        let endTime = node._source.endTime;
-
-        nodes.push({
-          label: label,
-          caseID: caseID,
-          startTime: startTime,
-          endTime: endTime,
-          system: system,
-          typ: typ,
-          contextInfo: contextInfo,
-        });
-      }
+      const nodes: ProcessEvent[] = hits.map((hit) => ({ ...hit._source }));
 
       return response.ok({
         body: {

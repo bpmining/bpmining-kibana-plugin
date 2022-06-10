@@ -29,7 +29,6 @@ export function PanelComponent() {
           onChange={(e) => onChange(e)}
         />
       </div>
-
       <CaseSelector />
     </EuiPanel>
   );

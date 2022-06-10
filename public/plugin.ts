@@ -3,25 +3,22 @@ import { DataPublicPluginSetup, DataPublicPluginStart } from 'src/plugins/data/p
 import { Plugin as ExpressionsPlugin } from 'src/plugins/expressions/public';
 import { VisualizationsSetup } from 'src/plugins/visualizations/public';
 
-import { createProcessGraphTypeDefinition } from './kbn_vis_config/process_graph_type';
-import { processGraphVisFn } from './kbn_vis_config/process_graph_vis_fn';
-import { processGraphVisRenderer } from './kbn_vis_config/process_graph_vis_renderer';
+import { createProcessGraphTypeDefinition } from './plugin_registration_config/type_definition';
+import { processGraphVisFn } from './plugin_registration_config/visualization_fn';
+import { processGraphVisRenderer } from './plugin_registration_config/visualization_renderer';
 import { setData } from './services';
 
-/** @internal */
 export interface ProcessGraphVisualizationDependencies {
   core: CoreSetup;
   plugins: { data: DataPublicPluginSetup };
 }
 
-/** @internal */
 export interface SetupDependencies {
   data: DataPublicPluginSetup;
   expressions: ReturnType<ExpressionsPlugin['setup']>;
   visualizations: VisualizationsSetup;
 }
 
-/** @internal */
 export interface StartDependencies {
   data: DataPublicPluginStart;
 }

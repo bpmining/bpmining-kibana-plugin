@@ -11,7 +11,9 @@
     "public/**/*.ts",
     "public/**/*.tsx",
     "server/**/*.ts",
+    "model/**/*.ts",
     "../../typings/**/*"
   ],
   "exclude": ["node_modules"]
+  
 }

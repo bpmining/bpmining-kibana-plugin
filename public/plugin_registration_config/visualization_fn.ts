@@ -6,7 +6,7 @@ import {
 import { KibanaContext, TimeRange, Query, ExecutionContextSearch } from 'src/plugins/data/public';
 import { VisData, ProcessGraphVisParams } from '../types';
 import { ProcessGraphVisualizationDependencies } from '../plugin';
-import { createProcessGraphRequestHandler } from './process_graph_request_handler';
+import { createProcessGraphRequestHandler } from './request_handler';
 import { get } from 'lodash';
 import { Adapters } from 'src/plugins/inspector';
 

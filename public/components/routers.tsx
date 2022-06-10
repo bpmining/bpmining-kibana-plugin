@@ -1,8 +1,8 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { VisNode, VisEdge } from '../types';
-import { CaseCounterComponent } from './lib/items/counter/case_counter';
-import { VariantCounterComponent } from './lib/items/counter/variant_counter';
+import { CaseCounterComponent } from './lib/counter/case_counter';
+import { VariantCounterComponent } from './lib/counter/variant_counter';
 import { VisGraphComponent } from './pages/process_graph/vis_graph';
 
 const COLOR_LAYER_1 = '#5B4897';
