@@ -1,20 +1,15 @@
-import { Filter, buildEsQuery } from '@kbn/es-query';
-import { TimeRange, Query, getEsQueryConfig } from '../../../../src/plugins/data/public';
-
-import { FETCH_PROCESS_DATA } from '../../common/routes';
-
 import { ProcessGraphVisualizationDependencies } from '../plugin';
 import { getData } from '../services';
-import { ProcessGraphVisParams } from '../types';
+import { buildEsQuery } from '@kbn/es-query';
+import { getEsQueryConfig } from '../../../../src/plugins/data/public';
+import { FETCH_PROCESS_DATA } from 'plugins/bpmining-kibana-plugin/common/routes';
+import { ProcessGraphRequestHandlerParams } from '../plugin_registration_config/request_handler';
 
-export interface ProcessGraphRequestHandlerParams {
-  query: Query;
-  filters: Filter;
-  timeRange: TimeRange;
-  visParams: ProcessGraphVisParams;
+export function fetchAggregatedProcessGraph() {
+  console.log('Fetch aggregated process graph.');
 }
 
-export function processGraphRequestHandler({
+export function fetchAggregatedThirdPartyGraph({
   core: { http, uiSettings },
 }: ProcessGraphVisualizationDependencies) {
   const { dataViews } = getData();

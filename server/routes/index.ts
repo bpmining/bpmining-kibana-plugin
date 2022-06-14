@@ -1,6 +1,8 @@
 import { IRouter } from '../../../../src/core/server';
-import { registerServerSearchRoute } from './server_search_route';
+import { aggregatedProcessGraphRoute } from './agg_process_graph_route';
+import { aggregatedThirdPartyGraphRoute } from './agg_third_party_graph';
 
 export function defineRoutes(router: IRouter) {
-  registerServerSearchRoute(router);
+  aggregatedProcessGraphRoute(router);
+  aggregatedThirdPartyGraphRoute(router);
 }

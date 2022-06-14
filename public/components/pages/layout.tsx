@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { EuiPage, EuiResizableContainer } from '@elastic/eui';
 import { PanelComponent } from './side_panel/panel';
 import { VisNode, VisEdge } from '../../types';
 import { LayerPanelComponent } from './layer_panel/layer_panel';
 import { GraphRouter } from '../routers';
 import '../_base.scss';
+import { fetchAggregatedThirdPartyGraph } from '../../reducer_actions/fetch_aggregated_graph';
+import { ProcessGraphVisualizationDependencies } from '../../plugin';
 
 type Props = {
   nodes: VisNode[];
@@ -12,6 +14,10 @@ type Props = {
 };
 
 export function LayoutComponent({ nodes, edges }: Props) {
+  useEffect(() => {
+    // console.log(fetchAggregatedThirdPartyGraph())
+  });
+
   return (
     <EuiPage paddingSize="none">
       <EuiResizableContainer style={{ height: 650, width: '100%' }}>

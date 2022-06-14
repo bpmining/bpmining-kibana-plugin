@@ -6,7 +6,7 @@ import {
 import { KibanaContext, TimeRange, Query, ExecutionContextSearch } from 'src/plugins/data/public';
 import { VisData, ProcessGraphVisParams } from '../types';
 import { ProcessGraphVisualizationDependencies } from '../plugin';
-import { createProcessGraphRequestHandler } from './request_handler';
+import { processGraphRequestHandler } from './request_handler';
 import { get } from 'lodash';
 import { Adapters } from 'src/plugins/inspector';
 
@@ -45,8 +45,8 @@ export const processGraphVisFn = (
     },
   },
   async fn(input, args): Output {
-    const processGraphRequestHandler = createProcessGraphRequestHandler(dependencies);
-    const response = await processGraphRequestHandler({
+    const requestHandler = processGraphRequestHandler(dependencies);
+    const response = await requestHandler({
       timeRange: get(input, 'timeRange') as TimeRange,
       query: get(input, 'query') as Query,
       filters: get(input, 'filters') as any,
