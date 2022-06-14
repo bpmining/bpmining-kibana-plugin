@@ -20,7 +20,6 @@ export function BpminingApp(props: ProcessGraphComponentProps) {
   });
 
   let nodes: VisNode[] = props.visData.data;
-  console.log(nodes);
   if (nodes === undefined) {
     console.log('no nodes');
     return <div> No graph can be shown.</div>;

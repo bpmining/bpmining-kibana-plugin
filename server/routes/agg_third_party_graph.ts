@@ -1,12 +1,12 @@
 import { schema } from '@kbn/config-schema';
 import { IRouter, SearchResponse } from '../../../../src/core/server';
-import { SERVER_SEARCH_ROUTE_PATH } from '../../common';
-import { ProcessEvent } from '../../model/event';
+import { FETCH_THIRD_PARTY_DATA } from '../../common/routes';
+import { ProcessEvent } from '../../model/process_event';
 
-export function registerServerSearchRoute(router: IRouter) {
+export function aggregatedThirdPartyGraphRoute(router: IRouter) {
   router.post(
     {
-      path: SERVER_SEARCH_ROUTE_PATH,
+      path: FETCH_THIRD_PARTY_DATA,
       validate: {
         body: schema.object({
           index: schema.string(),
@@ -35,6 +35,7 @@ export function registerServerSearchRoute(router: IRouter) {
                   },
                 },
               ],
+              filter: [{ term: { typ: 'third-party' } }],
             },
           },
           size: 100,
