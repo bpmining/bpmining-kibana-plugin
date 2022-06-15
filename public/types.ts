@@ -4,6 +4,11 @@ export interface ProcessGraphVisParams {
 
 export interface VisData {
   data: VisNode[];
+  index: string;
+  filter: any;
+  timeFieldName: string;
+  timeRangeFrom: any;
+  timeRangeTo: any;
 }
 
 export interface VisNode {

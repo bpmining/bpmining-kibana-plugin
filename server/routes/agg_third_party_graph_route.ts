@@ -1,12 +1,12 @@
 import { schema } from '@kbn/config-schema';
 import { IRouter, SearchResponse } from '../../../../src/core/server';
-import { FETCH_PROCESS_DATA } from '../../common/routes';
+import { FETCH_THIRD_PARTY_DATA } from '../../common/routes';
 import { ProcessEvent } from '../../model/process_event';
 
-export function aggregatedProcessGraphRoute(router: IRouter) {
+export function aggregatedThirdPartyGraphRoute(router: IRouter) {
   router.post(
     {
-      path: FETCH_PROCESS_DATA,
+      path: FETCH_THIRD_PARTY_DATA,
       validate: {
         body: schema.object({
           index: schema.string(),
@@ -35,7 +35,7 @@ export function aggregatedProcessGraphRoute(router: IRouter) {
                   },
                 },
               ],
-              filter: [{ term: { typ: 'process' } }],
+              filter: [{ term: { typ: 'third-party' } }],
             },
           },
           size: 100,

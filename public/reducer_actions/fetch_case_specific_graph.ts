@@ -1,4 +1,4 @@
-import { FETCH_PROCESS_DATA, FETCH_THIRD_PARTY_DATA } from '../../common/routes';
+import { FETCH_PROCESS_DATA_CASE, FETCH_THIRD_PARTY_DATA_CASE } from '../../common/routes';
 import { getSearchService } from '../services';
 import { VisNode } from '../types';
 
@@ -19,15 +19,31 @@ export interface MetaData {
   timeRangeTo: any;
 }
 
-export function fetchAggregatedProcessGraph() {
+export async function fetchProcessGraphCase(metadata: MetaData, caseID: string) {
   console.log('Fetch aggregated process graph.');
   const router = getSearchService();
+  return await router
+    .post(FETCH_PROCESS_DATA_CASE, {
+      body: JSON.stringify({
+        index: metadata.index,
+        filtersDsl: metadata.filter,
+        timeFieldName: metadata.timeFieldName,
+        timeRangeFrom: metadata.timeRangeFrom,
+        timeRangeTo: metadata.timeRangeTo,
+        caseID: caseID,
+      }),
+    })
+    .then((response) => {
+      const nodes = response.data;
+      console.log(nodes);
+      return nodes;
+    });
 }
 
-export async function fetchAggregatedThirdPartyGraph(metadata: MetaData) {
+export async function fetchThirdPartyGraphCase(metadata: MetaData) {
   const router = getSearchService();
   return await router
-    .post(FETCH_THIRD_PARTY_DATA, {
+    .post(FETCH_THIRD_PARTY_DATA_CASE, {
       body: JSON.stringify({
         index: metadata.index,
         filtersDsl: metadata.filter,

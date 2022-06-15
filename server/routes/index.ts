@@ -1,8 +1,10 @@
 import { IRouter } from '../../../../src/core/server';
 import { aggregatedProcessGraphRoute } from './agg_process_graph_route';
-import { aggregatedThirdPartyGraphRoute } from './agg_third_party_graph';
+import { aggregatedThirdPartyGraphRoute } from './agg_third_party_graph_route';
+import { caseProcessGraphRoute } from './case_process_graph_route';
 
 export function defineRoutes(router: IRouter) {
   aggregatedProcessGraphRoute(router);
   aggregatedThirdPartyGraphRoute(router);
+  caseProcessGraphRoute(router);
 }
