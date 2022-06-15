@@ -1,16 +1,12 @@
 import { CoreSetup, CoreStart, Plugin } from 'src/core/public';
-import {
-  DataPublicPluginSetup,
-  DataPublicPluginStart,
-  getEsQueryConfig,
-} from 'src/plugins/data/public';
+import { DataPublicPluginSetup, DataPublicPluginStart } from 'src/plugins/data/public';
 import { Plugin as ExpressionsPlugin } from 'src/plugins/expressions/public';
 import { VisualizationsSetup } from 'src/plugins/visualizations/public';
 
 import { createProcessGraphTypeDefinition } from './plugin_registration_config/type_definition';
 import { processGraphVisFn } from './plugin_registration_config/visualization_fn';
 import { processGraphVisRenderer } from './plugin_registration_config/visualization_renderer';
-import { getData, setData } from './services';
+import { setData, setSearchService } from './services';
 
 export interface ProcessGraphVisualizationDependencies {
   core: CoreSetup;
@@ -48,6 +44,7 @@ export class BpminingPlugin implements Plugin<BpminingPluginSetup, BpminingPlugi
 
   public start(core: CoreStart, { data }: StartDependencies) {
     setData(data);
+    setSearchService(core.http);
   }
 
   public stop() {}

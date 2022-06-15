@@ -6,16 +6,18 @@ import { LayerPanelComponent } from './layer_panel/layer_panel';
 import { GraphRouter } from '../routers';
 import '../_base.scss';
 import { fetchAggregatedThirdPartyGraph } from '../../reducer_actions/fetch_aggregated_graph';
-import { ProcessGraphVisualizationDependencies } from '../../plugin';
+import { fetchProcessGraphCase } from '../../reducer_actions/fetch_case_specific_graph';
 
 type Props = {
   nodes: VisNode[];
   edges: VisEdge[];
+  metadata: any;
 };
 
-export function LayoutComponent({ nodes, edges }: Props) {
+export function LayoutComponent({ nodes, edges, metadata }: Props) {
   useEffect(() => {
-    // console.log(fetchAggregatedThirdPartyGraph())
+    const response = fetchProcessGraphCase(metadata, 'A-11');
+    console.log(response);
   });
 
   return (

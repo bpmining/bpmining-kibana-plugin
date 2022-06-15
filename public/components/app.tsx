@@ -6,6 +6,11 @@ import { VisNode, VisEdge } from '../types';
 
 export interface RawVisData {
   data: VisNode[];
+  index: any;
+  filter: any;
+  timeFieldName: string;
+  timeRangeFrom: any;
+  timeRangeTo: any;
 }
 
 interface ProcessGraphComponentProps {
@@ -25,10 +30,10 @@ export function BpminingApp(props: ProcessGraphComponentProps) {
     return <div> No graph can be shown.</div>;
   } else {
     let edges: VisEdge[] = [];
-
+    console.log(props.visData);
     return (
       <MemoryRouter>
-        <LayoutComponent nodes={nodes} edges={edges} />
+        <LayoutComponent nodes={nodes} edges={edges} metadata={props.visData} />
       </MemoryRouter>
     );
   }
