@@ -34,9 +34,9 @@ export async function fetchProcessGraphCase(metadata: MetaData, caseID: string) 
       }),
     })
     .then((response) => {
-      const nodes = response.data;
-      console.log(nodes);
-      return nodes;
+      const graph = response.data;
+      console.log(graph);
+      return graph;
     });
 }
 
