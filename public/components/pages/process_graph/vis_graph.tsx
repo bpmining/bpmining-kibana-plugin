@@ -1,7 +1,7 @@
 // @ts-ignore
 import Graph from 'react-graph-vis';
 import React from 'react';
-import { VisNode, VisEdge } from '../../../types';
+import { VisEdge, VisNode } from '../../../../model/vis_types';
 
 export interface VisGraphComponentProps {
   nodes: VisNode[];
@@ -14,7 +14,7 @@ export function VisGraphComponent(props: VisGraphComponentProps) {
     nodes: props.nodes,
     edges: props.edges,
   };
-
+  console.log(graph);
   const options = {
     autoResize: true,
     layout: {
@@ -22,6 +22,7 @@ export function VisGraphComponent(props: VisGraphComponentProps) {
     },
     nodes: {
       color: props.color,
+      opacity: 0.5,
     },
     edges: {
       color: '#000000',

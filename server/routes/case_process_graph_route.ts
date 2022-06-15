@@ -2,6 +2,7 @@ import { schema } from '@kbn/config-schema';
 import { IRouter, SearchResponse } from '../../../../src/core/server';
 import { FETCH_PROCESS_DATA_CASE } from '../../common/routes';
 import { ProcessEvent } from '../../model/process_event';
+import { buildCaseGraph } from '../graph_calculation/build_case_graph';
 
 export function caseProcessGraphRoute(router: IRouter) {
   router.post(
@@ -47,10 +48,11 @@ export function caseProcessGraphRoute(router: IRouter) {
       const hits = (res as SearchResponse<ProcessEvent>).hits.hits;
 
       const nodes: ProcessEvent[] = hits.map((hit) => ({ ...hit._source }));
+      const graph = buildCaseGraph(nodes);
 
       return response.ok({
         body: {
-          data: nodes,
+          data: graph,
           index: index,
           filter: filtersDsl,
           timeFieldName: timeFieldName,

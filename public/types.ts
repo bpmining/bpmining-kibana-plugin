@@ -22,8 +22,3 @@ export interface VisNode {
   typ?: 'process' | 'third-party';
   contextInfo?: object;
 }
-
-export interface VisEdge {
-  from: number;
-  to: number;
-}
