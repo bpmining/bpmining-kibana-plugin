@@ -18,3 +18,8 @@ export interface VisEdge {
     from: number;
     to: number;
   }
+
+  export interface VisGraphProps {
+    nodes: VisNode[];
+    edges: VisEdge[];
+  }

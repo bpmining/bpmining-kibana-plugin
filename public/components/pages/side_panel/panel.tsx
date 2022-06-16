@@ -5,20 +5,31 @@ import '../../_base.scss';
 import './panel.scss';
 import { CaseCounterRouter, VariantCounterRouter } from '../../routers';
 import { CaseSelector } from './case_selector/case_selector';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 
-export function PanelComponent() {
+interface PanelComponentProps {
+  caseIds: string[];
+  caseCount: number;
+}
+
+const mapStateToProps = (state) => {
+  return state;
+};
+
+const PanelComponent = (props) => {
   const [checked, setChecked] = useState(false);
   const onChange = (e: any) => {
     setChecked(e.target.checked);
   };
-
+  console.log(props);
   return (
     <EuiPanel paddingSize="m" style={{ minHeight: '100%' }}>
       <div className="design-scope">
         <img src={logo} alt="Logo" className="logo" />
 
         <div className="counter-container">
-          <CaseCounterRouter cases={2} />
+          <CaseCounterRouter cases={props.caseCount} />
           <VariantCounterRouter variants={2} />
         </div>
 
@@ -31,8 +42,15 @@ export function PanelComponent() {
             onChange={(e) => onChange(e)}
           />
         </div>
-        <CaseSelector />
+        <CaseSelector caseIds={props.caseIds} metadata={props.metadata} />
       </div>
     </EuiPanel>
   );
-}
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return bindActionCreators({}, dispatch);
+};
+
+const connectedPanelComponent = connect(mapStateToProps, mapDispatchToProps)(PanelComponent);
+export { connectedPanelComponent as PanelComponent };

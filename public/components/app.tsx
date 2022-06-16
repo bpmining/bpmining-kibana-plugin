@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { ProcessGraphVisParams } from '../types';
 import { MemoryRouter } from 'react-router-dom';
 import { LayoutComponent } from './pages/layout';
-import { VisNode, VisEdge } from '../types';
+import { VisEdge, VisNode } from 'plugins/bpmining-kibana-plugin/model/vis_types';
 
 export interface RawVisData {
   data: VisNode[];
