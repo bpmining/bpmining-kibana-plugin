@@ -4,8 +4,9 @@ import { PanelComponent } from './side_panel/panel';
 import { LayerPanelComponent } from './layer_panel/layer_panel';
 import { GraphRouter } from '../routers';
 import '../_base.scss';
-import { fetchProcessGraphCase } from '../../reducer_actions/fetch_case_specific_graph';
 import { VisEdge, VisNode } from 'plugins/bpmining-kibana-plugin/model/vis_types';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 
 type Props = {
   nodes: VisNode[];
@@ -13,17 +14,23 @@ type Props = {
   metadata: any;
 };
 
-export function LayoutComponent({ nodes, edges, metadata }: Props) {
-  const [graph, setGraph] = useState({ nodes: nodes, edges: edges });
+const mapStateToProps = (state) => {
+  return state;
+};
+
+const LayoutComponent = (props) => {
+  const [caseCount, setCaseCount] = useState(0);
+  const [caseIds, setCaseIds] = useState([]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      const graph = await fetchProcessGraphCase(metadata, 'A-11');
-      setGraph(graph);
-      console.log(graph);
-    };
-    fetchData();
+    setCaseCount(props.metadata.data.caseCount);
+    setCaseIds(props.metadata.data.caseIds);
   }, []);
+
+  let graphBool = false;
+  if (props.rootReducer.graph) {
+    graphBool = true;
+  }
 
   return (
     <EuiPage paddingSize="none">
@@ -31,14 +38,19 @@ export function LayoutComponent({ nodes, edges, metadata }: Props) {
         {(EuiResizablePanel, EuiResizableButton) => (
           <>
             <EuiResizablePanel mode="collapsible" initialSize={20} minSize="18%">
-              <PanelComponent />
+              <PanelComponent caseCount={caseCount} caseIds={caseIds} metadata={props.metadata} />
             </EuiResizablePanel>
 
             <EuiResizableButton />
 
             <EuiResizablePanel mode="main" initialSize={80} minSize="500px">
               <div className="design-scope">
-                <GraphRouter nodes={graph.nodes} edges={graph.edges} />
+                {graphBool && (
+                  <GraphRouter
+                    nodes={props.rootReducer.graph.nodes}
+                    edges={props.rootReducer.graph.edges}
+                  />
+                )}
                 <div className="layer-container">
                   <LayerPanelComponent />
                 </div>
@@ -49,4 +61,11 @@ export function LayoutComponent({ nodes, edges, metadata }: Props) {
       </EuiResizableContainer>
     </EuiPage>
   );
-}
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return bindActionCreators({}, dispatch);
+};
+
+const connectedLayoutComponent = connect(mapStateToProps, mapDispatchToProps)(LayoutComponent);
+export { connectedLayoutComponent as LayoutComponent };

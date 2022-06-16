@@ -1,17 +1,12 @@
+import { VisGraphProps } from 'plugins/bpmining-kibana-plugin/model/vis_types';
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { calculateColorValue } from '../services';
-import { VisNode, VisEdge } from '../types';
 import { CaseCounterComponent } from './lib/counter/case_counter';
 import { VariantCounterComponent } from './lib/counter/variant_counter';
 import { VisGraphComponent } from './pages/process_graph/vis_graph';
 
-interface VisGraphRouterProps {
-  nodes: VisNode[];
-  edges: VisEdge[];
-}
-
-export function GraphRouter({ nodes, edges }: VisGraphRouterProps) {
+export function GraphRouter({ nodes, edges }: VisGraphProps) {
   return (
     <Switch>
       <Route exact path="/">
