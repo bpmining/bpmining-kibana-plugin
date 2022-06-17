@@ -4,7 +4,7 @@ import { MemoryRouter } from 'react-router-dom';
 import { LayoutComponent } from './pages/layout';
 import { VisEdge, VisNode } from 'plugins/bpmining-kibana-plugin/model/vis_types';
 
-export interface RawVisData {
+export interface RawResponseData {
   data: VisNode[];
   index: any;
   filter: any;
@@ -16,7 +16,7 @@ export interface RawVisData {
 interface ProcessGraphComponentProps {
   renderComplete(): void;
   visParams: ProcessGraphVisParams;
-  visData: RawVisData;
+  visData: RawResponseData;
 }
 
 export function BpminingApp(props: ProcessGraphComponentProps) {

@@ -1,9 +1,14 @@
 import { ProcessEvent } from 'plugins/bpmining-kibana-plugin/model/process_event';
-import { VisNode } from 'plugins/bpmining-kibana-plugin/model/vis_types';
+import { VisEdge, VisNode } from 'plugins/bpmining-kibana-plugin/model/vis_types';
 import { assignNodeIds } from './assign_node_ids';
 import { calculateEdges } from './calculate_edges';
 import { calculateNodeThroughputTime } from './calculate_node_throughput_time';
 import { sortNodes } from './sort_nodes';
+
+export interface ProcessGraph {
+  nodes: VisNode[];
+  edges: VisEdge[];
+}
 
 export function buildCaseGraph(nodes: ProcessEvent[]) {
   const sortedNodes = sortNodes(nodes, 'timestamp');
