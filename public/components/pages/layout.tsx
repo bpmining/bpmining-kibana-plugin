@@ -15,6 +15,7 @@ type Props = {
 };
 
 const mapStateToProps = (state) => {
+  console.log(state)
   return state;
 };
 

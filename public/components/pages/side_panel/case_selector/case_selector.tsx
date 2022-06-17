@@ -1,27 +1,39 @@
 import * as React from 'react';
 import { Autocomplete, TextField } from '@mui/material';
-import { bindActionCreators } from 'redux';
+import { AnyAction, bindActionCreators, Dispatch } from 'redux';
 import * as fetchCaseGraphActions from '../../../../reducer_actions/fetch_case_specific_graph';
 import { connect } from 'react-redux';
 import { useState } from 'react';
 
-interface CaseSelectorProps {
-  caseIds: string[];
+interface CaseSelectorState{
+  rootReducer: Object;
 }
 
-const mapStateToProps = (state) => {
+interface CaseSelectorProps {
+  caseIds: string[];
+  metadata: any;
+  unselectCaseAction: Function; 
+  fetchCaseGraphAction: Function;
+}
+
+interface CaseSelectorOption {
+  label: string;
+}
+const mapStateToProps = (state: CaseSelectorState) => {
+  console.log(state)
   return state;
 };
 
-const CaseSelector = (props) => {
-  const [value, setValue] = useState('');
+const CaseSelector = (props: CaseSelectorProps) => {
+  const [value, setValue] = useState<CaseSelectorOption | null>({label: ''});
 
-  const cases: any = [];
+  const cases: CaseSelectorOption[] = [];
+ 
   for (let i = 0; i < props.caseIds.length; i++) {
     cases.push({ label: props.caseIds[i] });
   }
-
-  function handleChange(event: any, value: any) {
+  
+  function handleChange(event: any, value: CaseSelectorOption | null) {
     setValue(value);
     if (value === null) {
       const { unselectCaseAction } = props;
@@ -35,7 +47,7 @@ const CaseSelector = (props) => {
   return (
     <Autocomplete
       value={value}
-      isOptionEqualToValue={(option, value) => option.value === value.value}
+      isOptionEqualToValue={(option: any, value: any) => option.value === value.value}
       disablePortal
       id="combo-box-demo"
       options={cases}
@@ -46,7 +58,7 @@ const CaseSelector = (props) => {
   );
 };
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch: Dispatch<AnyAction>) => {
   return bindActionCreators(
     {
       fetchCaseGraphAction: fetchCaseGraphActions.fetchCaseGraph,

@@ -1,4 +1,4 @@
-import { VisGraphProps } from '../../model/vis_types';
+import { VisGraph } from '../../model/vis_types';
 import { FETCH_PROCESS_DATA_CASE, FETCH_THIRD_PARTY_DATA_CASE } from '../../common/routes';
 import { getSearchService } from '../services';
 import { VisNode } from '../types';
@@ -24,14 +24,14 @@ export const FETCH_CASE_GRAPH_SUCCESS = 'FETCH_CASE_GRAPH_SUCCESS';
 export const FETCH_CASE_GRAPH_ERROR = 'FETCH_CASE_GRAPH_ERROR';
 export const UNSELECT_CASE = 'UNSELECT_CASE';
 
-export function fetchCaseGraphSuccessAction(caseGraph: VisGraphProps) {
+export function fetchCaseGraphSuccessAction(caseGraph: VisGraph) {
   return {
     type: FETCH_CASE_GRAPH_SUCCESS,
     graph: caseGraph,
   };
 }
 
-export function fetchCaseGraphErrorAction(error: any) {
+export function fetchCaseGraphErrorAction(error: Error) {
   return {
     type: FETCH_CASE_GRAPH_ERROR,
     error: error,

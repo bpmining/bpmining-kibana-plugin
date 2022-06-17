@@ -19,7 +19,7 @@ export interface VisEdge {
     to: number;
   }
 
-  export interface VisGraphProps {
+  export interface VisGraph {
     nodes: VisNode[];
     edges: VisEdge[];
   }
