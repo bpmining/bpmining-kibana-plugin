@@ -7,6 +7,7 @@ import '../_base.scss';
 import { VisEdge, VisNode } from 'plugins/bpmining-kibana-plugin/model/vis_types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { constNull } from 'fp-ts/lib/function';
 
 type Props = {
   nodes: VisNode[];
@@ -15,18 +16,19 @@ type Props = {
 };
 
 const mapStateToProps = (state) => {
-  console.log(state)
+  console.log(state);
   return state;
 };
 
 const LayoutComponent = (props) => {
   const [caseCount, setCaseCount] = useState(0);
   const [caseIds, setCaseIds] = useState([]);
-
+  console.log(props.metadata.data);
   useEffect(() => {
+    console.log(props.metadata.data);
     setCaseCount(props.metadata.data.caseCount);
     setCaseIds(props.metadata.data.caseIds);
-  }, []);
+  }, [props]);
 
   let graphBool = false;
   if (props.rootReducer.graph) {
