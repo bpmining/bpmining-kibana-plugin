@@ -2,6 +2,7 @@ import { VisGraph } from '../../model/vis_types';
 import { FETCH_PROCESS_DATA_CASE, FETCH_THIRD_PARTY_DATA_CASE } from '../../common/routes';
 import { getSearchService } from '../services';
 import { VisNode } from '../types';
+import { AnyAction, Dispatch } from 'redux';
 
 export interface ResponseData {
   data: VisNode[];
@@ -45,7 +46,7 @@ export function unselectCaseAction() {
 }
 
 export const fetchCaseGraph = (metadata: MetaData, caseId: string) => {
-  return function (dispatch) {
+  return function (dispatch: Dispatch<AnyAction>) {
     fetchProcessGraphCase(metadata, caseId)
       .then(
         function (caseGraph) {
