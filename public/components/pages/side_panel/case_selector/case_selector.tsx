@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Autocomplete, TextField } from '@mui/material';
 import { AnyAction, bindActionCreators, Dispatch } from 'redux';
 import { connect } from 'react-redux';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { RootReducer } from '../../../../reducer/root_reducer';
 
 import * as fetchCaseGraphActions from '../../../../reducer_actions/fetch_case_specific_graph';
@@ -14,6 +14,7 @@ interface CaseSelectorState {
 interface CaseSelectorProps {
   caseIds: string[];
   metadata: any;
+  rootReducer: RootReducer;
   unselectCaseAction: Function;
   fetchCaseGraphAction: Function;
 }
@@ -29,6 +30,8 @@ const mapStateToProps = (state: CaseSelectorState) => {
 const CaseSelector = (props: CaseSelectorProps) => {
   const [value, setValue] = useState<CaseSelectorOption | null>({ label: '' });
 
+  useEffect(() => {}, [props]);
+
   const cases: CaseSelectorOption[] = [];
 
   for (let i = 0; i < props.caseIds.length; i++) {
@@ -43,7 +46,8 @@ const CaseSelector = (props: CaseSelectorProps) => {
       return;
     }
     const { fetchCaseGraphAction } = props;
-    fetchCaseGraphAction(props.metadata, value.label);
+    console.log(props.rootReducer.layer);
+    fetchCaseGraphAction(props.metadata, value.label, props.rootReducer.layer);
   }
 
   return (
