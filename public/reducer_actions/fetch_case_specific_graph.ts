@@ -45,26 +45,45 @@ export function unselectCaseAction() {
   };
 }
 
-export const fetchCaseGraph = (metadata: MetaData, caseId: string) => {
+export const fetchCaseGraph = (metadata: MetaData, caseId: string, layer: number) => {
   return function (dispatch: Dispatch<AnyAction>) {
-    fetchProcessGraphCase(metadata, caseId)
-      .then(
-        function (caseGraph) {
-          const action = fetchCaseGraphSuccessAction(caseGraph);
-          dispatch(action);
-        },
-        (error) => {
+    if (layer === 1) {
+      fetchProcessGraphCase(metadata, caseId)
+        .then(
+          function (caseGraph) {
+            const action = fetchCaseGraphSuccessAction(caseGraph);
+            dispatch(action);
+          },
+          (error) => {
+            dispatch(fetchCaseGraphErrorAction(error));
+          }
+        )
+        .catch((error) => {
           dispatch(fetchCaseGraphErrorAction(error));
-        }
-      )
-      .catch((error) => {
-        dispatch(fetchCaseGraphErrorAction(error));
-      });
+        });
+    } else if (layer === 2) {
+      console.log('Fetch data for Layer 2');
+      fetchThirdPartyGraphCase(metadata, caseId)
+        .then(
+          function (caseGraph) {
+            const action = fetchCaseGraphSuccessAction(caseGraph);
+            dispatch(action);
+          },
+          (error) => {
+            dispatch(fetchCaseGraphErrorAction(error));
+          }
+        )
+        .catch((error) => {
+          dispatch(fetchCaseGraphErrorAction(error));
+        });
+    } else {
+      throw new Error('Layer out of bounds (must be 1 or 2).');
+    }
   };
 };
 
 async function fetchProcessGraphCase(metadata: MetaData, caseId: string) {
-  console.log('Fetch aggregated process graph.');
+  console.log('Fetch process graph for case: ' + caseId);
   const router = getSearchService();
   return await router
     .post(FETCH_PROCESS_DATA_CASE, {
@@ -84,7 +103,8 @@ async function fetchProcessGraphCase(metadata: MetaData, caseId: string) {
     });
 }
 
-export async function fetchThirdPartyGraphCase(metadata: MetaData) {
+export async function fetchThirdPartyGraphCase(metadata: MetaData, caseId: string) {
+  console.log('Fetch third party graph for case: ' + caseId);
   const router = getSearchService();
   return await router
     .post(FETCH_THIRD_PARTY_DATA_CASE, {
@@ -94,11 +114,12 @@ export async function fetchThirdPartyGraphCase(metadata: MetaData) {
         timeFieldName: metadata.timeFieldName,
         timeRangeFrom: metadata.timeRangeFrom,
         timeRangeTo: metadata.timeRangeTo,
+        caseID: caseId,
       }),
     })
     .then((response) => {
-      const nodes = response.data;
-      console.log(nodes);
-      return nodes;
+      const graph = response.data;
+      console.log(graph);
+      return graph;
     });
 }

@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import { ProcessGraphVisParams } from '../types';
-import { MemoryRouter } from 'react-router-dom';
 import { LayoutComponent } from './pages/layout';
 import { VisEdge, VisNode } from 'plugins/bpmining-kibana-plugin/model/vis_types';
 
@@ -31,10 +30,6 @@ export function BpminingApp(props: ProcessGraphComponentProps) {
   } else {
     let edges: VisEdge[] = [];
     console.log(props.visData);
-    return (
-      <MemoryRouter>
-        <LayoutComponent nodes={nodes} edges={edges} metadata={props.visData} />
-      </MemoryRouter>
-    );
+    return <LayoutComponent nodes={nodes} edges={edges} metadata={props.visData} />;
   }
 }
