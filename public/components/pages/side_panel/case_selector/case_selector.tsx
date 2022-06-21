@@ -5,14 +5,14 @@ import * as fetchCaseGraphActions from '../../../../reducer_actions/fetch_case_s
 import { connect } from 'react-redux';
 import { useState } from 'react';
 
-interface CaseSelectorState{
+interface CaseSelectorState {
   rootReducer: Object;
 }
 
 interface CaseSelectorProps {
   caseIds: string[];
   metadata: any;
-  unselectCaseAction: Function; 
+  unselectCaseAction: Function;
   fetchCaseGraphAction: Function;
 }
 
@@ -20,19 +20,19 @@ interface CaseSelectorOption {
   label: string;
 }
 const mapStateToProps = (state: CaseSelectorState) => {
-  console.log(state)
+  console.log(state);
   return state;
 };
 
 const CaseSelector = (props: CaseSelectorProps) => {
-  const [value, setValue] = useState<CaseSelectorOption | null>({label: ''});
+  const [value, setValue] = useState<CaseSelectorOption | null>({ label: '' });
 
   const cases: CaseSelectorOption[] = [];
- 
+
   for (let i = 0; i < props.caseIds.length; i++) {
     cases.push({ label: props.caseIds[i] });
   }
-  
+
   function handleChange(event: any, value: CaseSelectorOption | null) {
     setValue(value);
     if (value === null) {

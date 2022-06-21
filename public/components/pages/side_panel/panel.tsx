@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { EuiPanel, EuiSwitch } from '@elastic/eui';
 import logo from '../../../../common/logo/bpmining.svg';
 import '../../_base.scss';
@@ -19,6 +19,9 @@ const mapStateToProps = (state) => {
 
 const PanelComponent = (props) => {
   const [checked, setChecked] = useState(false);
+
+  useEffect(() => {}, [props]);
+
   const onChange = (e: any) => {
     setChecked(e.target.checked);
   };
