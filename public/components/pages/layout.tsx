@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { EuiPage, EuiResizableContainer } from '@elastic/eui';
 import { PanelComponent } from './side_panel/panel';
-import { LayerPanelComponent } from './layer_panel/layer_panel';
-import { GraphRouter } from '../routers';
+import { LayerPanel } from './layer_panel/layer_panel';
 import '../_base.scss';
 import { VisEdge, VisNode } from 'plugins/bpmining-kibana-plugin/model/vis_types';
 import { AnyAction, bindActionCreators, Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { RootReducer } from '../../reducer/root_reducer';
+import { VisGraphComponent } from './process_graph/vis_graph';
+import { calculateColorValue } from '../../services';
 
 interface LayoutState {
   rootReducer: RootReducer;
@@ -53,13 +54,14 @@ const LayoutComponent = (props: LayoutProps) => {
             <EuiResizablePanel mode="main" initialSize={80} minSize="500px">
               <div className="design-scope">
                 {graphBool && (
-                  <GraphRouter
+                  <VisGraphComponent
                     nodes={props.rootReducer.graph.nodes}
                     edges={props.rootReducer.graph.edges}
+                    color={calculateColorValue(props.rootReducer.layer)}
                   />
                 )}
                 <div className="layer-container">
-                  <LayerPanelComponent />
+                  <LayerPanel />
                 </div>
               </div>
             </EuiResizablePanel>

@@ -3,11 +3,13 @@ import { EuiPanel, EuiSwitch } from '@elastic/eui';
 import logo from '../../../../common/logo/bpmining.svg';
 import '../../_base.scss';
 import './panel.scss';
-import { CaseCounterRouter, VariantCounterRouter } from '../../routers';
 import { CaseSelector } from './case_selector/case_selector';
 import { AnyAction, bindActionCreators, Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { RootReducer } from '../../../reducer/root_reducer';
+import { calculateColorValue } from '../../../services';
+import { CaseCounterComponent } from '../../lib/counter/case_counter';
+import { VariantCounterComponent } from '../../lib/counter/variant_counter';
 
 interface PanelComponentState {
   rootReducer: RootReducer;
@@ -17,6 +19,7 @@ interface PanelComponentProps {
   caseIds: string[];
   caseCount: number;
   metadata: any;
+  rootReducer: RootReducer;
 }
 
 const mapStateToProps = (state: PanelComponentState) => {
@@ -38,8 +41,14 @@ const PanelComponent = (props: PanelComponentProps) => {
         <img src={logo} alt="Logo" className="logo" />
 
         <div className="counter-container">
-          <CaseCounterRouter cases={props.caseCount} />
-          <VariantCounterRouter variants={2} />
+          <CaseCounterComponent
+            cases={props.caseCount}
+            color={calculateColorValue(props.rootReducer.layer)}
+          />
+          <VariantCounterComponent
+            variants={1}
+            color={calculateColorValue(props.rootReducer.layer)}
+          />
         </div>
 
         <div className="frequency-map-container">
