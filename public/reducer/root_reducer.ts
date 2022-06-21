@@ -2,7 +2,7 @@ import { VisGraph } from 'plugins/bpmining-kibana-plugin/model/vis_types';
 import * as fetchCaseGraphActions from '../reducer_actions/fetch_case_specific_graph';
 
 export interface RootReducer {
-  graph: VisGraph | undefined;
+  graph: VisGraph;
   error: Error | null;
 }
 

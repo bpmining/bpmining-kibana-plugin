@@ -5,27 +5,31 @@ import { LayerPanelComponent } from './layer_panel/layer_panel';
 import { GraphRouter } from '../routers';
 import '../_base.scss';
 import { VisEdge, VisNode } from 'plugins/bpmining-kibana-plugin/model/vis_types';
-import { bindActionCreators } from 'redux';
+import { AnyAction, bindActionCreators, Dispatch } from 'redux';
 import { connect } from 'react-redux';
-import { constNull } from 'fp-ts/lib/function';
+import { RootReducer } from '../../reducer/root_reducer';
 
-type Props = {
+interface LayoutState {
+  rootReducer: RootReducer;
+}
+
+type LayoutProps = {
   nodes: VisNode[];
   edges: VisEdge[];
   metadata: any;
+  rootReducer: RootReducer;
 };
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state: LayoutState) => {
   console.log(state);
   return state;
 };
 
-const LayoutComponent = (props) => {
+const LayoutComponent = (props: LayoutProps) => {
   const [caseCount, setCaseCount] = useState(0);
   const [caseIds, setCaseIds] = useState([]);
-  console.log(props.metadata.data);
+
   useEffect(() => {
-    console.log(props.metadata.data);
     setCaseCount(props.metadata.data.caseCount);
     setCaseIds(props.metadata.data.caseIds);
   }, [props]);
@@ -66,7 +70,7 @@ const LayoutComponent = (props) => {
   );
 };
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch: Dispatch<AnyAction>) => {
   return bindActionCreators({}, dispatch);
 };
 

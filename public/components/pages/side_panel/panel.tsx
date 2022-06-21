@@ -5,19 +5,25 @@ import '../../_base.scss';
 import './panel.scss';
 import { CaseCounterRouter, VariantCounterRouter } from '../../routers';
 import { CaseSelector } from './case_selector/case_selector';
-import { bindActionCreators } from 'redux';
+import { AnyAction, bindActionCreators, Dispatch } from 'redux';
 import { connect } from 'react-redux';
+import { RootReducer } from '../../../reducer/root_reducer';
+
+interface PanelComponentState {
+  rootReducer: RootReducer;
+}
 
 interface PanelComponentProps {
   caseIds: string[];
   caseCount: number;
+  metadata: any;
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state: PanelComponentState) => {
   return state;
 };
 
-const PanelComponent = (props) => {
+const PanelComponent = (props: PanelComponentProps) => {
   const [checked, setChecked] = useState(false);
 
   useEffect(() => {}, [props]);
@@ -25,7 +31,7 @@ const PanelComponent = (props) => {
   const onChange = (e: any) => {
     setChecked(e.target.checked);
   };
-  console.log(props);
+
   return (
     <EuiPanel paddingSize="m" style={{ minHeight: '100%' }}>
       <div className="design-scope">
@@ -51,7 +57,7 @@ const PanelComponent = (props) => {
   );
 };
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch: Dispatch<AnyAction>) => {
   return bindActionCreators({}, dispatch);
 };
 
