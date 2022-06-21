@@ -4,9 +4,10 @@ import { AnyAction, bindActionCreators, Dispatch } from 'redux';
 import * as fetchCaseGraphActions from '../../../../reducer_actions/fetch_case_specific_graph';
 import { connect } from 'react-redux';
 import { useState } from 'react';
+import { RootReducer } from '../../../../reducer/root_reducer';
 
 interface CaseSelectorState {
-  rootReducer: Object;
+  rootReducer: RootReducer;
 }
 
 interface CaseSelectorProps {
