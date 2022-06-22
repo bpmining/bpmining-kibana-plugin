@@ -1,11 +1,17 @@
 import { VisGraph } from '../../model/vis_types';
 import { FETCH_PROCESS_DATA_CASE, FETCH_THIRD_PARTY_DATA_CASE } from '../../common/routes';
 import { getSearchService } from '../services';
-import { VisNode } from '../types';
 import { AnyAction, Dispatch } from 'redux';
+import { CaseSelectorOption } from '../components/pages/side_panel/case_selector/case_selector';
 
 export interface ResponseData {
-  data: VisNode[];
+  graph: VisGraph;
+  caseIds: string[];
+  caseCount: number;
+}
+
+export interface ServerResponse {
+  data: ResponseData;
   index: string;
   filter: any;
   timeFieldName: string;
@@ -24,11 +30,14 @@ export interface MetaData {
 export const FETCH_CASE_GRAPH_SUCCESS = 'FETCH_CASE_GRAPH_SUCCESS';
 export const FETCH_CASE_GRAPH_ERROR = 'FETCH_CASE_GRAPH_ERROR';
 export const UNSELECT_CASE = 'UNSELECT_CASE';
+export const SELECT_CASE = 'SELECT_CASE';
 
-export function fetchCaseGraphSuccessAction(caseGraph: VisGraph) {
+export function fetchCaseGraphSuccessAction(data: ResponseData) {
   return {
     type: FETCH_CASE_GRAPH_SUCCESS,
-    graph: caseGraph,
+    graph: data.graph,
+    caseIds: data.caseIds,
+    caseCount: data.caseCount,
   };
 }
 
@@ -36,6 +45,13 @@ export function fetchCaseGraphErrorAction(error: Error) {
   return {
     type: FETCH_CASE_GRAPH_ERROR,
     error: error,
+  };
+}
+
+export function selectCaseAction(selectedCase: CaseSelectorOption) {
+  return {
+    type: SELECT_CASE,
+    selectedCase: selectedCase.label,
   };
 }
 
@@ -50,8 +66,8 @@ export const fetchCaseGraph = (metadata: MetaData, caseId: string, layer: number
     if (layer === 1) {
       fetchProcessGraphCase(metadata, caseId)
         .then(
-          function (caseGraph) {
-            const action = fetchCaseGraphSuccessAction(caseGraph);
+          function (data) {
+            const action = fetchCaseGraphSuccessAction(data);
             dispatch(action);
           },
           (error) => {
@@ -65,8 +81,8 @@ export const fetchCaseGraph = (metadata: MetaData, caseId: string, layer: number
       console.log('Fetch data for Layer 2');
       fetchThirdPartyGraphCase(metadata, caseId)
         .then(
-          function (caseGraph) {
-            const action = fetchCaseGraphSuccessAction(caseGraph);
+          function (data) {
+            const action = fetchCaseGraphSuccessAction(data);
             dispatch(action);
           },
           (error) => {
@@ -97,9 +113,9 @@ async function fetchProcessGraphCase(metadata: MetaData, caseId: string) {
       }),
     })
     .then((response) => {
-      const graph = response.data;
-      console.log(graph);
-      return graph;
+      const data = response.data;
+      console.log(data);
+      return data;
     });
 }
 
@@ -118,8 +134,8 @@ export async function fetchThirdPartyGraphCase(metadata: MetaData, caseId: strin
       }),
     })
     .then((response) => {
-      const graph = response.data;
-      console.log(graph);
-      return graph;
+      const data = response.data;
+      console.log(data);
+      return data;
     });
 }

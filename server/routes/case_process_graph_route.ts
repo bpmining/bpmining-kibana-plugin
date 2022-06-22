@@ -3,6 +3,7 @@ import { IRouter, SearchResponse } from '../../../../src/core/server';
 import { FETCH_PROCESS_DATA_CASE } from '../../common/routes';
 import { ProcessEvent } from '../../model/process_event';
 import { buildCaseGraph } from '../graph_calculation/build_case_graph';
+import { extractPossibleCaseIds } from '../helpers/extract_possible_case_ids';
 
 export function caseProcessGraphRoute(router: IRouter) {
   router.post(
@@ -49,10 +50,18 @@ export function caseProcessGraphRoute(router: IRouter) {
 
       const nodes: ProcessEvent[] = hits.map((hit) => ({ ...hit._source }));
       const graph = buildCaseGraph(nodes);
+      const caseIds = extractPossibleCaseIds(nodes);
+      const caseCount = caseIds.length;
+
+      const data = {
+        graph: graph,
+        caseIds: caseIds,
+        caseCount: caseCount,
+      };
 
       return response.ok({
         body: {
-          data: graph,
+          data: data,
           index: index,
           filter: filtersDsl,
           timeFieldName: timeFieldName,

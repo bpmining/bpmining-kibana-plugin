@@ -10,15 +10,18 @@ import { RootReducer } from '../../reducer/root_reducer';
 import { VisGraphComponent } from './process_graph/vis_graph';
 import { calculateColorValue } from '../../services';
 
+import * as fetchCaseGraphActions from '../../reducer_actions/fetch_case_specific_graph';
+import * as fetcAggregatedGraphActions from '../../reducer_actions/fetch_aggregated_graph';
+
 interface LayoutState {
   rootReducer: RootReducer;
 }
 
 type LayoutProps = {
-  nodes: VisNode[];
-  edges: VisEdge[];
   metadata: any;
   rootReducer: RootReducer;
+  fetchCaseGraphAction: Function;
+  fetchAggregatedGraphAction: Function;
 };
 
 const mapStateToProps = (state: LayoutState) => {
@@ -27,18 +30,29 @@ const mapStateToProps = (state: LayoutState) => {
 };
 
 const LayoutComponent = (props: LayoutProps) => {
-  const [caseCount, setCaseCount] = useState(0);
-  const [caseIds, setCaseIds] = useState([]);
-
   useEffect(() => {
-    setCaseCount(props.metadata.data.caseCount);
-    setCaseIds(props.metadata.data.caseIds);
-  }, [props]);
+    fetchGraph();
+  }, [props.rootReducer.selectedCase, props.rootReducer.layer]);
 
   let graphBool = false;
   if (props.rootReducer.graph) {
     graphBool = true;
   }
+
+  const fetchGraph = () => {
+    const layer = props.rootReducer.layer;
+
+    // check filters
+    const selectedCase = props.rootReducer.selectedCase;
+    if (selectedCase !== null) {
+      const { fetchCaseGraphAction } = props;
+      fetchCaseGraphAction(props.metadata, selectedCase, layer);
+    } else {
+      // no filters applied
+      const { fetchAggregatedGraphAction } = props;
+      fetchAggregatedGraphAction(props.metadata, layer);
+    }
+  };
 
   return (
     <EuiPage paddingSize="none">
@@ -46,7 +60,11 @@ const LayoutComponent = (props: LayoutProps) => {
         {(EuiResizablePanel, EuiResizableButton) => (
           <>
             <EuiResizablePanel mode="collapsible" initialSize={20} minSize="18%">
-              <PanelComponent caseCount={caseCount} caseIds={caseIds} metadata={props.metadata} />
+              <PanelComponent
+                caseCount={props.rootReducer.caseCount}
+                caseIds={props.rootReducer.caseIds}
+                metadata={props.metadata}
+              />
             </EuiResizablePanel>
 
             <EuiResizableButton />
@@ -73,7 +91,13 @@ const LayoutComponent = (props: LayoutProps) => {
 };
 
 const mapDispatchToProps = (dispatch: Dispatch<AnyAction>) => {
-  return bindActionCreators({}, dispatch);
+  return bindActionCreators(
+    {
+      fetchCaseGraphAction: fetchCaseGraphActions.fetchCaseGraph,
+      fetchAggregatedGraphAction: fetcAggregatedGraphActions.fetchAggregatedGraph,
+    },
+    dispatch
+  );
 };
 
 const connectedLayoutComponent = connect(mapStateToProps, mapDispatchToProps)(LayoutComponent);
