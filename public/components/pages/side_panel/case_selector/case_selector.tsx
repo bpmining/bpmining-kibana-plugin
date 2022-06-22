@@ -15,11 +15,11 @@ interface CaseSelectorProps {
   caseIds: string[];
   metadata: any;
   rootReducer: RootReducer;
+  selectCaseAction: Function;
   unselectCaseAction: Function;
-  fetchCaseGraphAction: Function;
 }
 
-interface CaseSelectorOption {
+export interface CaseSelectorOption {
   label: string;
 }
 const mapStateToProps = (state: CaseSelectorState) => {
@@ -40,14 +40,13 @@ const CaseSelector = (props: CaseSelectorProps) => {
 
   function handleChange(event: any, value: CaseSelectorOption | null) {
     setValue(value);
-    if (value === null) {
+    if (value !== null) {
+      const { selectCaseAction } = props;
+      selectCaseAction(value);
+    } else {
       const { unselectCaseAction } = props;
       unselectCaseAction();
-      return;
     }
-    const { fetchCaseGraphAction } = props;
-    console.log(props.rootReducer.layer);
-    fetchCaseGraphAction(props.metadata, value.label, props.rootReducer.layer);
   }
 
   return (
@@ -67,8 +66,8 @@ const CaseSelector = (props: CaseSelectorProps) => {
 const mapDispatchToProps = (dispatch: Dispatch<AnyAction>) => {
   return bindActionCreators(
     {
-      fetchCaseGraphAction: fetchCaseGraphActions.fetchCaseGraph,
       unselectCaseAction: fetchCaseGraphActions.unselectCaseAction,
+      selectCaseAction: fetchCaseGraphActions.selectCaseAction,
     },
     dispatch
   );

@@ -2,6 +2,7 @@ import { schema } from '@kbn/config-schema';
 import { IRouter, SearchResponse } from '../../../../src/core/server';
 import { FETCH_PROCESS_DATA } from '../../common/routes';
 import { ProcessEvent } from '../../model/process_event';
+import { buildCaseGraph } from '../graph_calculation/build_case_graph';
 import { extractPossibleCaseIds } from '../helpers/extract_possible_case_ids';
 
 export function aggregatedProcessGraphRoute(router: IRouter) {
@@ -50,8 +51,10 @@ export function aggregatedProcessGraphRoute(router: IRouter) {
       const caseIds = extractPossibleCaseIds(nodes);
       const caseCount = caseIds.length;
 
+      const graph = buildCaseGraph(nodes);
+
       const data = {
-        nodes: nodes,
+        graph: graph,
         caseIds: caseIds,
         caseCount: caseCount,
       };
