@@ -14,7 +14,7 @@ export function VisGraphComponent(props: VisGraphComponentProps) {
     nodes: props.nodes,
     edges: props.edges,
   };
-  console.log(graph);
+
   const options = {
     autoResize: true,
     layout: {

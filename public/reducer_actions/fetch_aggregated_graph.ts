@@ -2,6 +2,7 @@ import { VisGraph } from '../../model/vis_types';
 import { FETCH_PROCESS_DATA, FETCH_THIRD_PARTY_DATA } from '../../common/routes';
 import { getSearchService } from '../services';
 import { AnyAction, Dispatch } from 'redux';
+import { ServerRequestData } from '../components/app';
 
 export interface ResponseData {
   graph: VisGraph;
@@ -11,14 +12,6 @@ export interface ResponseData {
 
 export interface ServerResponse {
   data: ResponseData;
-  index: string;
-  filter: any;
-  timeFieldName: string;
-  timeRangeFrom: any;
-  timeRangeTo: any;
-}
-
-export interface MetaData {
   index: string;
   filter: any;
   timeFieldName: string;
@@ -45,10 +38,10 @@ export function fetchAggregatedGraphErrorAction(error: Error) {
   };
 }
 
-export const fetchAggregatedGraph = (metadata: MetaData, layer: number) => {
+export const fetchAggregatedGraph = (serverRequestData: ServerRequestData, layer: number) => {
   return function (dispatch: Dispatch<AnyAction>) {
     if (layer === 1) {
-      fetchProcessGraphAggregated(metadata)
+      fetchProcessGraphAggregated(serverRequestData)
         .then(
           function (data) {
             const action = fetchAggregatedGraphSuccessAction(data);
@@ -64,7 +57,7 @@ export const fetchAggregatedGraph = (metadata: MetaData, layer: number) => {
         });
     } else if (layer === 2) {
       console.log('Fetch data for Layer 2');
-      fetchThirdPartyGraphAggregated(metadata)
+      fetchThirdPartyGraphAggregated(serverRequestData)
         .then(
           function (data) {
             const action = fetchAggregatedGraphSuccessAction(data);
@@ -83,17 +76,17 @@ export const fetchAggregatedGraph = (metadata: MetaData, layer: number) => {
   };
 };
 
-async function fetchProcessGraphAggregated(metadata: MetaData) {
+async function fetchProcessGraphAggregated(serverRequestData: ServerRequestData) {
   console.log('Fetch aggregated process graph.');
   const router = getSearchService();
   return await router
     .post(FETCH_PROCESS_DATA, {
       body: JSON.stringify({
-        index: metadata.index,
-        filtersDsl: metadata.filter,
-        timeFieldName: metadata.timeFieldName,
-        timeRangeFrom: metadata.timeRangeFrom,
-        timeRangeTo: metadata.timeRangeTo,
+        index: serverRequestData.index,
+        filtersDsl: serverRequestData.filter,
+        timeFieldName: serverRequestData.timeFieldName,
+        timeRangeFrom: serverRequestData.timeRangeFrom,
+        timeRangeTo: serverRequestData.timeRangeTo,
       }),
     })
     .then((response) => {
@@ -103,17 +96,17 @@ async function fetchProcessGraphAggregated(metadata: MetaData) {
     });
 }
 
-export async function fetchThirdPartyGraphAggregated(metadata: MetaData) {
+export async function fetchThirdPartyGraphAggregated(serverRequestData: ServerRequestData) {
   console.log('Fetch aggregated third party graph');
   const router = getSearchService();
   return await router
     .post(FETCH_THIRD_PARTY_DATA, {
       body: JSON.stringify({
-        index: metadata.index,
-        filtersDsl: metadata.filter,
-        timeFieldName: metadata.timeFieldName,
-        timeRangeFrom: metadata.timeRangeFrom,
-        timeRangeTo: metadata.timeRangeTo,
+        index: serverRequestData.index,
+        filtersDsl: serverRequestData.filter,
+        timeFieldName: serverRequestData.timeFieldName,
+        timeRangeFrom: serverRequestData.timeRangeFrom,
+        timeRangeTo: serverRequestData.timeRangeTo,
       }),
     })
     .then((response) => {
