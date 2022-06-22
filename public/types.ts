@@ -1,3 +1,5 @@
+import { VisNode } from '../model/vis_types';
+
 export interface ProcessGraphVisParams {
   indexPatternId: string;
 }
@@ -9,16 +11,4 @@ export interface VisData {
   timeFieldName: string;
   timeRangeFrom: any;
   timeRangeTo: any;
-}
-
-export interface VisNode {
-  label: string;
-  caseID: string;
-
-  startTime?: number;
-  endTime?: number;
-
-  system?: string;
-  typ?: 'process' | 'third-party';
-  contextInfo?: object;
 }

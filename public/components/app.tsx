@@ -12,6 +12,14 @@ export interface RawResponseData {
   timeRangeTo: any;
 }
 
+export interface ServerRequestData {
+  index: string;
+  filter: any;
+  timeFieldName: string;
+  timeRangeFrom: any;
+  timeRangeTo: any;
+}
+
 interface ProcessGraphComponentProps {
   renderComplete(): void;
   visParams: ProcessGraphVisParams;
@@ -22,5 +30,14 @@ export function BpminingApp(props: ProcessGraphComponentProps) {
   useEffect(() => {
     props.renderComplete();
   });
-  return <LayoutComponent metadata={props.visData} />;
+
+  const serverRequestData: ServerRequestData = {
+    index: props.visData.index,
+    filter: props.visData.filter,
+    timeFieldName: props.visData.timeFieldName,
+    timeRangeFrom: props.visData.timeRangeFrom,
+    timeRangeTo: props.visData.timeRangeTo,
+  };
+
+  return <LayoutComponent serverRequestData={serverRequestData} />;
 }

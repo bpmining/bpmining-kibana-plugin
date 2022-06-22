@@ -10,6 +10,7 @@ import { RootReducer } from '../../../reducer/root_reducer';
 import { calculateColorValue } from '../../../services';
 import { CaseCounterComponent } from '../../lib/counter/case_counter';
 import { VariantCounterComponent } from '../../lib/counter/variant_counter';
+import { ServerRequestData } from '../../app';
 
 interface PanelComponentState {
   rootReducer: RootReducer;
@@ -18,7 +19,7 @@ interface PanelComponentState {
 interface PanelComponentProps {
   caseIds: string[];
   caseCount: number;
-  metadata: any;
+  serverRequestData: ServerRequestData;
   rootReducer: RootReducer;
 }
 
@@ -43,11 +44,11 @@ const PanelComponent = (props: PanelComponentProps) => {
         <div className="counter-container">
           <CaseCounterComponent
             cases={props.caseCount}
-            color={calculateColorValue(props.rootReducer.layer)}
+            color={calculateColorValue(props.rootReducer.layer.selectedLayer)}
           />
           <VariantCounterComponent
             variants={1}
-            color={calculateColorValue(props.rootReducer.layer)}
+            color={calculateColorValue(props.rootReducer.layer.selectedLayer)}
           />
         </div>
 
@@ -60,7 +61,7 @@ const PanelComponent = (props: PanelComponentProps) => {
             onChange={(e) => onChange(e)}
           />
         </div>
-        <CaseSelector caseIds={props.caseIds} metadata={props.metadata} />
+        <CaseSelector caseIds={props.caseIds} />
       </div>
     </EuiPanel>
   );

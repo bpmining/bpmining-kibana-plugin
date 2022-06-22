@@ -13,7 +13,6 @@ interface CaseSelectorState {
 
 interface CaseSelectorProps {
   caseIds: string[];
-  metadata: any;
   rootReducer: RootReducer;
   selectCaseAction: Function;
   unselectCaseAction: Function;

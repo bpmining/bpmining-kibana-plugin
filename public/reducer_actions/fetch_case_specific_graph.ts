@@ -19,7 +19,7 @@ export interface ServerResponse {
   timeRangeTo: any;
 }
 
-export interface MetaData {
+export interface ServerRequestData {
   index: string;
   filter: any;
   timeFieldName: string;
@@ -61,10 +61,14 @@ export function unselectCaseAction() {
   };
 }
 
-export const fetchCaseGraph = (metadata: MetaData, caseId: string, layer: number) => {
+export const fetchCaseGraph = (
+  serverRequestData: ServerRequestData,
+  caseId: string,
+  layer: number
+) => {
   return function (dispatch: Dispatch<AnyAction>) {
     if (layer === 1) {
-      fetchProcessGraphCase(metadata, caseId)
+      fetchProcessGraphCase(serverRequestData, caseId)
         .then(
           function (data) {
             const action = fetchCaseGraphSuccessAction(data);
@@ -79,7 +83,7 @@ export const fetchCaseGraph = (metadata: MetaData, caseId: string, layer: number
         });
     } else if (layer === 2) {
       console.log('Fetch data for Layer 2');
-      fetchThirdPartyGraphCase(metadata, caseId)
+      fetchThirdPartyGraphCase(serverRequestData, caseId)
         .then(
           function (data) {
             const action = fetchCaseGraphSuccessAction(data);
@@ -98,17 +102,17 @@ export const fetchCaseGraph = (metadata: MetaData, caseId: string, layer: number
   };
 };
 
-async function fetchProcessGraphCase(metadata: MetaData, caseId: string) {
+async function fetchProcessGraphCase(serverRequestData: ServerRequestData, caseId: string) {
   console.log('Fetch process graph for case: ' + caseId);
   const router = getSearchService();
   return await router
     .post(FETCH_PROCESS_DATA_CASE, {
       body: JSON.stringify({
-        index: metadata.index,
-        filtersDsl: metadata.filter,
-        timeFieldName: metadata.timeFieldName,
-        timeRangeFrom: metadata.timeRangeFrom,
-        timeRangeTo: metadata.timeRangeTo,
+        index: serverRequestData.index,
+        filtersDsl: serverRequestData.filter,
+        timeFieldName: serverRequestData.timeFieldName,
+        timeRangeFrom: serverRequestData.timeRangeFrom,
+        timeRangeTo: serverRequestData.timeRangeTo,
         caseID: caseId,
       }),
     })
@@ -119,17 +123,20 @@ async function fetchProcessGraphCase(metadata: MetaData, caseId: string) {
     });
 }
 
-export async function fetchThirdPartyGraphCase(metadata: MetaData, caseId: string) {
+export async function fetchThirdPartyGraphCase(
+  serverRequestData: ServerRequestData,
+  caseId: string
+) {
   console.log('Fetch third party graph for case: ' + caseId);
   const router = getSearchService();
   return await router
     .post(FETCH_THIRD_PARTY_DATA_CASE, {
       body: JSON.stringify({
-        index: metadata.index,
-        filtersDsl: metadata.filter,
-        timeFieldName: metadata.timeFieldName,
-        timeRangeFrom: metadata.timeRangeFrom,
-        timeRangeTo: metadata.timeRangeTo,
+        index: serverRequestData.index,
+        filtersDsl: serverRequestData.filter,
+        timeFieldName: serverRequestData.timeFieldName,
+        timeRangeFrom: serverRequestData.timeRangeFrom,
+        timeRangeTo: serverRequestData.timeRangeTo,
         caseID: caseId,
       }),
     })

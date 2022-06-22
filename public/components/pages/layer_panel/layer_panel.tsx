@@ -16,7 +16,6 @@ interface LayerPanelProps {
 }
 
 const mapStateToProps = (state: LayerPanelState) => {
-  console.log(state);
   return state;
 };
 

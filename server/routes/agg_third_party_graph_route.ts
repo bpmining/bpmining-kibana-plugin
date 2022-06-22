@@ -2,6 +2,8 @@ import { schema } from '@kbn/config-schema';
 import { IRouter, SearchResponse } from '../../../../src/core/server';
 import { FETCH_THIRD_PARTY_DATA } from '../../common/routes';
 import { ProcessEvent } from '../../model/process_event';
+import { buildCaseGraph } from '../graph_calculation/build_case_graph';
+import { extractPossibleCaseIds } from '../helpers/extract_possible_case_ids';
 
 export function aggregatedThirdPartyGraphRoute(router: IRouter) {
   router.post(
@@ -46,10 +48,20 @@ export function aggregatedThirdPartyGraphRoute(router: IRouter) {
       const hits = (res as SearchResponse<ProcessEvent>).hits.hits;
 
       const nodes: ProcessEvent[] = hits.map((hit) => ({ ...hit._source }));
+      const caseIds = extractPossibleCaseIds(nodes);
+      const caseCount = caseIds.length;
+
+      const graph = buildCaseGraph(nodes);
+
+      const data = {
+        graph: graph,
+        caseIds: caseIds,
+        caseCount: caseCount,
+      };
 
       return response.ok({
         body: {
-          data: nodes,
+          data: data,
           index: index,
           filter: filtersDsl,
           timeFieldName: timeFieldName,
