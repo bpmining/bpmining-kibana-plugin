@@ -18,7 +18,9 @@ export function VisGraphComponent(props: VisGraphComponentProps) {
   const options = {
     autoResize: true,
     layout: {
-      hierarchical: true,
+      hierarchical: {
+        sortMethod: 'directed',
+      },
     },
     nodes: {
       color: props.color,
@@ -28,6 +30,9 @@ export function VisGraphComponent(props: VisGraphComponentProps) {
       color: '#000000',
     },
     height: '980px',
+    physics: {
+      enabled: false,
+    },
   };
 
   /* const events = {

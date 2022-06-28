@@ -2,7 +2,7 @@ import { schema } from '@kbn/config-schema';
 import { IRouter, SearchResponse } from '../../../../src/core/server';
 import { FETCH_THIRD_PARTY_DATA } from '../../common/routes';
 import { ProcessEvent } from '../../model/process_event';
-import { buildCaseGraph } from '../graph_calculation/build_case_graph';
+import { buildAggregatedGraph } from '../graph_calculation/build_aggregated_graph';
 import { extractPossibleCaseIds } from '../helpers/extract_possible_case_ids';
 
 export function aggregatedThirdPartyGraphRoute(router: IRouter) {
@@ -51,7 +51,7 @@ export function aggregatedThirdPartyGraphRoute(router: IRouter) {
       const caseIds = extractPossibleCaseIds(nodes);
       const caseCount = caseIds.length;
 
-      const graph = buildCaseGraph(nodes);
+      const graph = buildAggregatedGraph(nodes);
 
       const data = {
         graph: graph,
