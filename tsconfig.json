@@ -13,7 +13,7 @@
     "server/**/*.ts",
     "model/**/*.ts",
     "../../typings/**/*"
-  ],
+, "server/graph_calculation/calculate_aggregated_edges.tsts"  ],
   "exclude": ["node_modules"]
   
 }
