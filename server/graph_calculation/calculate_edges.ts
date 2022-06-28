@@ -3,8 +3,8 @@ import { VisNode, VisEdge } from 'plugins/bpmining-kibana-plugin/model/vis_types
 export function calculateEdges(visNodes: VisNode[]) {
   let edges: VisEdge[] = [];
 
-  for (let i = 1; i <= visNodes.length + 1; i++) {
-    if (i === 1) {
+  for (let i = 0; i < visNodes.length; i++) {
+    if (i === 0) {
       continue;
     }
     const edge = {

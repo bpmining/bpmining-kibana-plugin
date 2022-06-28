@@ -31,7 +31,7 @@ export function VisGraphComponent(props: VisGraphComponentProps) {
     },
     height: '980px',
     physics: {
-      enabled: false,
+      enabled: true,
     },
   };
 
