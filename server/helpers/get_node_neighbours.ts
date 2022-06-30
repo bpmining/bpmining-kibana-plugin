@@ -5,9 +5,9 @@ export function getNeighboursFor(nodes: VisNode[]): VisNodeNeighbours[] {
   let result: VisNodeNeighbours[] = [];
   nodes.map((node, i) => {
     const nodeWithNeighbours = {
-      node: { label: node.label, id: node.id },
-      prev: { label: nodes[i - 1]?.label, id: nodes[i - 1]?.id },
-      next: { label: nodes[i + 1]?.label, id: nodes[i + 1]?.id },
+      node: node,
+      prev: nodes[i - 1],
+      next: nodes[i + 1],
     };
     result.push(nodeWithNeighbours);
   });
