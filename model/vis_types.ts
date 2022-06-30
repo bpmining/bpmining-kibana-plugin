@@ -17,6 +17,7 @@ export interface VisNode{
 export interface VisEdge {
     from: number;
     to: number;
+    label?: string;
   }
 
   export interface VisGraph {
