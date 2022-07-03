@@ -1,14 +1,13 @@
-import { ProcessEvent } from 'plugins/bpmining-kibana-plugin/model/process_event';
 import { VisNodeNeighbours } from '../graph_calculation/build_aggregated_graph';
 
-export function addStartAndEndPoint(nodes: VisNodeNeighbours[], allNodes: ProcessEvent[]) {
+export function addStartAndEndPoint(nodes: VisNodeNeighbours[], lastIndex: number) {
   const startNode = {
     node: { label: 'S', id: 0 },
     prev: undefined,
     next: undefined,
   };
   const endNode = {
-    node: { label: 'E', id: allNodes.length + 1 },
+    node: { label: 'E', id: lastIndex + 1 },
     prev: undefined,
     next: undefined,
   };
