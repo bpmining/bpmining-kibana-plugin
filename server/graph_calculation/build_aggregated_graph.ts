@@ -6,7 +6,6 @@ import { splitNodesByCase } from '../helpers/split_nodes_by_case';
 import { assignNodeIds } from './assign_node_ids';
 import { calculateAggregatedGraphEdges } from './calculate_edges';
 import { formatTime } from './calculate_edge_throughput_time';
-import { calculateNodeThroughputTime } from './calculate_node_throughput_time';
 import { sortNodes } from './sort_nodes';
 
 export interface RawVisEdge {
@@ -32,17 +31,14 @@ export function buildAggregatedGraph(nodes: ProcessEvent[]) {
   }
   const sortedNodes = sortNodes(nodes, 'timestamp');
   const nodesWithIds: VisNode[] = assignNodeIds(sortedNodes);
-
   const nodeFrequencies = getNodeFrequencies(nodesWithIds);
-  console.log(nodeFrequencies);
-
   const nodesPerCase: Array<VisNode[]> = splitNodesByCase(nodesWithIds);
 
   let nodesPerCaseWithNeighbours: Array<VisNodeNeighbours[]> = [];
   let edgesPerCase: Array<RawVisEdge[]> = [];
   nodesPerCase.forEach((oneCase) => {
     const caseWithNeighbours = getNeighboursFor(oneCase);
-    const nodesWithEndpoints = addStartAndEndPoint(caseWithNeighbours, nodes);
+    const nodesWithEndpoints = addStartAndEndPoint(caseWithNeighbours, nodes.length);
     nodesPerCaseWithNeighbours.push(nodesWithEndpoints);
 
     const edges = calculateAggregatedGraphEdges(nodesWithEndpoints);
@@ -74,13 +70,53 @@ export function buildAggregatedGraph(nodes: ProcessEvent[]) {
   return graph;
 }
 
-function flatten(array: any): Array<any> {
+export function buildAggregatedThirdPartyGraph(nodes: Array<VisNode[]>, lastIndex: number) {
+  if (nodes.length === 0) {
+    return;
+  }
+  let nodesPerEventWithNeighbours: Array<VisNodeNeighbours[]> = [];
+  let edgesPerEvent: Array<RawVisEdge[]> = [];
+  nodes.forEach((oneEvent) => {
+    const eventWithNeighbours = getNeighboursFor(oneEvent);
+    const nodesWithEndpoints = addStartAndEndPoint(eventWithNeighbours, lastIndex);
+    nodesPerEventWithNeighbours.push(nodesWithEndpoints);
+
+    const edges = calculateAggregatedGraphEdges(nodesWithEndpoints);
+    edgesPerEvent.push(edges);
+  });
+
+  const allNodes = flatten(nodesPerEventWithNeighbours);
+  const nodesUniqueByLabel = [
+    ...new Map(allNodes.map((item: VisNodeNeighbours) => [item['node'].label, item])).values(),
+  ];
+  const aggregatedNodes = nodesUniqueByLabel.map((item: VisNodeNeighbours) => item.node);
+
+  const allEdges: RawVisEdge[] = flatten(edgesPerEvent);
+  const aggregatedEdges = getAggregatedEdgesWithLabels(allEdges);
+
+  /*   for (let node of nodesWithIds) {
+    const throughputTime = calculateNodeThroughputTime(node);
+
+    if (throughputTime !== undefined) {
+      Object.assign(node, { throughputTime: throughputTime });
+    }
+  } */
+
+  const graph = {
+    nodes: aggregatedNodes,
+    edges: aggregatedEdges,
+  };
+
+  return graph;
+}
+
+export function flatten(array: any): Array<any> {
   return array.reduce(function (a: any, b: any) {
     return a.concat(Array.isArray(b) ? flatten(b) : b);
   }, []);
 }
 
-function getNodeFrequencies(nodesWithIds: VisNode[]) {
+export function getNodeFrequencies(nodesWithIds: VisNode[]) {
   const nodeIds = nodesWithIds.map((node) => node.id);
   const uniqueNodeIds = [...new Set(nodeIds)];
 

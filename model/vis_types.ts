@@ -12,6 +12,7 @@ export interface VisNode{
 
     id: number;
     throughputTime?: Date;
+    thirdPartyData?: VisNode[];
 }
 
 export interface VisEdge {

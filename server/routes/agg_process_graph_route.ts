@@ -3,6 +3,7 @@ import { IRouter, SearchResponse } from '../../../../src/core/server';
 import { FETCH_PROCESS_DATA } from '../../common/routes';
 import { ProcessEvent } from '../../model/process_event';
 import { buildAggregatedGraph } from '../graph_calculation/build_aggregated_graph';
+import { assignThirdPartyDataTo } from '../helpers/third_party_data';
 import { extractPossibleCaseIds } from '../helpers/extract_possible_case_ids';
 
 export function aggregatedProcessGraphRoute(router: IRouter) {
@@ -37,7 +38,6 @@ export function aggregatedProcessGraphRoute(router: IRouter) {
                   },
                 },
               ],
-              filter: [{ term: { typ: 'process' } }],
             },
           },
           size: 100,
@@ -51,7 +51,10 @@ export function aggregatedProcessGraphRoute(router: IRouter) {
       const caseIds = extractPossibleCaseIds(nodes);
       const caseCount = caseIds.length;
 
-      const graph = buildAggregatedGraph(nodes);
+      const nodesWithThirdPartyData = assignThirdPartyDataTo(nodes);
+      console.log(nodesWithThirdPartyData);
+      const processNodes = nodes.filter((node) => node.typ === 'process');
+      const graph = buildAggregatedGraph(processNodes);
 
       const data = {
         graph: graph,
