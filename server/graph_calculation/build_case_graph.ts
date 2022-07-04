@@ -19,7 +19,7 @@ export function buildCaseGraph(nodes: ProcessEvent[]) {
   const sortedNodes = sortNodes(nodes, 'timestamp');
   const nodesWithIds: VisNode[] = assignNodeIds(sortedNodes);
   const nodesWithNeighbours = getNeighboursFor(nodesWithIds);
-  const nodesWithEndpoints = addStartAndEndPoint(nodesWithNeighbours, nodes);
+  const nodesWithEndpoints = addStartAndEndPoint(nodesWithNeighbours, nodes.length);
 
   const finalNodes = nodesWithEndpoints.map((item) => item.node);
   const edges = calculateCaseGraphEdges(nodesWithEndpoints);

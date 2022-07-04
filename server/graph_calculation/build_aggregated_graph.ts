@@ -70,46 +70,6 @@ export function buildAggregatedGraph(nodes: ProcessEvent[]) {
   return graph;
 }
 
-export function buildAggregatedThirdPartyGraph(nodes: Array<VisNode[]>, lastIndex: number) {
-  if (nodes.length === 0) {
-    return;
-  }
-  let nodesPerEventWithNeighbours: Array<VisNodeNeighbours[]> = [];
-  let edgesPerEvent: Array<RawVisEdge[]> = [];
-  nodes.forEach((oneEvent) => {
-    const eventWithNeighbours = getNeighboursFor(oneEvent);
-    const nodesWithEndpoints = addStartAndEndPoint(eventWithNeighbours, lastIndex);
-    nodesPerEventWithNeighbours.push(nodesWithEndpoints);
-
-    const edges = calculateAggregatedGraphEdges(nodesWithEndpoints);
-    edgesPerEvent.push(edges);
-  });
-
-  const allNodes = flatten(nodesPerEventWithNeighbours);
-  const nodesUniqueByLabel = [
-    ...new Map(allNodes.map((item: VisNodeNeighbours) => [item['node'].label, item])).values(),
-  ];
-  const aggregatedNodes = nodesUniqueByLabel.map((item: VisNodeNeighbours) => item.node);
-
-  const allEdges: RawVisEdge[] = flatten(edgesPerEvent);
-  const aggregatedEdges = getAggregatedEdgesWithLabels(allEdges);
-
-  /*   for (let node of nodesWithIds) {
-    const throughputTime = calculateNodeThroughputTime(node);
-
-    if (throughputTime !== undefined) {
-      Object.assign(node, { throughputTime: throughputTime });
-    }
-  } */
-
-  const graph = {
-    nodes: aggregatedNodes,
-    edges: aggregatedEdges,
-  };
-
-  return graph;
-}
-
 export function flatten(array: any): Array<any> {
   return array.reduce(function (a: any, b: any) {
     return a.concat(Array.isArray(b) ? flatten(b) : b);

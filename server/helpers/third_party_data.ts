@@ -1,6 +1,4 @@
 import { ProcessEvent } from 'plugins/bpmining-kibana-plugin/model/process_event';
-import { VisNode } from 'plugins/bpmining-kibana-plugin/model/vis_types';
-import { flatten } from '../graph_calculation/build_aggregated_graph';
 import { sortNodes } from '../graph_calculation/sort_nodes';
 
 export function assignThirdPartyDataTo(nodes: ProcessEvent[]) {
@@ -20,26 +18,6 @@ export function assignThirdPartyDataTo(nodes: ProcessEvent[]) {
     }
   });
   return sortedNodes;
-}
-
-export function bundleThirdPartyNodes(nodes: VisNode[]): Array<VisNode[]> {
-  const sortedNodes: VisNode[] | ProcessEvent[] = sortNodes(nodes, 'timestamp');
-  const allThirdPartyNodes: Array<VisNode[]> = [];
-  sortedNodes.forEach((node, index) => {
-    const currentTyp = node.typ;
-    let nextTyp = undefined;
-    const nextNode = sortedNodes[index + 1];
-    if (nextNode) {
-      nextTyp = nextNode.typ;
-    }
-
-    if (currentTyp === 'third-party' && !flatten(allThirdPartyNodes).includes(node)) {
-      const thirdPartyData: VisNode[] = [];
-      getThirdPartyNodes(sortedNodes, index, thirdPartyData);
-      allThirdPartyNodes.push(thirdPartyData);
-    }
-  });
-  return allThirdPartyNodes;
 }
 
 function getThirdPartyNodes(sortedNodes: any, index: number, thirdPartyData: any) {
