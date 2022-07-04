@@ -51,10 +51,6 @@ export function aggregatedThirdPartyGraphRoute(router: IRouter) {
       const caseIds = extractPossibleCaseIds(nodes);
       const caseCount = caseIds.length;
 
-      /* const nodesWithIds: VisNode[] = assignNodeIds(nodes);
-      const nodeFrequencies = getNodeFrequencies(nodesWithIds);
-      const bundledThirdPartyData = bundleThirdPartyNodes(nodesWithIds); */
-
       const graph = buildAggregatedGraph(nodes);
 
       const data = {

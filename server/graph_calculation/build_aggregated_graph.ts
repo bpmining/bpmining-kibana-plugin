@@ -5,7 +5,7 @@ import { getNeighboursFor } from '../helpers/get_node_neighbours';
 import { splitNodesByCase } from '../helpers/split_nodes_by_case';
 import { assignNodeIds } from './assign_node_ids';
 import { calculateAggregatedGraphEdges } from './calculate_edges';
-import { formatTime } from './calculate_edge_throughput_time';
+import { calculateNodeThroughputTime, formatTime } from './calculate_throughput_time';
 import { sortNodes } from './sort_nodes';
 
 export interface RawVisEdge {
@@ -31,7 +31,13 @@ export function buildAggregatedGraph(nodes: ProcessEvent[]) {
   }
   const sortedNodes = sortNodes(nodes, 'timestamp');
   const nodesWithIds: VisNode[] = assignNodeIds(sortedNodes);
-  const nodeFrequencies = getNodeFrequencies(nodesWithIds);
+  for (let node of nodesWithIds) {
+    const throughputTime = calculateNodeThroughputTime(node);
+
+    if (throughputTime !== undefined) {
+      Object.assign(node, { throughputTime: throughputTime });
+    }
+  }
   const nodesPerCase: Array<VisNode[]> = splitNodesByCase(nodesWithIds);
 
   let nodesPerCaseWithNeighbours: Array<VisNodeNeighbours[]> = [];
@@ -46,21 +52,10 @@ export function buildAggregatedGraph(nodes: ProcessEvent[]) {
   });
 
   const allNodes = flatten(nodesPerCaseWithNeighbours);
-  const nodesUniqueByLabel = [
-    ...new Map(allNodes.map((item: VisNodeNeighbours) => [item['node'].label, item])).values(),
-  ];
-  const aggregatedNodes = nodesUniqueByLabel.map((item: VisNodeNeighbours) => item.node);
+  const aggregatedNodes = getAggregatedNodes(allNodes);
 
   const allEdges: RawVisEdge[] = flatten(edgesPerCase);
   const aggregatedEdges = getAggregatedEdgesWithLabels(allEdges);
-
-  /*   for (let node of nodesWithIds) {
-    const throughputTime = calculateNodeThroughputTime(node);
-
-    if (throughputTime !== undefined) {
-      Object.assign(node, { throughputTime: throughputTime });
-    }
-  } */
 
   const graph = {
     nodes: aggregatedNodes,
@@ -74,18 +69,6 @@ export function flatten(array: any): Array<any> {
   return array.reduce(function (a: any, b: any) {
     return a.concat(Array.isArray(b) ? flatten(b) : b);
   }, []);
-}
-
-export function getNodeFrequencies(nodesWithIds: VisNode[]) {
-  const nodeIds = nodesWithIds.map((node) => node.id);
-  const uniqueNodeIds = [...new Set(nodeIds)];
-
-  let frequencies: any = [];
-  uniqueNodeIds.forEach((id) => {
-    const nodesWithCurrentId = nodesWithIds.filter((node) => node.id === id);
-    frequencies.push({ id: id, frequency: nodesWithCurrentId.length });
-  });
-  return frequencies;
 }
 
 function getAggregatedEdgesWithLabels(edges: RawVisEdge[]) {
@@ -118,4 +101,26 @@ function getAggregatedEdgesWithLabels(edges: RawVisEdge[]) {
   });
 
   return aggregatedEdges;
+}
+
+function getAggregatedNodes(allNodes: VisNodeNeighbours[]): VisNode[] {
+  const nodesUniqueById = [
+    ...new Map(allNodes.map((item: VisNodeNeighbours) => [item['node'].id, item])).values(),
+  ];
+  const uniqueNodes: VisNode[] = nodesUniqueById.map((item: VisNodeNeighbours) => item.node);
+  uniqueNodes.forEach((node) => {
+    const sameNodes = allNodes.filter((n: VisNodeNeighbours) => n.node.id === node.id);
+    const frequency = sameNodes.length;
+
+    let throughputTime: number = 0;
+    sameNodes.forEach((node) => {
+      if (node.node.throughputTime !== undefined) {
+        throughputTime += node.node.throughputTime.getTime();
+      }
+    });
+    const meanThroughputTime = throughputTime / frequency;
+    Object.assign(node, { frequency: frequency });
+    Object.assign(node, { meanThroughputTime: formatTime(new Date(meanThroughputTime)) });
+  });
+  return uniqueNodes;
 }

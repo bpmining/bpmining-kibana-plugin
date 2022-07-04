@@ -2,12 +2,12 @@ import { VisNodeNeighbours } from '../graph_calculation/build_aggregated_graph';
 
 export function addStartAndEndPoint(nodes: VisNodeNeighbours[], lastIndex: number) {
   const startNode = {
-    node: { label: 'S', id: 0 },
+    node: { label: '', id: 0 },
     prev: undefined,
     next: undefined,
   };
   const endNode = {
-    node: { label: 'E', id: lastIndex + 1 },
+    node: { label: '', id: lastIndex + 1 },
     prev: undefined,
     next: undefined,
   };

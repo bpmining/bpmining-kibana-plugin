@@ -4,7 +4,11 @@ import { addStartAndEndPoint } from '../helpers/add_start_end_point';
 import { getNeighboursFor } from '../helpers/get_node_neighbours';
 import { assignNodeIds } from './assign_node_ids';
 import { calculateCaseGraphEdges } from './calculate_edges';
-import { calculateNodeThroughputTime } from './calculate_node_throughput_time';
+import {
+  calculateGraphThroughputTime,
+  calculateNodeThroughputTime,
+  formatTime,
+} from './calculate_throughput_time';
 import { sortNodes } from './sort_nodes';
 
 export interface ProcessGraph {
@@ -18,23 +22,27 @@ export function buildCaseGraph(nodes: ProcessEvent[]) {
   }
   const sortedNodes = sortNodes(nodes, 'timestamp');
   const nodesWithIds: VisNode[] = assignNodeIds(sortedNodes);
+
+  for (let node of nodesWithIds) {
+    const throughputTime = calculateNodeThroughputTime(node);
+
+    if (throughputTime !== undefined) {
+      Object.assign(node, { throughputTime: formatTime(new Date(throughputTime)) });
+    }
+  }
+
   const nodesWithNeighbours = getNeighboursFor(nodesWithIds);
   const nodesWithEndpoints = addStartAndEndPoint(nodesWithNeighbours, nodes.length);
 
   const finalNodes = nodesWithEndpoints.map((item) => item.node);
   const edges = calculateCaseGraphEdges(nodesWithEndpoints);
 
-  /* for (let node of nodesWithIds) {
-    const throughputTime = calculateNodeThroughputTime(node);
-
-    if (throughputTime !== undefined) {
-      Object.assign(node, { throughputTime: throughputTime });
-    }
-  } */
+  const graphThroughputTime = calculateGraphThroughputTime(finalNodes);
 
   const graph = {
     nodes: finalNodes,
     edges: edges,
+    throughputTime: graphThroughputTime,
   };
 
   return graph;
