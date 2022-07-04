@@ -1,6 +1,6 @@
 import { VisEdge } from 'plugins/bpmining-kibana-plugin/model/vis_types';
 import { RawVisEdge, VisNodeNeighbours } from './build_aggregated_graph';
-import { calculateEdgeThroughputTime, formatTime } from './calculate_edge_throughput_time';
+import { calculateEdgeThroughputTime, formatTime } from './calculate_throughput_time';
 
 export function calculateCaseGraphEdges(aggregatedNodes: VisNodeNeighbours[]) {
   let edges: VisEdge[] = [];

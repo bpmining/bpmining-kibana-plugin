@@ -52,8 +52,7 @@ export function aggregatedProcessGraphRoute(router: IRouter) {
       const caseCount = caseIds.length;
 
       const nodesWithThirdPartyData = assignThirdPartyDataTo(nodes);
-      console.log(nodesWithThirdPartyData);
-      const processNodes = nodes.filter((node) => node.typ === 'process');
+      const processNodes = nodesWithThirdPartyData.filter((node) => node.typ === 'process');
       const graph = buildAggregatedGraph(processNodes);
 
       const data = {
