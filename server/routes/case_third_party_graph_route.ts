@@ -1,12 +1,9 @@
 import { schema } from '@kbn/config-schema';
-import { VisNode } from 'plugins/bpmining-kibana-plugin/model/vis_types';
 import { IRouter, SearchResponse } from '../../../../src/core/server';
 import { FETCH_THIRD_PARTY_DATA_CASE } from '../../common/routes';
 import { ProcessEvent } from '../../model/process_event';
-import { assignNodeIds } from '../graph_calculation/assign_node_ids';
-import { buildAggregatedThirdPartyGraph } from '../graph_calculation/build_aggregated_graph';
+import { buildCaseGraph } from '../graph_calculation/build_case_graph';
 import { extractPossibleCaseIds } from '../helpers/extract_possible_case_ids';
-import { bundleThirdPartyNodes } from '../helpers/third_party_data';
 
 export function caseThirdPartyGraphRoute(router: IRouter) {
   router.post(
@@ -41,7 +38,7 @@ export function caseThirdPartyGraphRoute(router: IRouter) {
                   },
                 },
               ],
-              filter: [{ term: { caseID: caseID } }],
+              filter: [{ term: { typ: 'third-party' } }, { term: { caseID: caseID } }],
             },
           },
           size: 100,
@@ -52,11 +49,7 @@ export function caseThirdPartyGraphRoute(router: IRouter) {
       const hits = (res as SearchResponse<ProcessEvent>).hits.hits;
 
       const nodes: ProcessEvent[] = hits.map((hit) => ({ ...hit._source }));
-      const lastIndex = nodes.length;
-      const nodesWithIds: VisNode[] = assignNodeIds(nodes);
-      const bundledThirdPartyData = bundleThirdPartyNodes(nodesWithIds);
-
-      const graph = buildAggregatedThirdPartyGraph(bundledThirdPartyData, lastIndex);
+      const graph = buildCaseGraph(nodes);
       const caseIds = extractPossibleCaseIds(nodes);
       const caseCount = caseIds.length;
 
