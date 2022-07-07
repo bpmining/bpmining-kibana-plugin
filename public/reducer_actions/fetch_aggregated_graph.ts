@@ -52,11 +52,9 @@ export const fetchAggregatedGraph = (serverRequestData: ServerRequestData, layer
           }
         )
         .catch((error) => {
-          console.log(error);
           dispatch(fetchAggregatedGraphErrorAction(error));
         });
     } else if (layer === 2) {
-      console.log('Fetch data for Layer 2');
       fetchThirdPartyGraphAggregated(serverRequestData)
         .then(
           function (data) {
@@ -77,7 +75,6 @@ export const fetchAggregatedGraph = (serverRequestData: ServerRequestData, layer
 };
 
 async function fetchProcessGraphAggregated(serverRequestData: ServerRequestData) {
-  console.log('Fetch aggregated process graph.');
   const router = getSearchService();
   return await router
     .post(FETCH_PROCESS_DATA, {
@@ -89,15 +86,13 @@ async function fetchProcessGraphAggregated(serverRequestData: ServerRequestData)
         timeRangeTo: serverRequestData.timeRangeTo,
       }),
     })
-    .then((response) => {
+    .then((response: any) => {
       const data = response.data;
-      console.log(data);
       return data;
     });
 }
 
 export async function fetchThirdPartyGraphAggregated(serverRequestData: ServerRequestData) {
-  console.log('Fetch aggregated third party graph');
   const router = getSearchService();
   return await router
     .post(FETCH_THIRD_PARTY_DATA, {
@@ -109,9 +104,8 @@ export async function fetchThirdPartyGraphAggregated(serverRequestData: ServerRe
         timeRangeTo: serverRequestData.timeRangeTo,
       }),
     })
-    .then((response) => {
+    .then((response: any) => {
       const data = response.data;
-      console.log(data);
       return data;
     });
 }

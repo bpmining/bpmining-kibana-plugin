@@ -52,8 +52,7 @@ export const processGraphVisFn = (
       filters: get(input, 'filters') as any,
       visParams: args,
     });
-    console.log('In Graph Function');
-    console.log(response);
+
     return {
       type: 'render',
       as: 'process_graph_vis',

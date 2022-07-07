@@ -5,6 +5,7 @@ import { ProcessEvent } from '../../model/process_event';
 import { buildAggregatedGraph } from '../graph_calculation/build_aggregated_graph';
 import { assignThirdPartyDataTo } from '../helpers/third_party_data';
 import { extractPossibleCaseIds } from '../helpers/extract_possible_case_ids';
+import { VisNode } from 'plugins/bpmining-kibana-plugin/model/vis_types';
 
 export function aggregatedProcessGraphRoute(router: IRouter) {
   router.post(
@@ -52,7 +53,9 @@ export function aggregatedProcessGraphRoute(router: IRouter) {
       const caseCount = caseIds.length;
 
       const nodesWithThirdPartyData = assignThirdPartyDataTo(nodes);
-      const processNodes = nodesWithThirdPartyData.filter((node) => node.typ === 'process');
+      const processNodes = nodesWithThirdPartyData.filter(
+        (node: VisNode) => node.typ === 'process'
+      );
       const graph = buildAggregatedGraph(processNodes);
 
       const data = {
