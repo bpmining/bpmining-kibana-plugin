@@ -31,13 +31,16 @@ export function buildAggregatedGraph(nodes: ProcessEvent[]) {
   }
   const sortedNodes = sortNodes(nodes, 'timestamp');
   const nodesWithIds: VisNode[] = assignNodeIds(sortedNodes);
-  for (let node of nodesWithIds) {
-    const throughputTime = calculateNodeThroughputTime(node);
+  nodesWithIds.forEach((node, index) => {
+    if (!nodesWithIds[index + 1] && !node.startTime && !node.endTime) {
+      return;
+    }
+    const throughputTime = calculateNodeThroughputTime(node, nodesWithIds[index + 1]);
 
     if (throughputTime !== undefined) {
       Object.assign(node, { throughputTime: throughputTime });
     }
-  }
+  });
   const nodesPerCase: Array<VisNode[]> = splitNodesByCase(nodesWithIds);
 
   let nodesPerCaseWithNeighbours: Array<VisNodeNeighbours[]> = [];
@@ -119,8 +122,10 @@ function getAggregatedNodes(allNodes: VisNodeNeighbours[]): VisNode[] {
       }
     });
     const meanThroughputTime = throughputTime / frequency;
-    Object.assign(node, { frequency: frequency });
-    Object.assign(node, { meanThroughputTime: formatTime(new Date(meanThroughputTime)) });
+    if (node.label) {
+      node.label = node.label + '|' + frequency;
+      node.label = node.label + ' / ' + formatTime(new Date(meanThroughputTime));
+    }
   });
   return uniqueNodes;
 }

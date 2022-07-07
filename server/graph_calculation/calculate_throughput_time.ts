@@ -2,9 +2,17 @@ import { ProcessEvent } from 'plugins/bpmining-kibana-plugin/model/process_event
 import { VisNode } from 'plugins/bpmining-kibana-plugin/model/vis_types';
 import { sortNodes } from './sort_nodes';
 
-export function calculateNodeThroughputTime(node: ProcessEvent) {
+export function calculateNodeThroughputTime(node: ProcessEvent, nextNode: ProcessEvent) {
   if (node.startTime && node.endTime) {
     const throughputTimeMilliseconds = node.endTime - node.startTime;
+    const throughputTimeSeconds = throughputTimeMilliseconds / 1000;
+
+    const throughputTime = new Date(0, 0);
+    throughputTime.setSeconds(+throughputTimeSeconds);
+
+    return throughputTime;
+  } else if (node.timestamp && nextNode.timestamp) {
+    const throughputTimeMilliseconds = nextNode.timestamp - node.timestamp;
     const throughputTimeSeconds = throughputTimeMilliseconds / 1000;
 
     const throughputTime = new Date(0, 0);
