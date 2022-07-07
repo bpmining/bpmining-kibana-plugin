@@ -9,8 +9,6 @@ const initialState = {
 };
 
 export const caseReducer = (state = initialState, action: any): CaseReducer => {
-  console.log('action in root reducer: ' + action.type);
-
   switch (action.type) {
     case fetchCaseGraphActions.SELECT_CASE:
       return {

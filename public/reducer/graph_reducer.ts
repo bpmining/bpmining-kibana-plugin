@@ -17,8 +17,6 @@ const initialState = {
 };
 
 export const graphReducer = (state = initialState, action: any): GraphReducer => {
-  console.log('action in root reducer: ' + action.type);
-
   switch (action.type) {
     case fetchAggregatedGraphActions.FETCH_AGGREGATED_GRAPH_SUCCESS:
       return {

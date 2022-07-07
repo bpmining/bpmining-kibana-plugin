@@ -82,7 +82,6 @@ export const fetchCaseGraph = (
           dispatch(fetchCaseGraphErrorAction(error));
         });
     } else if (layer === 2) {
-      console.log('Fetch data for Layer 2');
       fetchThirdPartyGraphCase(serverRequestData, caseId)
         .then(
           function (data) {
@@ -103,7 +102,6 @@ export const fetchCaseGraph = (
 };
 
 async function fetchProcessGraphCase(serverRequestData: ServerRequestData, caseId: string) {
-  console.log('Fetch process graph for case: ' + caseId);
   const router = getSearchService();
   return await router
     .post(FETCH_PROCESS_DATA_CASE, {
@@ -116,9 +114,8 @@ async function fetchProcessGraphCase(serverRequestData: ServerRequestData, caseI
         caseID: caseId,
       }),
     })
-    .then((response) => {
+    .then((response: any) => {
       const data = response.data;
-      console.log(data);
       return data;
     });
 }
@@ -127,7 +124,6 @@ export async function fetchThirdPartyGraphCase(
   serverRequestData: ServerRequestData,
   caseId: string
 ) {
-  console.log('Fetch third party graph for case: ' + caseId);
   const router = getSearchService();
   return await router
     .post(FETCH_THIRD_PARTY_DATA_CASE, {
@@ -140,9 +136,8 @@ export async function fetchThirdPartyGraphCase(
         caseID: caseId,
       }),
     })
-    .then((response) => {
+    .then((response: any) => {
       const data = response.data;
-      console.log(data);
       return data;
     });
 }

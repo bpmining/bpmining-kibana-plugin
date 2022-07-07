@@ -22,7 +22,6 @@ export interface CaseSelectorOption {
   label: string;
 }
 const mapStateToProps = (state: CaseSelectorState) => {
-  console.log(state);
   return state;
 };
 

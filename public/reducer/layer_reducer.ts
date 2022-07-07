@@ -9,8 +9,6 @@ const initialState = {
 };
 
 export const layerReducer = (state = initialState, action: any): LayerReducer => {
-  console.log('action in root reducer: ' + action.type);
-
   switch (action.type) {
     case layerActions.SET_LAYER_SUCCESS:
       return {
