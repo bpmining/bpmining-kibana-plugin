@@ -5,13 +5,13 @@ import { LayerPanel } from './layer_panel/layer_panel';
 import '../_base.scss';
 import { AnyAction, bindActionCreators, Dispatch } from 'redux';
 import { connect } from 'react-redux';
-import { RootReducer } from '../../reducer/root_reducer';
 import { VisGraphComponent } from './process_graph/vis_graph';
 import { calculateColorValue } from '../../services';
 import { VisNode, VisEdge } from '../../../model/vis_types';
 import * as fetchCaseGraphActions from '../../reducer_actions/fetch_case_specific_graph';
 import * as fetcAggregatedGraphActions from '../../reducer_actions/fetch_aggregated_graph';
 import { ServerRequestData } from '../app';
+import { RootReducer } from '../../reducer/root_reducer';
 
 interface LayoutState {
   rootReducer: RootReducer;

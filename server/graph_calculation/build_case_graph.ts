@@ -23,13 +23,15 @@ export function buildCaseGraph(nodes: ProcessEvent[]) {
   const sortedNodes = sortNodes(nodes, 'timestamp');
   const nodesWithIds: VisNode[] = assignNodeIds(sortedNodes);
 
-  for (let node of nodesWithIds) {
-    const throughputTime = calculateNodeThroughputTime(node);
-
-    if (throughputTime !== undefined) {
-      Object.assign(node, { throughputTime: formatTime(new Date(throughputTime)) });
+  nodesWithIds.forEach((node, index) => {
+    if (!nodesWithIds[index + 1] && !node.startTime && !node.endTime) {
+      return;
     }
-  }
+    const throughputTime = calculateNodeThroughputTime(node, nodesWithIds[index + 1]);
+    if (node.label && throughputTime) {
+      node.label = node.label + '|' + formatTime(new Date(throughputTime));
+    }
+  });
 
   const nodesWithNeighbours = getNeighboursFor(nodesWithIds);
   const nodesWithEndpoints = addStartAndEndPoint(nodesWithNeighbours, nodes.length);

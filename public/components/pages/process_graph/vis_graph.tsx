@@ -14,24 +14,93 @@ export function VisGraphComponent(props: VisGraphComponentProps) {
     nodes: props.nodes,
     edges: props.edges,
   };
-
+  console.log(props.nodes);
   const options = {
     autoResize: true,
     layout: {
       hierarchical: {
+        enabled: true,
+        nodeSpacing: 300,
+        blockShifting: false,
+        edgeMinimization: false,
+        parentCentralization: true,
         sortMethod: 'directed',
       },
     },
     nodes: {
-      color: props.color,
-      opacity: 0.5,
+      shape: 'custom',
+      ctxRenderer: ({ ctx, id, x, y, state: { selected, hover }, style, label }) => {
+        let r = 35;
+        const drawNode = () => {
+          if (label === undefined) {
+            ctx.beginPath();
+            ctx.arc(x, y, r - 10, 0, 2 * Math.PI, false);
+            ctx.fillStyle = '#D6D1E5';
+            ctx.fill();
+            ctx.lineWidth = 2;
+            ctx.strokeStyle = '#5B4897';
+            ctx.stroke();
+          } else {
+            const splitLabel = label.split('|');
+            const title = splitLabel[0];
+            const frequencyAndCycleTime = splitLabel[1];
+            const textLen = ctx.measureText(title);
+
+            const w = textLen.width + 200;
+            const h = 2 * r;
+            if (w < 2 * r) {
+              r = w / 2;
+            }
+            if (h < 2 * r) {
+              r = h / 2;
+            }
+
+            // draw rounded nodes
+            ctx.beginPath();
+            ctx.moveTo(x, y - r);
+            ctx.arcTo(x - r + w, y - r, x - r + w, y - r + h, r);
+            ctx.arcTo(x - r + w, y - r + h, x - r, y - r + h, r);
+            ctx.arcTo(x - r, y - r + h, x - r, y - r, r);
+            ctx.arcTo(x - r, y - r, x - r + w, y - r, r);
+            ctx.closePath();
+            ctx.save();
+            ctx.fillStyle = 'white';
+
+            // draw circles with icons
+            ctx.fill();
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.arc(x, y, r - 10, 0, 2 * Math.PI, false);
+            ctx.fillStyle = '#D6D1E5';
+            ctx.fill();
+
+            ctx.restore();
+
+            // add labels
+            ctx.font = 'bold 18px sans-serif';
+            ctx.fillStyle = 'black';
+            ctx.fillText(title, x - r + 75, y - 8);
+
+            ctx.font = 'normal 18px sans-serif';
+            ctx.fillStyle = 'black';
+            ctx.fillText(frequencyAndCycleTime, x - r + 75, y + 18);
+          }
+        };
+        return {
+          drawNode,
+          nodeDimensions: { width: 2 * r, height: 2 * r },
+        };
+      },
     },
     edges: {
       color: '#000000',
+      arrowStrikethrough: false,
     },
     height: '980px',
     physics: {
-      enabled: true,
+      barnesHut: {
+        avoidOverlap: 1,
+      },
     },
   };
 
