@@ -1,6 +1,6 @@
 import { VisNodeNeighbours } from '../graph_calculation/build_aggregated_graph';
 
-export function addStartAndEndPoint(nodes: VisNodeNeighbours[], lastIndex: number) {
+export function addStartAndEndPoint(nodes: VisNodeNeighbours[], lastIndex: number, layer: number) {
   const startNode = {
     node: { label: '', id: 0 },
     prev: undefined,
@@ -11,6 +11,14 @@ export function addStartAndEndPoint(nodes: VisNodeNeighbours[], lastIndex: numbe
     prev: undefined,
     next: undefined,
   };
+
+  if (layer === 1) {
+    Object.assign(startNode.node, { color: '#D6D1E5' }, { borderColor: '#5B4897' });
+    Object.assign(endNode.node, { color: '#D6D1E5' }, { borderColor: '#5B4897' });
+  } else {
+    Object.assign(startNode.node, { color: '#F9C880' }, { borderColor: '#F39000' });
+    Object.assign(endNode.node, { color: '#F9C880' }, { borderColor: '#F39000' });
+  }
 
   nodes.push(startNode, endNode);
 

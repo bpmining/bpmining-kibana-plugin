@@ -14,6 +14,7 @@ export function VisGraphComponent(props: VisGraphComponentProps) {
     nodes: props.nodes,
     edges: props.edges,
   };
+
   console.log(props.nodes);
   const options = {
     autoResize: true,
@@ -21,7 +22,7 @@ export function VisGraphComponent(props: VisGraphComponentProps) {
       hierarchical: {
         enabled: true,
         nodeSpacing: 300,
-        blockShifting: false,
+        blockShifting: true,
         edgeMinimization: false,
         parentCentralization: true,
         sortMethod: 'directed',
@@ -35,10 +36,10 @@ export function VisGraphComponent(props: VisGraphComponentProps) {
           if (label === undefined) {
             ctx.beginPath();
             ctx.arc(x, y, r - 10, 0, 2 * Math.PI, false);
-            ctx.fillStyle = '#D6D1E5';
+            ctx.fillStyle = style.color;
             ctx.fill();
             ctx.lineWidth = 2;
-            ctx.strokeStyle = '#5B4897';
+            ctx.strokeStyle = style.borderColor;
             ctx.stroke();
           } else {
             const splitLabel = label.split('|');
@@ -64,14 +65,24 @@ export function VisGraphComponent(props: VisGraphComponentProps) {
             ctx.arcTo(x - r, y - r, x - r + w, y - r, r);
             ctx.closePath();
             ctx.save();
-            ctx.fillStyle = 'white';
-
-            // draw circles with icons
+            // if slowest node fill red
+            if (style.color === '#F9D0D2') {
+              ctx.fillStyle = style.color;
+            } else {
+              ctx.fillStyle = 'white';
+            }
             ctx.fill();
             ctx.stroke();
+
+            // draw circles with icons
             ctx.beginPath();
             ctx.arc(x, y, r - 10, 0, 2 * Math.PI, false);
-            ctx.fillStyle = '#D6D1E5';
+            if (style.color === '#F9D0D2') {
+              ctx.fillStyle = '#E9454E';
+            } else {
+              ctx.fillStyle = style.color;
+            }
+
             ctx.fill();
 
             ctx.restore();
@@ -98,9 +109,7 @@ export function VisGraphComponent(props: VisGraphComponentProps) {
     },
     height: '980px',
     physics: {
-      barnesHut: {
-        avoidOverlap: 1,
-      },
+      enabled: false,
     },
   };
 
