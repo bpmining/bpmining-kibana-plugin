@@ -5,7 +5,11 @@ import { getNeighboursFor } from '../helpers/get_node_neighbours';
 import { splitNodesByCase } from '../helpers/split_nodes_by_case';
 import { assignNodeIds } from './assign_node_ids';
 import { calculateAggregatedGraphEdges } from './calculate_edges';
-import { calculateNodeThroughputTime, formatTime } from './calculate_throughput_time';
+import {
+  calculateNodeThroughputTime,
+  convertDateToSeconds,
+  formatTime,
+} from './calculate_throughput_time';
 import { sortNodes } from './sort_nodes';
 
 export interface RawVisEdge {
@@ -25,20 +29,31 @@ export interface ProcessGraph {
   edges: VisEdge[];
 }
 
-export function buildAggregatedGraph(nodes: ProcessEvent[]) {
+export function buildAggregatedGraph(nodes: ProcessEvent[], layer: number) {
   if (nodes.length === 0) {
     return;
   }
   const sortedNodes = sortNodes(nodes, 'timestamp');
   const nodesWithIds: VisNode[] = assignNodeIds(sortedNodes);
+
   nodesWithIds.forEach((node, index) => {
     if (!nodesWithIds[index + 1] && !node.startTime && !node.endTime) {
+      if (layer === 1) {
+        Object.assign(node, { color: '#D6D1E5' }, { borderColor: '#5B4897' });
+      } else {
+        Object.assign(node, { color: '#F9C880' }, { borderColor: '#F39000' });
+      }
       return;
     }
     const throughputTime = calculateNodeThroughputTime(node, nodesWithIds[index + 1]);
 
     if (throughputTime !== undefined) {
       Object.assign(node, { throughputTime: throughputTime });
+    }
+    if (layer === 1) {
+      Object.assign(node, { color: '#D6D1E5' }, { borderColor: '#828282' });
+    } else {
+      Object.assign(node, { color: '#F9C880' }, { borderColor: '#828282' });
     }
   });
   const nodesPerCase: Array<VisNode[]> = splitNodesByCase(nodesWithIds);
@@ -47,7 +62,7 @@ export function buildAggregatedGraph(nodes: ProcessEvent[]) {
   let edgesPerCase: Array<RawVisEdge[]> = [];
   nodesPerCase.forEach((oneCase) => {
     const caseWithNeighbours = getNeighboursFor(oneCase);
-    const nodesWithEndpoints = addStartAndEndPoint(caseWithNeighbours, nodes.length);
+    const nodesWithEndpoints = addStartAndEndPoint(caseWithNeighbours, nodes.length, layer);
     nodesPerCaseWithNeighbours.push(nodesWithEndpoints);
 
     const edges = calculateAggregatedGraphEdges(nodesWithEndpoints);
@@ -121,11 +136,28 @@ function getAggregatedNodes(allNodes: VisNodeNeighbours[]): VisNode[] {
         throughputTime += node.node.throughputTime.getTime();
       }
     });
-    const meanThroughputTime = throughputTime / frequency;
+    const meanThroughputTime = throughputTime === 0 ? 0 : throughputTime / frequency;
+    Object.assign(node, { meanThroughputTime: meanThroughputTime });
     if (node.label) {
       node.label = node.label + '|' + frequency;
-      node.label = node.label + ' / ' + formatTime(new Date(meanThroughputTime));
+      node.label += meanThroughputTime
+        ? ' / ' + formatTime(new Date(meanThroughputTime))
+        : ' / no data available';
     }
   });
+
+  const slowestNode = uniqueNodes.reduce((prev, current) => {
+    const prevTime =
+      prev.meanThroughputTime === 0 ? 0 : convertDateToSeconds(new Date(prev.meanThroughputTime));
+    const currentTime =
+      current.meanThroughputTime === 0
+        ? 0
+        : convertDateToSeconds(new Date(current.meanThroughputTime));
+    console.log(prevTime);
+    return prevTime > currentTime ? prev : current;
+  });
+
+  slowestNode.color = '#F9D0D2';
+
   return uniqueNodes;
 }

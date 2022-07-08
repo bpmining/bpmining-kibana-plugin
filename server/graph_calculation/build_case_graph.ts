@@ -7,6 +7,7 @@ import { calculateCaseGraphEdges } from './calculate_edges';
 import {
   calculateGraphThroughputTime,
   calculateNodeThroughputTime,
+  convertDateToSeconds,
   formatTime,
 } from './calculate_throughput_time';
 import { sortNodes } from './sort_nodes';
@@ -16,7 +17,7 @@ export interface ProcessGraph {
   edges: VisEdge[];
 }
 
-export function buildCaseGraph(nodes: ProcessEvent[]) {
+export function buildCaseGraph(nodes: ProcessEvent[], layer: number) {
   if (nodes.length === 0) {
     return;
   }
@@ -31,10 +32,28 @@ export function buildCaseGraph(nodes: ProcessEvent[]) {
     if (node.label && throughputTime) {
       node.label = node.label + '|' + formatTime(new Date(throughputTime));
     }
+
+    if (layer === 1) {
+      Object.assign(node, { style: { color: '#D6D1E5' } });
+    } else {
+      Object.assign(node, { style: { color: '#F9C880' } });
+    }
   });
 
+  const slowestNode = nodesWithIds.reduce((prev, current) => {
+    const prevTime = prev.throughputTime
+      ? 0
+      : convertDateToSeconds(new Date(prev.meanThroughputTime));
+    const currentTime = current.throughputTime
+      ? 0
+      : convertDateToSeconds(new Date(current.meanThroughputTime));
+    console.log(prevTime);
+    return prevTime > currentTime ? prev : current;
+  });
+  Object.assign(slowestNode, { color: '#F9D0D2', borderColor: '#E9454E' });
+
   const nodesWithNeighbours = getNeighboursFor(nodesWithIds);
-  const nodesWithEndpoints = addStartAndEndPoint(nodesWithNeighbours, nodes.length);
+  const nodesWithEndpoints = addStartAndEndPoint(nodesWithNeighbours, nodes.length, layer);
 
   const finalNodes = nodesWithEndpoints.map((item) => item.node);
   const edges = calculateCaseGraphEdges(nodesWithEndpoints);

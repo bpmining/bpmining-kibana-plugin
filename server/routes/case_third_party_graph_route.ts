@@ -49,7 +49,9 @@ export function caseThirdPartyGraphRoute(router: IRouter) {
       const hits = (res as SearchResponse<ProcessEvent>).hits.hits;
 
       const nodes: ProcessEvent[] = hits.map((hit) => ({ ...hit._source }));
-      const graph = buildCaseGraph(nodes);
+
+      const layer = 2;
+      const graph = buildCaseGraph(nodes, layer);
       const caseIds = extractPossibleCaseIds(nodes);
       const caseCount = caseIds.length;
 

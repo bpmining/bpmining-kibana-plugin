@@ -56,7 +56,8 @@ export function aggregatedProcessGraphRoute(router: IRouter) {
       const processNodes = nodesWithThirdPartyData.filter(
         (node: VisNode) => node.typ === 'process'
       );
-      const graph = buildAggregatedGraph(processNodes);
+      const layer = 1;
+      const graph = buildAggregatedGraph(processNodes, layer);
 
       const data = {
         graph: graph,

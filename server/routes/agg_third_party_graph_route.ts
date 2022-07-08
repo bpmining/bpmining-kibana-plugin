@@ -51,7 +51,8 @@ export function aggregatedThirdPartyGraphRoute(router: IRouter) {
       const caseIds = extractPossibleCaseIds(nodes);
       const caseCount = caseIds.length;
 
-      const graph = buildAggregatedGraph(nodes);
+      const layer = 2;
+      const graph = buildAggregatedGraph(nodes, layer);
 
       const data = {
         graph: graph,
