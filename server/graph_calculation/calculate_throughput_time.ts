@@ -9,7 +9,6 @@ export function calculateNodeThroughputTime(node: ProcessEvent, nextNode: Proces
 
     const throughputTime = new Date(0, 0);
     throughputTime.setSeconds(+throughputTimeSeconds);
-    console.log(throughputTime);
     return throughputTime;
   } else if (node.timestamp && nextNode.timestamp) {
     const throughputTimeMilliseconds = nextNode.timestamp - node.timestamp;
