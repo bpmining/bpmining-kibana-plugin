@@ -32,7 +32,7 @@ export function VisGraphComponent(props: VisGraphComponentProps) {
       shape: 'custom',
       ctxRenderer: ({ ctx, id, x, y, state: { selected, hover }, style, label }) => {
         let r = 35;
-        const drawNode = () => {
+        const drawNode = async () => {
           if (label === undefined) {
             ctx.beginPath();
             ctx.arc(x, y, r - 10, 0, 2 * Math.PI, false);
@@ -85,8 +85,6 @@ export function VisGraphComponent(props: VisGraphComponentProps) {
 
             ctx.fill();
 
-            ctx.restore();
-
             // add labels
             ctx.font = 'bold 18px sans-serif';
             ctx.fillStyle = 'black';
@@ -95,6 +93,23 @@ export function VisGraphComponent(props: VisGraphComponentProps) {
             ctx.font = 'normal 18px sans-serif';
             ctx.fillStyle = 'black';
             ctx.fillText(frequencyAndCycleTime, x - r + 75, y + 18);
+
+            const material_font = new FontFace(
+              'material-icons',
+              // pass the url to the file in CSS url() notation
+              'url(https://fonts.gstatic.com/s/materialicons/v48/flUhRq6tzZclQEJ-Vdg-IuiaDsNcIhQ8tQ.woff2)'
+            );
+            document.fonts.add(material_font);
+            await material_font
+              .load()
+              .then(() => {
+                // we're good to use it
+                ctx.fillStyle = 'black';
+                ctx.font = '20px material-icons';
+                ctx.fillText('layers', x - r + 175, y - 8);
+              })
+              .catch(console.error);
+            ctx.restore();
           }
         };
         return {
