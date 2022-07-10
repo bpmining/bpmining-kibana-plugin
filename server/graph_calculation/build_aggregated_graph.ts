@@ -139,10 +139,13 @@ function getAggregatedNodes(allNodes: VisNodeNeighbours[]): VisNode[] {
     const meanThroughputTime = throughputTime === 0 ? 0 : throughputTime / frequency;
     Object.assign(node, { meanThroughputTime: meanThroughputTime });
     if (node.label) {
-      node.label = node.label + '|' + frequency;
+      node.label += '|' + frequency;
       node.label += meanThroughputTime
         ? ' / ' + formatTime(new Date(meanThroughputTime))
         : ' / no data available';
+      if (node.thirdPartyData) {
+        node.label += '|third-party-data';
+      }
     }
   });
 
@@ -153,7 +156,6 @@ function getAggregatedNodes(allNodes: VisNodeNeighbours[]): VisNode[] {
       current.meanThroughputTime === 0
         ? 0
         : convertDateToSeconds(new Date(current.meanThroughputTime));
-    console.log(prevTime);
     return prevTime > currentTime ? prev : current;
   });
 

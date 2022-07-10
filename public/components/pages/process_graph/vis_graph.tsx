@@ -1,7 +1,8 @@
 // @ts-ignore
 import Graph from 'react-graph-vis';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { VisEdge, VisNode } from '../../../../model/vis_types';
+import { NodeModal } from './node_modal';
 
 export interface VisGraphComponentProps {
   nodes: VisNode[];
@@ -10,12 +11,14 @@ export interface VisGraphComponentProps {
 }
 
 export function VisGraphComponent(props: VisGraphComponentProps) {
+  const [nodeModal, setNodeModal] = useState(false);
+  const [currentNode, setCurrentNode] = useState<VisNode>();
+  useEffect(() => {}, [props]);
   const graph = {
     nodes: props.nodes,
     edges: props.edges,
   };
 
-  console.log(props.nodes);
   const options = {
     autoResize: true,
     layout: {
@@ -45,9 +48,10 @@ export function VisGraphComponent(props: VisGraphComponentProps) {
             const splitLabel = label.split('|');
             const title = splitLabel[0];
             const frequencyAndCycleTime = splitLabel[1];
+            const thirdPartyData = splitLabel.includes('third-party-data') ? true : false;
             const textLen = ctx.measureText(title);
 
-            const w = textLen.width + 200;
+            const w = textLen.width * 3;
             const h = 2 * r;
             if (w < 2 * r) {
               r = w / 2;
@@ -94,21 +98,22 @@ export function VisGraphComponent(props: VisGraphComponentProps) {
             ctx.fillStyle = 'black';
             ctx.fillText(frequencyAndCycleTime, x - r + 75, y + 18);
 
-            const material_font = new FontFace(
-              'material-icons',
-              // pass the url to the file in CSS url() notation
-              'url(https://fonts.gstatic.com/s/materialicons/v48/flUhRq6tzZclQEJ-Vdg-IuiaDsNcIhQ8tQ.woff2)'
-            );
-            document.fonts.add(material_font);
-            await material_font
-              .load()
-              .then(() => {
-                // we're good to use it
-                ctx.fillStyle = 'black';
-                ctx.font = '20px material-icons';
-                ctx.fillText('layers', x - r + 175, y - 8);
-              })
-              .catch(console.error);
+            // add drill down icon
+            if (thirdPartyData) {
+              const material_font = new FontFace(
+                'material-icons',
+                'url(https://fonts.gstatic.com/s/materialicons/v48/flUhRq6tzZclQEJ-Vdg-IuiaDsNcIhQ8tQ.woff2)'
+              );
+              document.fonts.add(material_font);
+              await material_font
+                .load()
+                .then(() => {
+                  ctx.fillStyle = 'black';
+                  ctx.font = '30px material-icons';
+                  ctx.fillText('layers', x - r + w - 50, y);
+                })
+                .catch(console.error);
+            }
             ctx.restore();
           }
         };
@@ -128,12 +133,21 @@ export function VisGraphComponent(props: VisGraphComponentProps) {
     },
   };
 
-  /* const events = {
-    select(event: { nodes: any; edges: any }) {
-      const { nodes, edges } = event;
+  const events = {
+    async selectNode(event: { nodes: any }) {
+      const { nodes } = event;
+      const selectedNode = graph.nodes[nodes[0] - 1];
+      console.log(selectedNode);
+      await setCurrentNode(selectedNode);
+      await setNodeModal(true);
     },
-  }; */
+  };
 
   // return <Graph graph={graph} options={options} events={events} />;
-  return <Graph graph={graph} options={options} />;
+  return (
+    <div>
+      <Graph graph={graph} options={options} events={events} />;
+      {nodeModal ? <NodeModal node={currentNode}></NodeModal> : undefined}
+    </div>
+  );
 }
