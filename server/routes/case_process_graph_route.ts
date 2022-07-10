@@ -1,9 +1,11 @@
 import { schema } from '@kbn/config-schema';
+import { VisNode } from 'plugins/bpmining-kibana-plugin/model/vis_types';
 import { IRouter, SearchResponse } from '../../../../src/core/server';
 import { FETCH_PROCESS_DATA_CASE } from '../../common/routes';
 import { ProcessEvent } from '../../model/process_event';
 import { buildCaseGraph } from '../graph_calculation/build_case_graph';
 import { extractPossibleCaseIds } from '../helpers/extract_possible_case_ids';
+import { assignThirdPartyDataTo } from '../helpers/third_party_data';
 
 export function caseProcessGraphRoute(router: IRouter) {
   router.post(
@@ -38,7 +40,7 @@ export function caseProcessGraphRoute(router: IRouter) {
                   },
                 },
               ],
-              filter: [{ term: { typ: 'process' } }, { term: { caseID: caseID } }],
+              filter: [{ term: { caseID: caseID } }],
             },
           },
           size: 100,
@@ -49,10 +51,13 @@ export function caseProcessGraphRoute(router: IRouter) {
       const hits = (res as SearchResponse<ProcessEvent>).hits.hits;
 
       const nodes: ProcessEvent[] = hits.map((hit) => ({ ...hit._source }));
-
+      const nodesWithThirdPartyData = assignThirdPartyDataTo(nodes);
+      const processNodes = nodesWithThirdPartyData.filter(
+        (node: VisNode) => node.typ === 'process'
+      );
       const layer = 1;
-      const graph = buildCaseGraph(nodes, layer);
-      const caseIds = extractPossibleCaseIds(nodes);
+      const graph = buildCaseGraph(processNodes, layer);
+      const caseIds = extractPossibleCaseIds(processNodes);
       const caseCount = caseIds.length;
 
       const data = {
