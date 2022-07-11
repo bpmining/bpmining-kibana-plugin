@@ -11,7 +11,7 @@ import { connect } from 'react-redux';
 export interface VisGraphComponentProps {
   nodes: VisNode[];
   edges: VisEdge[];
-  color: string;
+  layer: number;
   rootReducer: RootReducer;
   showNodeDetailPanel: Function;
   hideNodeDetailPanel: Function;
@@ -36,6 +36,10 @@ const VisGraphComponent = (props: VisGraphComponentProps) => {
     nodes: props.nodes,
     edges: props.edges,
   };
+  const caseIds = graph.nodes.map((node) => node.caseID);
+  const uniqueCaseIds = [...new Set(caseIds)];
+  // must be > 2 because start and endnode have caseId "undefined"
+  const aggregated = uniqueCaseIds.length > 2;
 
   const options = {
     autoResize: true,
@@ -153,16 +157,16 @@ const VisGraphComponent = (props: VisGraphComponentProps) => {
 
   const events = {
     async selectNode(clickEvent: { nodes: any; pointer: any; event: any }) {
-      console.log(clickEvent);
       const { nodes, pointer, event } = clickEvent;
-      const selectedNode = graph.nodes[nodes[0] - 1];
+      const selectedNode = graph.nodes.find((node) => node.id === nodes[0]);
+      if (selectedNode && selectedNode.label !== '') {
+        await setCurrentNode(selectedNode);
+        await setXPosition(pointer.DOM.y - 100);
+        await setYPosition(pointer.DOM.x - 100);
 
-      await setCurrentNode(selectedNode);
-      await setXPosition(pointer.DOM.y);
-      await setYPosition(pointer.DOM.x - 50);
-
-      const { showNodeDetailPanel } = props;
-      showNodeDetailPanel();
+        const { showNodeDetailPanel } = props;
+        showNodeDetailPanel();
+      }
     },
     async deselectNode() {
       const { hideNodeDetailPanel } = props;
@@ -190,7 +194,7 @@ const VisGraphComponent = (props: VisGraphComponentProps) => {
           className="node-panel-container"
           style={{ position: 'absolute', top: x + 'px', right: y + 'px' }}
         >
-          <NodePanel node={currentNode}></NodePanel>
+          <NodePanel node={currentNode} aggregated={aggregated}></NodePanel>
         </div>
       ) : undefined}
     </div>

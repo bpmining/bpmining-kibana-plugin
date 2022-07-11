@@ -1,6 +1,10 @@
 import { VisEdge } from 'plugins/bpmining-kibana-plugin/model/vis_types';
 import { RawVisEdge, VisNodeNeighbours } from './build_aggregated_graph';
-import { calculateEdgeThroughputTime, formatTime } from './calculate_throughput_time';
+import {
+  calculateEdgeThroughputTime,
+  formatDateTime,
+  formatTime,
+} from './calculate_throughput_time';
 
 export function calculateCaseGraphEdges(aggregatedNodes: VisNodeNeighbours[]) {
   let edges: VisEdge[] = [];
@@ -12,14 +16,14 @@ export function calculateCaseGraphEdges(aggregatedNodes: VisNodeNeighbours[]) {
     const edgeToNext = {
       from: node.node.id,
       to: node.next.id,
-      label: formatTime(calculateEdgeThroughputTime(node.node, node.next)),
+      label: formatDateTime(calculateEdgeThroughputTime(node.node, node.next)),
     };
     edges.push(edgeToNext);
 
     const edgeToPrevious = {
       from: node.prev.id,
       to: node.node.id,
-      label: formatTime(calculateEdgeThroughputTime(node.prev, node.node)),
+      label: formatDateTime(calculateEdgeThroughputTime(node.prev, node.node)),
     };
     edges.push(edgeToPrevious);
   });

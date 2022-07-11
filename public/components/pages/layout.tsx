@@ -83,7 +83,7 @@ const LayoutComponent = (props: LayoutProps) => {
                   <VisGraphComponent
                     nodes={nodes}
                     edges={edges}
-                    color={calculateColorValue(props.rootReducer.layer.selectedLayer)}
+                    layer={props.rootReducer.layer.selectedLayer}
                   />
                 )}
                 <div className="layer-container">

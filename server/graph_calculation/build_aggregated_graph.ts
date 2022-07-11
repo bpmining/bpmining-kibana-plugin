@@ -7,7 +7,7 @@ import { assignNodeIds } from './assign_node_ids';
 import { calculateAggregatedGraphEdges } from './calculate_edges';
 import {
   calculateNodeThroughputTime,
-  convertDateToSeconds,
+  formatDateTime,
   formatTime,
 } from './calculate_throughput_time';
 import { sortNodes } from './sort_nodes';
@@ -45,7 +45,7 @@ export function buildAggregatedGraph(nodes: ProcessEvent[], layer: number) {
       }
       return;
     }
-    const throughputTime = calculateNodeThroughputTime(node, nodesWithIds[index + 1]);
+    const throughputTime = calculateNodeThroughputTime(node);
 
     if (throughputTime !== undefined) {
       Object.assign(node, { throughputTime: throughputTime });
@@ -114,7 +114,7 @@ function getAggregatedEdgesWithLabels(edges: RawVisEdge[]) {
       to: edge.to,
       label: `${frequency}x 
       
-      ${formatTime(new Date(meanThroughputTime))}`,
+      ${formatDateTime(new Date(meanThroughputTime))}`,
     });
   });
 
@@ -130,19 +130,27 @@ function getAggregatedNodes(allNodes: VisNodeNeighbours[]): VisNode[] {
     const sameNodes = allNodes.filter((n: VisNodeNeighbours) => n.node.id === node.id);
     const frequency = sameNodes.length;
 
+    const minThroughputTime = Math.min(...sameNodes.map((node) => node.node.throughputTime));
+    Object.assign(node, { minThroughputTime: formatDateTime(new Date(minThroughputTime)) });
+    const maxThroughputTime = Math.max(...sameNodes.map((node) => node.node.throughputTime));
+    Object.assign(node, { maxThroughputTime: formatDateTime(new Date(maxThroughputTime)) });
+
     let throughputTime: number = 0;
     sameNodes.forEach((node) => {
       if (node.node.throughputTime !== undefined) {
-        throughputTime += node.node.throughputTime.getTime();
+        throughputTime += node.node.throughputTime.getHours() * 60 * 60;
+        throughputTime += node.node.throughputTime.getMinutes() * 60;
+        throughputTime += node.node.throughputTime.getSeconds();
       }
     });
+    const totalThroughputTime = throughputTime === 0 ? '-' : formatTime(throughputTime);
+    Object.assign(node, { totalThroughputTime: totalThroughputTime });
     const meanThroughputTime = throughputTime === 0 ? 0 : throughputTime / frequency;
+    console.log(meanThroughputTime);
     Object.assign(node, { meanThroughputTime: meanThroughputTime });
     if (node.label) {
       node.label += '|' + frequency;
-      node.label += meanThroughputTime
-        ? ' / ' + formatTime(new Date(meanThroughputTime))
-        : ' / no data available';
+      node.label += ' / ' + (meanThroughputTime === 0 ? '-' : formatTime(meanThroughputTime));
       if (node.thirdPartyData) {
         node.label += '|third-party-data';
       }
@@ -150,16 +158,13 @@ function getAggregatedNodes(allNodes: VisNodeNeighbours[]): VisNode[] {
   });
 
   const slowestNode = uniqueNodes.reduce((prev, current) => {
-    const prevTime =
-      prev.meanThroughputTime === 0 ? 0 : convertDateToSeconds(new Date(prev.meanThroughputTime));
-    const currentTime =
-      current.meanThroughputTime === 0
-        ? 0
-        : convertDateToSeconds(new Date(current.meanThroughputTime));
+    const prevTime = prev.meanThroughputTime === 0 ? 0 : prev.meanThroughputTime;
+    const currentTime = current.meanThroughputTime === 0 ? 0 : current.meanThroughputTime;
     return prevTime > currentTime ? prev : current;
   });
-
-  slowestNode.color = '#F9D0D2';
+  if (slowestNode.meanThroughputTime !== 0) {
+    slowestNode.color = '#F9D0D2';
+  }
 
   return uniqueNodes;
 }

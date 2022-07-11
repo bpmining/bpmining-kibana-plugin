@@ -8,7 +8,7 @@ import {
   calculateGraphThroughputTime,
   calculateNodeThroughputTime,
   convertDateToSeconds,
-  formatTime,
+  formatDateTime,
 } from './calculate_throughput_time';
 import { sortNodes } from './sort_nodes';
 
@@ -25,22 +25,39 @@ export function buildCaseGraph(nodes: ProcessEvent[], layer: number) {
   const nodesWithIds: VisNode[] = assignNodeIds(sortedNodes);
 
   nodesWithIds.forEach((node, index) => {
-    if (!nodesWithIds[index + 1] && !node.startTime && !node.endTime) {
+    let throughputTime = undefined;
+    if (!node.startTime || !node.endTime) {
       if (layer === 1) {
         Object.assign(node, { color: '#D6D1E5' }, { borderColor: '#5B4897' });
       } else {
         Object.assign(node, { color: '#F9C880' }, { borderColor: '#F39000' });
       }
-      return;
+    } else {
+      throughputTime = calculateNodeThroughputTime(node);
     }
-    const throughputTime = calculateNodeThroughputTime(node, nodesWithIds[index + 1]);
     Object.assign(node, { throughputTime: throughputTime });
+    const sameNodes = nodesWithIds.filter((n: VisNode) => n.id === node.id);
+    const frequency = sameNodes.length;
+    Object.assign(node, { frequency: frequency });
+
     if (node.label && throughputTime) {
-      node.label += '|' + formatTime(new Date(throughputTime));
+      node.label += '|' + formatDateTime(new Date(throughputTime));
+    } else {
+      node.label += '| - ';
     }
 
     if (node.thirdPartyData) {
       node.label += '|third-party-data';
+    }
+
+    if (node.contextInfo) {
+      const keys = Object.keys(node.contextInfo);
+      let contextInformation = [];
+      keys.forEach((key: string) => {
+        const value = node.contextInfo[key];
+        contextInformation.push(key + ': ' + value);
+      });
+      node.contextInfo = contextInformation;
     }
 
     if (layer === 1) {
