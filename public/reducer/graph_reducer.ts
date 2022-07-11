@@ -1,12 +1,14 @@
 import { VisGraph } from 'plugins/bpmining-kibana-plugin/model/vis_types';
 import * as fetchCaseGraphActions from '../reducer_actions/fetch_case_specific_graph';
 import * as fetchAggregatedGraphActions from '../reducer_actions/fetch_aggregated_graph';
+import * as nodeDetailPanelActions from '../reducer_actions/node_detail_panel';
 
 export interface GraphReducer {
   graph: VisGraph | undefined;
   caseIds: string[];
   caseCount: number;
   error: Error | null;
+  nodeDetail: boolean;
 }
 
 const initialState = {
@@ -14,6 +16,7 @@ const initialState = {
   caseIds: [],
   caseCount: 0,
   error: null,
+  nodeDetail: false,
 };
 
 export const graphReducer = (state = initialState, action: any): GraphReducer => {
@@ -45,6 +48,16 @@ export const graphReducer = (state = initialState, action: any): GraphReducer =>
         ...state,
         graph: undefined,
         error: action.error,
+      };
+    case nodeDetailPanelActions.SHOW_NODE_DETAIL_PANEL:
+      return {
+        ...state,
+        nodeDetail: true,
+      };
+    case nodeDetailPanelActions.HIDE_NODE_DETAIL_PANEL:
+      return {
+        ...state,
+        nodeDetail: false,
       };
     default:
       return state;

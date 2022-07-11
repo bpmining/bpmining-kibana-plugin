@@ -77,7 +77,7 @@ const LayoutComponent = (props: LayoutProps) => {
 
             <EuiResizableButton />
 
-            <EuiResizablePanel mode="main" initialSize={80} minSize="500px">
+            <EuiResizablePanel className="canvas" mode="main" initialSize={80} minSize="500px">
               <div className="design-scope">
                 {graphBool && (
                   <VisGraphComponent

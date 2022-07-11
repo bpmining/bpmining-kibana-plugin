@@ -2,17 +2,35 @@
 import Graph from 'react-graph-vis';
 import React, { useEffect, useState } from 'react';
 import { VisEdge, VisNode } from '../../../../model/vis_types';
-import { NodeModal } from './node_modal';
+import { NodePanel } from './node_panel';
+import { RootReducer } from 'plugins/bpmining-kibana-plugin/public/reducer/root_reducer';
+import * as nodeDetailPanelActions from '../../../reducer_actions/node_detail_panel';
+import { AnyAction, bindActionCreators, Dispatch } from 'redux';
+import { connect } from 'react-redux';
 
 export interface VisGraphComponentProps {
   nodes: VisNode[];
   edges: VisEdge[];
   color: string;
+  rootReducer: RootReducer;
+  showNodeDetailPanel: Function;
+  hideNodeDetailPanel: Function;
 }
 
-export function VisGraphComponent(props: VisGraphComponentProps) {
-  const [nodeModal, setNodeModal] = useState(false);
+interface VisGraphComponentState {
+  rootReducer: RootReducer;
+}
+
+const mapStateToProps = (state: VisGraphComponentState) => {
+  return state;
+};
+
+const VisGraphComponent = (props: VisGraphComponentProps) => {
   const [currentNode, setCurrentNode] = useState<VisNode>();
+  const [x, setXPosition] = useState<number>(0);
+  const [y, setYPosition] = useState<number>(0);
+  const [network, setNetwork] = useState<any>();
+
   useEffect(() => {}, [props]);
   const graph = {
     nodes: props.nodes,
@@ -134,20 +152,60 @@ export function VisGraphComponent(props: VisGraphComponentProps) {
   };
 
   const events = {
-    async selectNode(event: { nodes: any }) {
-      const { nodes } = event;
+    async selectNode(clickEvent: { nodes: any; pointer: any; event: any }) {
+      console.log(clickEvent);
+      const { nodes, pointer, event } = clickEvent;
       const selectedNode = graph.nodes[nodes[0] - 1];
-      console.log(selectedNode);
+
       await setCurrentNode(selectedNode);
-      await setNodeModal(true);
+      await setXPosition(pointer.DOM.y);
+      await setYPosition(pointer.DOM.x - 50);
+
+      const { showNodeDetailPanel } = props;
+      showNodeDetailPanel();
+    },
+    async deselectNode() {
+      const { hideNodeDetailPanel } = props;
+      hideNodeDetailPanel();
+    },
+    async zoom() {
+      const { hideNodeDetailPanel } = props;
+      hideNodeDetailPanel();
     },
   };
 
-  // return <Graph graph={graph} options={options} events={events} />;
   return (
     <div>
-      <Graph graph={graph} options={options} events={events} />;
-      {nodeModal ? <NodeModal node={currentNode}></NodeModal> : undefined}
+      <Graph
+        graph={graph}
+        options={options}
+        events={events}
+        getNetwork={async (network) => {
+          await setNetwork({ network });
+        }}
+      />
+
+      {props.rootReducer.graph.nodeDetail ? (
+        <div
+          className="node-panel-container"
+          style={{ position: 'absolute', top: x + 'px', right: y + 'px' }}
+        >
+          <NodePanel node={currentNode}></NodePanel>
+        </div>
+      ) : undefined}
     </div>
   );
-}
+};
+
+const mapDispatchToProps = (dispatch: Dispatch<AnyAction>) => {
+  return bindActionCreators(
+    {
+      showNodeDetailPanel: nodeDetailPanelActions.showNodeDetailPanelAction,
+      hideNodeDetailPanel: nodeDetailPanelActions.hideNodeDetailPanelAction,
+    },
+    dispatch
+  );
+};
+
+const connectedVisGraph = connect(mapStateToProps, mapDispatchToProps)(VisGraphComponent);
+export { connectedVisGraph as VisGraphComponent };
