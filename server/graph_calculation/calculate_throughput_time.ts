@@ -2,21 +2,13 @@ import { ProcessEvent } from 'plugins/bpmining-kibana-plugin/model/process_event
 import { VisNode } from 'plugins/bpmining-kibana-plugin/model/vis_types';
 import { sortNodes } from './sort_nodes';
 
-export function calculateNodeThroughputTime(node: ProcessEvent, nextNode: ProcessEvent) {
+export function calculateNodeThroughputTime(node: ProcessEvent) {
   if (node.startTime && node.endTime) {
     const throughputTimeMilliseconds = node.endTime - node.startTime;
     const throughputTimeSeconds = throughputTimeMilliseconds / 1000;
 
     const throughputTime = new Date(0, 0);
     throughputTime.setSeconds(+throughputTimeSeconds);
-    return throughputTime;
-  } else if (node.timestamp && nextNode.timestamp) {
-    const throughputTimeMilliseconds = nextNode.timestamp - node.timestamp;
-    const throughputTimeSeconds = throughputTimeMilliseconds / 1000;
-
-    const throughputTime = new Date(0, 0);
-    throughputTime.setSeconds(+throughputTimeSeconds);
-
     return throughputTime;
   }
   return undefined;
@@ -43,16 +35,36 @@ export function calculateGraphThroughputTime(nodes: VisNode[]) {
   const throughputTime = new Date(0, 0);
   throughputTime.setSeconds(+throughputTimeSeconds);
 
-  const formatedTimeString = formatTime(throughputTime);
+  const formatedTimeString = formatDateTime(throughputTime);
   return formatedTimeString;
 }
 
-export function formatTime(throughputTime: Date): string {
+export function formatDateTime(throughputTime: Date): string {
   let timeString = '';
 
   const hours = throughputTime.getHours();
   const minutes = throughputTime.getMinutes();
   const seconds = throughputTime.getSeconds();
+
+  if (hours > 0) {
+    timeString = `${hours}:${minutes} h`;
+  } else if (minutes > 0) {
+    timeString = `${minutes}:${seconds} min`;
+  } else if (seconds > 0) {
+    timeString = `${seconds} s`;
+  } else {
+    timeString = '0 s';
+  }
+
+  return timeString;
+}
+
+export function formatTime(throughputTime: number): string {
+  let timeString = '';
+
+  const hours = Math.floor(throughputTime / 3600);
+  const minutes = Math.floor((throughputTime % 3600) / 60);
+  const seconds = Math.floor(throughputTime % 60);
 
   if (hours > 0) {
     timeString = `${hours}:${minutes} h`;

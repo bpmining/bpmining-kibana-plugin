@@ -1,4 +1,5 @@
 export interface VisNode{
+    
     timestamp: number;
     label: string;
     caseID: string;
@@ -8,11 +9,15 @@ export interface VisNode{
   
     system?: string;
     typ?: 'process' | 'third-party';
-    contextInfo?: object;
+    contextInfo?: object | Array<any>;
 
     id: number;
     throughputTime?: Date;
     meanThroughputTime?: number;
+    totalThroughputTime?: string;
+    minThroughputTime?: string;
+    maxThroughputTime?: string;
+    frequency?: number ;
     thirdPartyData?: VisNode[];
 }
 

@@ -12,6 +12,7 @@ export interface NodePanelState {
 
 export interface NodePanelProps {
   node: VisNode;
+  aggregated: boolean;
   rootReducer: RootReducer;
   showNodeDetailPanel: Function;
   hideNodeDetailPanel: Function;
@@ -25,20 +26,60 @@ const NodePanel = (props: NodePanelProps) => {
   const node = props.node;
   const splitLabel = node.label.split('|');
   const title = splitLabel[0];
+  console.log(node);
+  const frequencyAndThroughputTime = splitLabel[1];
+  const frequency = frequencyAndThroughputTime.split('/')[0];
+  const throughputTime = frequencyAndThroughputTime.split('/')[1];
+  let contextInfo;
+  if (node.contextInfo) {
+    contextInfo = node.contextInfo.map((line) => line).join('\n');
+  }
+  const drillDown = node.thirdPartyData ? true : false;
 
   function handleDrillDown(event: any) {
     const { hideNodeDetailPanel } = props;
     hideNodeDetailPanel();
   }
 
-  return (
-    <EuiPanel className="node-panel">
-      <p>{title}</p>
-      <br />
-      <p>Case Id: {node.caseID}</p>
-      <EuiButton onClick={handleDrillDown}>Drill Down</EuiButton>
-    </EuiPanel>
-  );
+  let panel;
+  if (props.aggregated) {
+    panel = (
+      <EuiPanel className="node-panel">
+        <p>{title}</p>
+        <br />
+        Absolute Frequency: {frequency} <br />
+        Total Duration: {node.totalThroughputTime}
+        <br />
+        Mean Duration: {throughputTime}
+        <br />
+        Min. Duration: {node.minThroughputTime}
+        <br />
+        Max. Duration: {node.maxThroughputTime}
+        <br />
+        {drillDown && <EuiButton onClick={handleDrillDown}>Drill Down</EuiButton>}
+      </EuiPanel>
+    );
+  } else {
+    panel = (
+      <EuiPanel className="node-panel">
+        <p>{title}</p>
+        <br />
+        Case Id: {node.caseID}
+        <br />
+        <br />
+        Absolute Frequency:
+        <br />
+        Case Frequency: {node.frequency} <br />
+        Throughput Time: {throughputTime}
+        <br />
+        <br />
+        {contextInfo} <br></br>
+        {drillDown && <EuiButton onClick={handleDrillDown}>Drill Down</EuiButton>}
+      </EuiPanel>
+    );
+  }
+
+  return panel;
 };
 
 const mapDispatchToProps = (dispatch: Dispatch<AnyAction>) => {
