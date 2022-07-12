@@ -1,5 +1,6 @@
 import { ProcessEvent } from 'plugins/bpmining-kibana-plugin/model/process_event';
 import { VisNode } from 'plugins/bpmining-kibana-plugin/model/vis_types';
+import { sortNodes } from './sort_nodes';
 
 export function assignNodeIds(sortedNodes: ProcessEvent[]): VisNode[] {
   const labels = sortedNodes.map((node) => node.label);
@@ -12,5 +13,6 @@ export function assignNodeIds(sortedNodes: ProcessEvent[]): VisNode[] {
       }
     });
   });
-  return nodesWithIds;
+
+  return sortNodes(nodesWithIds, 'timestamp');
 }

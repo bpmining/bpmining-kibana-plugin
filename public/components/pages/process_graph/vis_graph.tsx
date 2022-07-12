@@ -31,11 +31,12 @@ const VisGraphComponent = (props: VisGraphComponentProps) => {
   const [y, setYPosition] = useState<number>(0);
   const [network, setNetwork] = useState<any>();
 
-  useEffect(() => {}, [props]);
-  const graph = {
+  useEffect(() => {}, [props.rootReducer.graph.graph]);
+  let graph = {
     nodes: props.nodes,
     edges: props.edges,
   };
+
   const caseIds = graph.nodes.map((node) => node.caseID);
   const uniqueCaseIds = [...new Set(caseIds)];
   // must be > 2 because start and endnode have caseId "undefined"
@@ -146,7 +147,10 @@ const VisGraphComponent = (props: VisGraphComponentProps) => {
       },
     },
     edges: {
-      color: '#000000',
+      color: {
+        color: '828282',
+        inherit: false,
+      },
       arrowStrikethrough: false,
     },
     height: '980px',
