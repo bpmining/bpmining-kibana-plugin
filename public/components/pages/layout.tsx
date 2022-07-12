@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { EuiPage, EuiResizableContainer } from '@elastic/eui';
 import { PanelComponent } from './side_panel/panel';
 import { LayerPanel } from './layer_panel/layer_panel';
@@ -7,7 +7,7 @@ import { AnyAction, bindActionCreators, Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { VisGraphComponent } from './process_graph/vis_graph';
 import { calculateColorValue } from '../../services';
-import { VisNode, VisEdge } from '../../../model/vis_types';
+import { VisNode, VisEdge, VisGraph } from '../../../model/vis_types';
 import * as fetchCaseGraphActions from '../../reducer_actions/fetch_case_specific_graph';
 import * as fetcAggregatedGraphActions from '../../reducer_actions/fetch_aggregated_graph';
 import { ServerRequestData } from '../app';
@@ -29,12 +29,17 @@ const mapStateToProps = (state: LayoutState) => {
 };
 
 const LayoutComponent = (props: LayoutProps) => {
+  const [drillDownGraph, setDrillDownGraph] = useState<VisGraph>();
+
   useEffect(() => {
+    setDrillDownGraph(undefined);
     fetchGraph();
+    console.log(drillDownGraph);
   }, [
     props.rootReducer.case.selectedCase,
     props.rootReducer.layer.selectedLayer,
     props.serverRequestData,
+    props.rootReducer.graph.drillDownGraph,
   ]);
 
   let graphBool = false;
@@ -47,9 +52,13 @@ const LayoutComponent = (props: LayoutProps) => {
     edges = props.rootReducer.graph.graph.edges;
   }
 
-  const fetchGraph = () => {
+  const fetchGraph = async () => {
     const layer = props.rootReducer.layer.selectedLayer;
-
+    const drillDownGraph = props.rootReducer.graph.drillDownGraph;
+    if (drillDownGraph) {
+      await setDrillDownGraph(drillDownGraph);
+      return;
+    }
     // check filters
     const selectedCase = props.rootReducer.case.selectedCase;
     if (selectedCase !== null) {
@@ -81,8 +90,8 @@ const LayoutComponent = (props: LayoutProps) => {
               <div className="design-scope">
                 {graphBool && (
                   <VisGraphComponent
-                    nodes={nodes}
-                    edges={edges}
+                    nodes={drillDownGraph ? drillDownGraph.nodes : nodes}
+                    edges={drillDownGraph ? drillDownGraph.edges : edges}
                     layer={props.rootReducer.layer.selectedLayer}
                   />
                 )}

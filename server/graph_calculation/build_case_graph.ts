@@ -9,8 +9,8 @@ import {
   calculateNodeThroughputTime,
   convertDateToSeconds,
   formatDateTime,
+  formatTime,
 } from './calculate_throughput_time';
-import { sortNodes } from './sort_nodes';
 
 export interface ProcessGraph {
   nodes: VisNode[];
@@ -21,8 +21,8 @@ export function buildCaseGraph(nodes: ProcessEvent[], layer: number) {
   if (nodes.length === 0) {
     return;
   }
-  const sortedNodes = sortNodes(nodes, 'timestamp');
-  const nodesWithIds: VisNode[] = assignNodeIds(sortedNodes);
+  /* const sortedNodes = sortNodes(nodes, 'timestamp'); */
+  const nodesWithIds: VisNode[] = assignNodeIds(nodes);
 
   nodesWithIds.forEach((node, index) => {
     let throughputTime = undefined;
@@ -48,14 +48,16 @@ export function buildCaseGraph(nodes: ProcessEvent[], layer: number) {
 
     if (node.thirdPartyData) {
       node.label += '|third-party-data';
+      node.thirdPartyData = buildCaseGraph(node.thirdPartyData, 2);
     }
 
     if (node.contextInfo) {
       const keys = Object.keys(node.contextInfo);
-      let contextInformation = [];
+      let contextInformation: string = '';
       keys.forEach((key: string) => {
-        const value = node.contextInfo[key];
-        contextInformation.push(key + ': ' + value);
+        const value: string = node.contextInfo[key];
+        contextInformation += `${key}: ${value}
+        `;
       });
       node.contextInfo = contextInformation;
     }
@@ -74,7 +76,10 @@ export function buildCaseGraph(nodes: ProcessEvent[], layer: number) {
       current.throughputTime === undefined ? 0 : convertDateToSeconds(current.throughputTime);
     return prevTime > currentTime ? prev : current;
   });
-  slowestNode.color = '#F9D0D2';
+
+  if (slowestNode.throughputTime !== undefined) {
+    slowestNode.color = '#F9D0D2';
+  }
 
   const nodesWithNeighbours = getNeighboursFor(nodesWithIds);
   const nodesWithEndpoints = addStartAndEndPoint(nodesWithNeighbours, nodes.length, layer);
@@ -82,11 +87,32 @@ export function buildCaseGraph(nodes: ProcessEvent[], layer: number) {
   const finalNodes = nodesWithEndpoints.map((item) => item.node);
   const edges = calculateCaseGraphEdges(nodesWithEndpoints);
 
+  const finalEdges: VisEdge[] = [];
+  var slowestEdge = edges[0];
+  var maxEdgeThroughputTime: number = 0;
+  edges.forEach((edge) => {
+    const throughputTime: number =
+      edge.label.getHours() * 60 * 60 + edge.label.getMinutes() * 60 + edge.label.getSeconds();
+
+    if (throughputTime > maxEdgeThroughputTime) {
+      maxEdgeThroughputTime = throughputTime;
+      slowestEdge = edge;
+    }
+    finalEdges.push({
+      from: edge.from,
+      to: edge.to,
+      label: `${formatTime(throughputTime)}`,
+    });
+  });
+  const index = finalEdges.findIndex(
+    (edge) => edge.from === slowestEdge.from && edge.to === slowestEdge.to
+  );
+  Object.assign(finalEdges[index], { color: { color: 'E9454E', inherit: false }, width: 2 });
   const graphThroughputTime = calculateGraphThroughputTime(finalNodes);
 
   const graph = {
     nodes: finalNodes,
-    edges: edges,
+    edges: finalEdges,
     throughputTime: graphThroughputTime,
   };
 

@@ -5,6 +5,7 @@ import * as nodeDetailPanelActions from '../reducer_actions/node_detail_panel';
 
 export interface GraphReducer {
   graph: VisGraph | undefined;
+  drillDownGraph: VisGraph | undefined;
   caseIds: string[];
   caseCount: number;
   error: Error | null;
@@ -13,6 +14,7 @@ export interface GraphReducer {
 
 const initialState = {
   graph: undefined,
+  drillDownGraph: undefined,
   caseIds: [],
   caseCount: 0,
   error: null,
@@ -25,6 +27,7 @@ export const graphReducer = (state = initialState, action: any): GraphReducer =>
       return {
         ...state,
         graph: action.graph,
+        drillDownGraph: undefined,
         caseIds: action.caseIds,
         caseCount: action.caseCount,
         error: null,
@@ -39,6 +42,7 @@ export const graphReducer = (state = initialState, action: any): GraphReducer =>
       return {
         ...state,
         graph: action.graph,
+        drillDownGraph: undefined,
         caseIds: action.caseIds,
         caseCount: action.caseCount,
         error: null,
@@ -58,6 +62,12 @@ export const graphReducer = (state = initialState, action: any): GraphReducer =>
       return {
         ...state,
         nodeDetail: false,
+      };
+    case nodeDetailPanelActions.DISPLAY_GRAPH:
+      return {
+        ...state,
+        nodeDetail: false,
+        drillDownGraph: action.graph,
       };
     default:
       return state;
