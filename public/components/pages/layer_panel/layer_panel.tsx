@@ -15,6 +15,7 @@ interface LayerPanelState {
 interface LayerPanelProps {
   setLayerAction: Function;
   hideDrillDownGraph: Function;
+  hideNodeDetailPanel: Function;
 }
 
 const mapStateToProps = (state: LayerPanelState) => {
@@ -23,8 +24,9 @@ const mapStateToProps = (state: LayerPanelState) => {
 
 export function LayerPanelComponent(props: LayerPanelProps) {
   const changeLayer = (layer: number) => {
-    const { setLayerAction, hideDrillDownGraph } = props;
+    const { setLayerAction, hideDrillDownGraph, hideNodeDetailPanel } = props;
     hideDrillDownGraph();
+    hideNodeDetailPanel();
     setLayerAction(layer);
   };
   return (
@@ -44,6 +46,7 @@ const mapDispatchToProps = (dispatch: Dispatch<AnyAction>) => {
     {
       setLayerAction: layerActions.setLayer,
       hideDrillDownGraph: nodeDetailPanelActions.hideGraphAction,
+      hideNodeDetailPanel: nodeDetailPanelActions.hideNodeDetailPanelAction,
     },
     dispatch
   );
