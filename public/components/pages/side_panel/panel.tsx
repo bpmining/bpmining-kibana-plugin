@@ -30,7 +30,7 @@ const mapStateToProps = (state: PanelComponentState) => {
 const PanelComponent = (props: PanelComponentProps) => {
   const [checked, setChecked] = useState(false);
 
-  useEffect(() => {}, [props]);
+  useEffect(() => {}, [props.caseCount, props.caseIds, props.rootReducer.layer.selectedLayer]);
 
   const onChange = (e: any) => {
     setChecked(e.target.checked);

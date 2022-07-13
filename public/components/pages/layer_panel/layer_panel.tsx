@@ -6,6 +6,7 @@ import { AnyAction, bindActionCreators, Dispatch } from 'redux';
 import { connect } from 'react-redux';
 
 import * as layerActions from '../../../reducer_actions/set_layer';
+import * as nodeDetailPanelActions from '../../../reducer_actions/node_detail_panel';
 
 interface LayerPanelState {
   rootReducer: RootReducer;
@@ -13,6 +14,7 @@ interface LayerPanelState {
 
 interface LayerPanelProps {
   setLayerAction: Function;
+  hideDrillDownGraph: Function;
 }
 
 const mapStateToProps = (state: LayerPanelState) => {
@@ -21,7 +23,8 @@ const mapStateToProps = (state: LayerPanelState) => {
 
 export function LayerPanelComponent(props: LayerPanelProps) {
   const changeLayer = (layer: number) => {
-    const { setLayerAction } = props;
+    const { setLayerAction, hideDrillDownGraph } = props;
+    hideDrillDownGraph();
     setLayerAction(layer);
   };
   return (
@@ -40,6 +43,7 @@ const mapDispatchToProps = (dispatch: Dispatch<AnyAction>) => {
   return bindActionCreators(
     {
       setLayerAction: layerActions.setLayer,
+      hideDrillDownGraph: nodeDetailPanelActions.hideGraphAction,
     },
     dispatch
   );

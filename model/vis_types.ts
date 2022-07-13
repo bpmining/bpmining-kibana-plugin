@@ -18,7 +18,8 @@ export interface VisNode{
     minThroughputTime?: string;
     maxThroughputTime?: string;
     frequency?: number ;
-    thirdPartyData?: VisNode[] | VisGraph;
+    thirdPartyData?: VisNode[];
+    drillDownGraph?: VisGraph;
 }
 
 export interface VisEdge {

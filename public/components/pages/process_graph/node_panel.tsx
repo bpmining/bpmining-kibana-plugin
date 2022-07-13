@@ -38,9 +38,11 @@ const NodePanel = (props: NodePanelProps) => {
   const drillDown = node.thirdPartyData ? true : false;
 
   async function handleDrillDown(node: VisNode) {
-    const { displayGraph, setLayer } = props;
-    await setLayer(2);
-    await displayGraph(node.thirdPartyData);
+    const { displayGraph, setLayer, hideNodeDetailPanel } = props;
+    hideNodeDetailPanel();
+    setLayer(2);
+    const graph = JSON.parse(JSON.stringify(node.drillDownGraph));
+    displayGraph(graph);
   }
 
   let panel;
@@ -87,7 +89,7 @@ const mapDispatchToProps = (dispatch: Dispatch<AnyAction>) => {
     {
       showNodeDetailPanel: nodeDetailPanelActions.showNodeDetailPanelAction,
       hideNodeDetailPanel: nodeDetailPanelActions.hideNodeDetailPanelAction,
-      displayGraph: nodeDetailPanelActions.displayGraphAction,
+      displayGraph: nodeDetailPanelActions.displayGraph,
       setLayer: layerActions.setLayer,
     },
     dispatch
