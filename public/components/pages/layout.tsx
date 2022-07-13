@@ -67,7 +67,7 @@ const LayoutComponent = (props: LayoutProps) => {
       <EuiResizableContainer style={{ height: 650, width: '100%' }}>
         {(EuiResizablePanel, EuiResizableButton) => (
           <>
-            <EuiResizablePanel mode="collapsible" initialSize={20} minSize="18%">
+            <EuiResizablePanel mode="collapsible" initialSize={26} minSize="260px">
               <PanelComponent
                 caseCount={props.rootReducer.graph.caseCount}
                 caseIds={props.rootReducer.graph.caseIds}
