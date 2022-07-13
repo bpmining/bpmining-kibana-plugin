@@ -29,9 +29,7 @@ const VisGraphComponent = (props: VisGraphComponentProps) => {
   const [x, setXPosition] = useState<number>(0);
   const [y, setYPosition] = useState<number>(0);
 
-  useEffect(() => {}, [props]);
-  console.log('IM VIS GRAPH: ');
-  console.log(props.nodes);
+  useEffect(() => {}, [props.rootReducer.graph.nodeDetail]);
 
   let graph = {
     nodes: props.nodes,
@@ -170,16 +168,16 @@ const VisGraphComponent = (props: VisGraphComponentProps) => {
         await setYPosition(pointer.DOM.x - 100);
 
         const { showNodeDetailPanel } = props;
-        showNodeDetailPanel();
+        await showNodeDetailPanel();
       }
     },
     async deselectNode() {
       const { hideNodeDetailPanel } = props;
-      hideNodeDetailPanel();
+      await hideNodeDetailPanel();
     },
     async zoom() {
       const { hideNodeDetailPanel } = props;
-      hideNodeDetailPanel();
+      await hideNodeDetailPanel();
     },
   };
 
@@ -187,14 +185,14 @@ const VisGraphComponent = (props: VisGraphComponentProps) => {
     <div>
       <Graph graph={graph} options={options} events={events} />
 
-      {props.rootReducer.graph.nodeDetail ? (
+      {props.rootReducer.graph.nodeDetail && (
         <div
           className="node-panel-container"
           style={{ position: 'absolute', top: x + 'px', right: y + 'px' }}
         >
           <NodePanel node={currentNode} aggregated={aggregated}></NodePanel>
         </div>
-      ) : undefined}
+      )}
     </div>
   );
 };
