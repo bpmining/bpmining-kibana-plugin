@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { EuiPanel, EuiSwitch } from '@elastic/eui';
+import { EuiPanel, EuiSpacer, EuiSwitch } from '@elastic/eui';
 import logo from '../../../../common/logo/bpmining.svg';
+import novatec_logo from '../../../../common/logo/NOVATEC-schwarz-violett-rot.png';
 import '../../_base.scss';
 import './panel.scss';
 import { CaseSelector } from './case_selector/case_selector';
@@ -11,6 +12,7 @@ import { calculateColorValue } from '../../../services';
 import { CaseCounterComponent } from '../../lib/counter/case_counter';
 import { VariantCounterComponent } from '../../lib/counter/variant_counter';
 import { ServerRequestData } from '../../app';
+import { FilterTabs } from './filter_tabs/tabs';
 
 interface PanelComponentState {
   rootReducer: RootReducer;
@@ -37,10 +39,10 @@ const PanelComponent = (props: PanelComponentProps) => {
   };
 
   return (
-    <EuiPanel paddingSize="m" style={{ minHeight: '100%' }}>
+    <EuiPanel paddingSize="m" style={{ minHeight: '680px' }}>
       <div className="design-scope">
         <img src={logo} alt="Logo" className="logo" />
-
+        <EuiSpacer />
         <div className="counter-container">
           <CaseCounterComponent
             cases={props.caseCount}
@@ -61,7 +63,14 @@ const PanelComponent = (props: PanelComponentProps) => {
             onChange={(e) => onChange(e)}
           />
         </div>
-        <CaseSelector caseIds={props.caseIds} />
+        <EuiSpacer />
+        <div>
+          <CaseSelector caseIds={props.caseIds} />
+          <EuiSpacer />
+          <FilterTabs />
+        </div>
+        <EuiSpacer />
+        <img src={novatec_logo} alt="Novatec Logo" className="novatec-logo" />
       </div>
     </EuiPanel>
   );
