@@ -48,7 +48,7 @@ export function buildCaseGraph(nodes: ProcessEvent[], layer: number) {
 
     if (node.thirdPartyData) {
       node.label += '|third-party-data';
-      node.thirdPartyData = buildCaseGraph(node.thirdPartyData, 2);
+      Object.assign(node, { drillDownGraph: buildCaseGraph(node.thirdPartyData, 2) });
     }
 
     if (node.contextInfo) {

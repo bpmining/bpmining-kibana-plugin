@@ -9,6 +9,7 @@ const initialState = {
 };
 
 export const layerReducer = (state = initialState, action: any): LayerReducer => {
+  console.log('Layer Reducer: ' + action.layer);
   switch (action.type) {
     case layerActions.SET_LAYER_SUCCESS:
       return {

@@ -22,6 +22,7 @@ const initialState = {
 };
 
 export const graphReducer = (state = initialState, action: any): GraphReducer => {
+  console.log(JSON.stringify(action));
   switch (action.type) {
     case fetchAggregatedGraphActions.FETCH_AGGREGATED_GRAPH_SUCCESS:
       return {
@@ -63,11 +64,16 @@ export const graphReducer = (state = initialState, action: any): GraphReducer =>
         ...state,
         nodeDetail: false,
       };
-    case nodeDetailPanelActions.DISPLAY_GRAPH:
+    case nodeDetailPanelActions.DISPLAY_DRILL_DOWN_GRAPH:
       return {
         ...state,
-        nodeDetail: false,
         drillDownGraph: action.graph,
+        graph: undefined,
+      };
+    case nodeDetailPanelActions.HIDE_DRILL_DOWN_GRAPH:
+      return {
+        ...state,
+        drillDownGraph: undefined,
       };
     default:
       return state;

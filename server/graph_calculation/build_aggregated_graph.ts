@@ -148,7 +148,7 @@ function getAggregatedNodes(allNodes: VisNodeNeighbours[]): VisNode[] {
     Object.assign(node, { maxThroughputTime: formatDateTime(new Date(maxThroughputTime)) });
 
     let throughputTime: number = 0;
-    let thirdPartyNodes = [];
+    let thirdPartyNodes: VisNode[] = [];
     sameNodes.forEach((node) => {
       if (node.node.throughputTime !== undefined) {
         throughputTime += node.node.throughputTime.getHours() * 60 * 60;
@@ -161,7 +161,7 @@ function getAggregatedNodes(allNodes: VisNodeNeighbours[]): VisNode[] {
     });
 
     if (thirdPartyNodes && node.thirdPartyData) {
-      node.thirdPartyData = buildAggregatedGraph(thirdPartyNodes, 2);
+      Object.assign(node, { drillDownGraph: buildAggregatedGraph(thirdPartyNodes, 2) });
     }
 
     const totalThroughputTime = throughputTime === 0 ? '-' : formatTime(throughputTime);

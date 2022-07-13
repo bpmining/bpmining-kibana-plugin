@@ -25,16 +25,18 @@ type LayoutProps = {
 };
 
 const mapStateToProps = (state: LayoutState) => {
+  console.log('STATE:');
+  console.log(state);
   return state;
 };
 
 const LayoutComponent = (props: LayoutProps) => {
-  const [drillDownGraph, setDrillDownGraph] = useState<VisGraph>();
+  console.log('IM LAYOUT: ');
+  console.log(props.rootReducer.graph.graph);
 
   useEffect(() => {
-    setDrillDownGraph(undefined);
+    console.log('FETCH DAT');
     fetchGraph();
-    console.log(drillDownGraph);
   }, [
     props.rootReducer.case.selectedCase,
     props.rootReducer.layer.selectedLayer,
@@ -52,11 +54,19 @@ const LayoutComponent = (props: LayoutProps) => {
     edges = props.rootReducer.graph.graph.edges;
   }
 
+  if (props.rootReducer.graph.drillDownGraph) {
+    console.log('YAY');
+    graphBool = true;
+    nodes = props.rootReducer.graph.drillDownGraph.nodes;
+    edges = props.rootReducer.graph.drillDownGraph.edges;
+  }
+
   const fetchGraph = async () => {
     const layer = props.rootReducer.layer.selectedLayer;
-    const drillDownGraph = props.rootReducer.graph.drillDownGraph;
-    if (drillDownGraph) {
-      await setDrillDownGraph(drillDownGraph);
+    console.log('B UH');
+    const drillDown = props.rootReducer.graph.drillDownGraph;
+    if (drillDown) {
+      console.log('AYE');
       return;
     }
     // check filters
@@ -66,11 +76,12 @@ const LayoutComponent = (props: LayoutProps) => {
       fetchCaseGraphAction(props.serverRequestData, selectedCase, layer);
     } else {
       // no filters applied
+      console.log('DAMN');
       const { fetchAggregatedGraphAction } = props;
       fetchAggregatedGraphAction(props.serverRequestData, layer);
     }
   };
-
+  console.log(nodes);
   return (
     <EuiPage paddingSize="none">
       <EuiResizableContainer style={{ height: 650, width: '100%' }}>
@@ -88,13 +99,7 @@ const LayoutComponent = (props: LayoutProps) => {
 
             <EuiResizablePanel className="canvas" mode="main" initialSize={80} minSize="500px">
               <div className="design-scope">
-                {graphBool && (
-                  <VisGraphComponent
-                    nodes={drillDownGraph ? drillDownGraph.nodes : nodes}
-                    edges={drillDownGraph ? drillDownGraph.edges : edges}
-                    layer={props.rootReducer.layer.selectedLayer}
-                  />
-                )}
+                {graphBool && <VisGraphComponent nodes={nodes} edges={edges} />}
                 <div className="layer-container">
                   <LayerPanel />
                 </div>

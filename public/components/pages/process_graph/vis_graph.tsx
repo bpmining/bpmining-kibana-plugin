@@ -11,7 +11,6 @@ import { connect } from 'react-redux';
 export interface VisGraphComponentProps {
   nodes: VisNode[];
   edges: VisEdge[];
-  layer: number;
   rootReducer: RootReducer;
   showNodeDetailPanel: Function;
   hideNodeDetailPanel: Function;
@@ -29,9 +28,11 @@ const VisGraphComponent = (props: VisGraphComponentProps) => {
   const [currentNode, setCurrentNode] = useState<VisNode>();
   const [x, setXPosition] = useState<number>(0);
   const [y, setYPosition] = useState<number>(0);
-  const [network, setNetwork] = useState<any>();
 
-  useEffect(() => {}, [props.rootReducer.graph.graph]);
+  useEffect(() => {}, [props]);
+  console.log('IM VIS GRAPH: ');
+  console.log(props.nodes);
+
   let graph = {
     nodes: props.nodes,
     edges: props.edges,
@@ -184,14 +185,7 @@ const VisGraphComponent = (props: VisGraphComponentProps) => {
 
   return (
     <div>
-      <Graph
-        graph={graph}
-        options={options}
-        events={events}
-        getNetwork={async (network) => {
-          await setNetwork({ network });
-        }}
-      />
+      <Graph graph={graph} options={options} events={events} />
 
       {props.rootReducer.graph.nodeDetail ? (
         <div
