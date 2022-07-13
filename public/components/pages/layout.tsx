@@ -6,8 +6,7 @@ import '../_base.scss';
 import { AnyAction, bindActionCreators, Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { VisGraphComponent } from './process_graph/vis_graph';
-import { calculateColorValue } from '../../services';
-import { VisNode, VisEdge, VisGraph } from '../../../model/vis_types';
+import { VisNode, VisEdge } from '../../../model/vis_types';
 import * as fetchCaseGraphActions from '../../reducer_actions/fetch_case_specific_graph';
 import * as fetcAggregatedGraphActions from '../../reducer_actions/fetch_aggregated_graph';
 import { ServerRequestData } from '../app';
@@ -25,17 +24,11 @@ type LayoutProps = {
 };
 
 const mapStateToProps = (state: LayoutState) => {
-  console.log('STATE:');
-  console.log(state);
   return state;
 };
 
 const LayoutComponent = (props: LayoutProps) => {
-  console.log('IM LAYOUT: ');
-  console.log(props.rootReducer.graph.graph);
-
   useEffect(() => {
-    console.log('FETCH DAT');
     fetchGraph();
   }, [
     props.rootReducer.case.selectedCase,
@@ -55,7 +48,6 @@ const LayoutComponent = (props: LayoutProps) => {
   }
 
   if (props.rootReducer.graph.drillDownGraph) {
-    console.log('YAY');
     graphBool = true;
     nodes = props.rootReducer.graph.drillDownGraph.nodes;
     edges = props.rootReducer.graph.drillDownGraph.edges;
@@ -63,10 +55,8 @@ const LayoutComponent = (props: LayoutProps) => {
 
   const fetchGraph = async () => {
     const layer = props.rootReducer.layer.selectedLayer;
-    console.log('B UH');
     const drillDown = props.rootReducer.graph.drillDownGraph;
     if (drillDown) {
-      console.log('AYE');
       return;
     }
     // check filters
@@ -76,7 +66,6 @@ const LayoutComponent = (props: LayoutProps) => {
       fetchCaseGraphAction(props.serverRequestData, selectedCase, layer);
     } else {
       // no filters applied
-      console.log('DAMN');
       const { fetchAggregatedGraphAction } = props;
       fetchAggregatedGraphAction(props.serverRequestData, layer);
     }
