@@ -43,14 +43,14 @@ const LayoutComponent = (props: LayoutProps) => {
 
   if (props.rootReducer.graph.graph !== undefined) {
     graphBool = true;
-    nodes = props.rootReducer.graph.graph.nodes;
-    edges = props.rootReducer.graph.graph.edges;
+    nodes = JSON.parse(JSON.stringify(props.rootReducer.graph.graph.nodes));
+    edges = JSON.parse(JSON.stringify(props.rootReducer.graph.graph.edges));
   }
 
   if (props.rootReducer.graph.drillDownGraph) {
     graphBool = true;
-    nodes = props.rootReducer.graph.drillDownGraph.nodes;
-    edges = props.rootReducer.graph.drillDownGraph.edges;
+    nodes = JSON.parse(JSON.stringify(props.rootReducer.graph.drillDownGraph.nodes));
+    edges = JSON.parse(JSON.stringify(props.rootReducer.graph.drillDownGraph.edges));
   }
 
   const fetchGraph = async () => {

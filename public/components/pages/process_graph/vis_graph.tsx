@@ -30,8 +30,8 @@ const VisGraphComponent = (props: VisGraphComponentProps) => {
   const [y, setYPosition] = useState<number>(0);
 
   useEffect(() => {}, [props.rootReducer.graph.nodeDetail]);
-
-  let graph = {
+  console.log('Here');
+  const graph = {
     nodes: props.nodes,
     edges: props.edges,
   };
@@ -44,13 +44,17 @@ const VisGraphComponent = (props: VisGraphComponentProps) => {
   const options = {
     autoResize: true,
     layout: {
+      improvedLayout: true,
       hierarchical: {
         enabled: true,
-        nodeSpacing: 300,
+        levelSeparation: 200,
+        nodeSpacing: 280,
         blockShifting: true,
-        edgeMinimization: false,
+        edgeMinimization: true,
         parentCentralization: true,
         sortMethod: 'directed',
+        direction: 'UD', // UD, DU, LR, RL
+        shakeTowards: 'roots', // roots, leaves
       },
     },
     nodes: {
@@ -122,6 +126,7 @@ const VisGraphComponent = (props: VisGraphComponentProps) => {
 
             // add drill down icon
             if (thirdPartyData) {
+              // TODO:
               const material_font = new FontFace(
                 'material-icons',
                 'url(https://fonts.gstatic.com/s/materialicons/v48/flUhRq6tzZclQEJ-Vdg-IuiaDsNcIhQ8tQ.woff2)'
@@ -159,25 +164,24 @@ const VisGraphComponent = (props: VisGraphComponentProps) => {
   };
 
   const events = {
-    async selectNode(clickEvent: { nodes: any; pointer: any; event: any }) {
-      const { nodes, pointer, event } = clickEvent;
+    selectNode(clickEvent: { nodes: any; pointer: any; event: any }) {
+      const { nodes, pointer } = clickEvent;
       const selectedNode = graph.nodes.find((node) => node.id === nodes[0]);
       if (selectedNode && selectedNode.label !== '') {
-        await setCurrentNode(selectedNode);
-        await setXPosition(pointer.DOM.y - 100);
-        await setYPosition(pointer.DOM.x - 100);
-
+        setCurrentNode(selectedNode);
+        setXPosition(pointer.DOM.y - 100);
+        setYPosition(pointer.DOM.x - 100);
         const { showNodeDetailPanel } = props;
-        await showNodeDetailPanel();
+        showNodeDetailPanel();
       }
     },
-    async deselectNode() {
+    deselectNode() {
       const { hideNodeDetailPanel } = props;
-      await hideNodeDetailPanel();
+      hideNodeDetailPanel();
     },
-    async zoom() {
+    zoom() {
       const { hideNodeDetailPanel } = props;
-      await hideNodeDetailPanel();
+      hideNodeDetailPanel();
     },
   };
 
