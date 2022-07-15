@@ -1,4 +1,4 @@
-import { EuiButton, EuiPanel, EuiText } from '@elastic/eui';
+import { EuiButton, EuiPanel, EuiSpacer, EuiText } from '@elastic/eui';
 import { VisNode } from 'plugins/bpmining-kibana-plugin/model/vis_types';
 import { RootReducer } from 'plugins/bpmining-kibana-plugin/public/reducer/root_reducer';
 import React, { useState } from 'react';
@@ -27,6 +27,7 @@ const mapStateToProps = (state: NodePanelState) => {
 
 const NodePanel = (props: NodePanelProps) => {
   const node = props.node;
+
   const splitLabel = node.label.split('|');
   const title = splitLabel[0];
   const throughputTime = splitLabel[1];
@@ -59,7 +60,7 @@ const NodePanel = (props: NodePanelProps) => {
         Min. Duration: {node.minThroughputTime}
         <br />
         Max. Duration: {node.maxThroughputTime}
-        <br />
+        <EuiSpacer />
         {drillDown && <EuiButton onClick={() => handleDrillDown(props.node)}>Drill Down</EuiButton>}
       </EuiPanel>
     );
@@ -75,7 +76,7 @@ const NodePanel = (props: NodePanelProps) => {
         <br />
         <br />
         <EuiText>{node.contextInfo} </EuiText>
-        <br></br>
+        <EuiSpacer />
         {drillDown && <EuiButton onClick={() => handleDrillDown(props.node)}>Drill Down</EuiButton>}
       </EuiPanel>
     );
