@@ -36,26 +36,23 @@ const VisGraphComponent = (props: VisGraphComponentProps) => {
     edges: props.edges,
   };
 
-  const caseIds = graph.nodes.map((node) => node.caseID);
-  const uniqueCaseIds = [...new Set(caseIds)];
-  // must be > 2 because start and endnode have caseId "undefined"
-  const aggregated = uniqueCaseIds.length > 2;
+  const aggregated = props.rootReducer.case.selectedCase ? false : true;
 
   const options = {
     autoResize: true,
     layout: {
-      improvedLayout: true,
+      /* improvedLayout: true,
       hierarchical: {
         enabled: true,
         levelSeparation: 200,
-        nodeSpacing: 280,
+        nodeSpacing: 500,
         blockShifting: true,
         edgeMinimization: true,
         parentCentralization: true,
         sortMethod: 'directed',
         direction: 'UD', // UD, DU, LR, RL
         shakeTowards: 'roots', // roots, leaves
-      },
+      }, */
     },
     nodes: {
       shape: 'custom',

@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import { ProcessEvent } from 'plugins/bpmining-kibana-plugin/model/process_event';
 import { VisEdge, VisNode } from 'plugins/bpmining-kibana-plugin/model/vis_types';
 import { addStartAndEndPoint } from '../helpers/add_start_end_point';
@@ -10,7 +11,6 @@ import {
   formatDateTime,
   formatTime,
 } from './calculate_throughput_time';
-import { sortNodes } from './sort_nodes';
 
 export interface RawVisEdge {
   from: number;
@@ -75,8 +75,10 @@ export function buildAggregatedGraph(nodes: ProcessEvent[], layer: number) {
   const allEdges: RawVisEdge[] = flatten(edgesPerCase);
   const aggregatedEdges = getAggregatedEdgesWithLabels(allEdges);
 
+  const nodesWithCoordinates = assignNodeCoordinates(aggregatedNodes, aggregatedEdges);
+
   const graph = {
-    nodes: aggregatedNodes,
+    nodes: nodesWithCoordinates,
     edges: aggregatedEdges,
   };
 
@@ -188,4 +190,33 @@ function getAggregatedNodes(allNodes: VisNodeNeighbours[]): VisNode[] {
   }
 
   return uniqueNodes;
+}
+
+export function assignNodeCoordinates(allNodes: VisNode[], allEdges: VisEdge[]) {
+  var dagre = require('dagre');
+  var g = new dagre.graphlib.Graph();
+
+  g.setGraph({});
+  g.setDefaultEdgeLabel(function () {
+    return {};
+  });
+
+  allNodes.forEach((node) => {
+    g.setNode(node.id, { label: node.label });
+  });
+
+  allEdges.forEach((edge) => {
+    g.setEdge(edge.from, edge.to);
+  });
+
+  dagre.layout(g);
+
+  g.nodes().forEach(function (v) {
+    Object.assign(
+      allNodes.find((node) => node.id === parseInt(v)),
+      { x: g.node(v).x * 5, y: g.node(v).y * 5 }
+    );
+  });
+
+  return allNodes;
 }

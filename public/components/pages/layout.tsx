@@ -70,7 +70,7 @@ const LayoutComponent = (props: LayoutProps) => {
       fetchAggregatedGraphAction(props.serverRequestData, layer);
     }
   };
-  console.log(nodes);
+
   return (
     <EuiPage paddingSize="none">
       <EuiResizableContainer style={{ height: 650, width: '100%' }}>
