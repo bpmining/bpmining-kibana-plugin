@@ -11,7 +11,8 @@ export interface VisNode{
     contextInfo?: object | Array<any>;
 
     id: number;
-    level?: number;
+    x?: number;
+    y?: number;
     throughputTime?: Date;
     meanThroughputTime?: number;
     totalThroughputTime?: string;
