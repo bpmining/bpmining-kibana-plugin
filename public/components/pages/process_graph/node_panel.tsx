@@ -81,7 +81,6 @@ const NodePanel = (props: NodePanelProps) => {
       </EuiPanel>
     );
   }
-
   return panel;
 };
 

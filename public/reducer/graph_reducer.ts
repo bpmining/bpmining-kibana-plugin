@@ -22,7 +22,6 @@ const initialState = {
 };
 
 export const graphReducer = (state = initialState, action: any): GraphReducer => {
-  console.log(JSON.stringify(action));
   switch (action.type) {
     case fetchAggregatedGraphActions.FETCH_AGGREGATED_GRAPH_SUCCESS:
       return {

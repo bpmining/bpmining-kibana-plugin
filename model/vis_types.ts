@@ -1,5 +1,4 @@
 export interface VisNode{
-    
     timestamp: number;
     label: string;
     caseID: string;
@@ -12,6 +11,7 @@ export interface VisNode{
     contextInfo?: object | Array<any>;
 
     id: number;
+    level?: number;
     throughputTime?: Date;
     meanThroughputTime?: number;
     totalThroughputTime?: string;
