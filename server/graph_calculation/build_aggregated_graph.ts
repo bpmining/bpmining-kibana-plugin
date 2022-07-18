@@ -211,7 +211,7 @@ export function assignNodeCoordinates(allNodes: VisNode[], allEdges: VisEdge[]) 
 
   dagre.layout(g);
 
-  g.nodes().forEach(function (v) {
+  g.nodes().forEach(function (v: string) {
     Object.assign(
       allNodes.find((node) => node.id === parseInt(v)),
       { x: g.node(v).x * 5, y: g.node(v).y * 5 }

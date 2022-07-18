@@ -3,6 +3,7 @@ import { VisEdge, VisNode } from 'plugins/bpmining-kibana-plugin/model/vis_types
 import { addStartAndEndPoint } from '../helpers/add_start_end_point';
 import { getNeighboursFor } from '../helpers/get_node_neighbours';
 import { assignNodeIds } from './assign_node_ids';
+import { assignNodeCoordinates } from './build_aggregated_graph';
 import { calculateCaseGraphEdges } from './calculate_edges';
 import {
   calculateGraphThroughputTime,
@@ -110,8 +111,10 @@ export function buildCaseGraph(nodes: ProcessEvent[], layer: number) {
   Object.assign(finalEdges[index], { color: { color: 'E9454E', inherit: false }, width: 2 });
   const graphThroughputTime = calculateGraphThroughputTime(finalNodes);
 
+  const nodesWithCoordinates = assignNodeCoordinates(finalNodes, finalEdges);
+
   const graph = {
-    nodes: finalNodes,
+    nodes: nodesWithCoordinates,
     edges: finalEdges,
     throughputTime: graphThroughputTime,
   };
