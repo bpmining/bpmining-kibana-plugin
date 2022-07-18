@@ -74,7 +74,7 @@ const VisGraphComponent = (props: VisGraphComponentProps) => {
             const thirdPartyData = splitLabel.includes('third-party-data') ? true : false;
             const textLen = ctx.measureText(title);
 
-            const w = textLen.width * 3;
+            const w = textLen.width + 250;
             const h = 2 * r;
             if (w < 2 * r) {
               r = w / 2;
@@ -167,7 +167,7 @@ const VisGraphComponent = (props: VisGraphComponentProps) => {
       if (selectedNode && selectedNode.label !== '') {
         setCurrentNode(selectedNode);
         setXPosition(pointer.DOM.y - 100);
-        setYPosition(pointer.DOM.x - 100);
+        setYPosition(pointer.DOM.x);
         const { showNodeDetailPanel } = props;
         showNodeDetailPanel();
       }
