@@ -1,6 +1,6 @@
 // @ts-ignore
 import Graph from 'react-graph-vis';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { VisEdge, VisNode } from '../../../../model/vis_types';
 import { NodePanel } from './node_panel';
 import { RootReducer } from 'plugins/bpmining-kibana-plugin/public/reducer/root_reducer';
@@ -29,7 +29,6 @@ const VisGraphComponent = (props: VisGraphComponentProps) => {
   const [x, setXPosition] = useState<number>(0);
   const [y, setYPosition] = useState<number>(0);
 
-  useEffect(() => {}, [props.rootReducer.graph.nodeDetail]);
   const graph = {
     nodes: props.nodes,
     edges: props.edges,
