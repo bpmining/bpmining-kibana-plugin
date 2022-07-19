@@ -33,8 +33,6 @@ export function buildAggregatedGraph(nodes: ProcessEvent[], layer: number) {
   if (nodes.length === 0) {
     return;
   }
-
-  /* const sortedNodes = sortNodes(nodes, 'timestamp'); */
   const nodesWithIds: VisNode[] = assignNodeIds(nodes);
 
   nodesWithIds.forEach((node, index) => {
@@ -183,7 +181,7 @@ function getAggregatedNodes(allNodes: VisNodeNeighbours[]): VisNode[] {
   const slowestNode = uniqueNodes.reduce((prev, current) => {
     const prevTime = prev.meanThroughputTime === 0 ? 0 : prev.meanThroughputTime;
     const currentTime = current.meanThroughputTime === 0 ? 0 : current.meanThroughputTime;
-    return prevTime > currentTime ? prev : current;
+    return prevTime! > currentTime! ? prev : current;
   });
   if (slowestNode.meanThroughputTime !== 0) {
     slowestNode.color = '#F9D0D2';

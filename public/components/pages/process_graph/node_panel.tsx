@@ -1,7 +1,7 @@
-import { EuiButton, EuiPanel, EuiSpacer, EuiText } from '@elastic/eui';
+import { EuiButton, EuiPanel, EuiSpacer } from '@elastic/eui';
 import { VisNode } from 'plugins/bpmining-kibana-plugin/model/vis_types';
 import { RootReducer } from 'plugins/bpmining-kibana-plugin/public/reducer/root_reducer';
-import React, { useState } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { AnyAction, bindActionCreators, Dispatch } from 'redux';
 import * as nodeDetailPanelActions from '../../../reducer_actions/node_detail_panel';
@@ -37,7 +37,6 @@ const NodePanel = (props: NodePanelProps) => {
   const meanThroughputTime = frequencyAndThroughputTime.split('/')[1];
 
   const drillDown = node.thirdPartyData ? true : false;
-
   async function handleDrillDown(node: VisNode) {
     const { displayGraph, setLayer, hideNodeDetailPanel } = props;
     hideNodeDetailPanel();
@@ -75,7 +74,16 @@ const NodePanel = (props: NodePanelProps) => {
         Throughput Time: {throughputTime}
         <br />
         <br />
-        <EuiText>{node.contextInfo} </EuiText>
+        <div>
+          {node.contextInfo &&
+            Object.keys(node.contextInfo).map((key) => {
+              return (
+                <div>
+                  {key}: {node.contextInfo[key]}
+                </div>
+              );
+            })}
+        </div>
         <EuiSpacer />
         {drillDown && <EuiButton onClick={() => handleDrillDown(props.node)}>Drill Down</EuiButton>}
       </EuiPanel>
@@ -98,3 +106,9 @@ const mapDispatchToProps = (dispatch: Dispatch<AnyAction>) => {
 
 const connectedNodePanel = connect(mapStateToProps, mapDispatchToProps)(NodePanel);
 export { connectedNodePanel as NodePanel };
+
+/* function extractContextInfo(contextInfo: any): any{
+  for (const [key, value] of Object.entries(contextInfo)) {
+    return(<p>{key}: {value}</p>);
+  }
+} */
