@@ -25,12 +25,11 @@ const mapStateToProps = (state: VisGraphComponentState) => {
 };
 
 const VisGraphComponent = (props: VisGraphComponentProps) => {
-  const [currentNode, setCurrentNode] = useState<VisNode>();
+  const [currentNode, setCurrentNode] = useState<VisNode>(props.nodes[0]);
   const [x, setXPosition] = useState<number>(0);
   const [y, setYPosition] = useState<number>(0);
 
   useEffect(() => {}, [props.rootReducer.graph.nodeDetail]);
-  console.log('Here');
   const graph = {
     nodes: props.nodes,
     edges: props.edges,
@@ -40,23 +39,9 @@ const VisGraphComponent = (props: VisGraphComponentProps) => {
 
   const options = {
     autoResize: true,
-    layout: {
-      /* improvedLayout: true,
-      hierarchical: {
-        enabled: true,
-        levelSeparation: 200,
-        nodeSpacing: 500,
-        blockShifting: true,
-        edgeMinimization: true,
-        parentCentralization: true,
-        sortMethod: 'directed',
-        direction: 'UD', // UD, DU, LR, RL
-        shakeTowards: 'roots', // roots, leaves
-      }, */
-    },
     nodes: {
       shape: 'custom',
-      ctxRenderer: ({ ctx, id, x, y, state: { selected, hover }, style, label }) => {
+      ctxRenderer: ({ ctx, id, x, y, state: { selected, hover }, style, label }: any) => {
         let r = 35;
         const drawNode = async () => {
           if (label === undefined) {
@@ -167,7 +152,7 @@ const VisGraphComponent = (props: VisGraphComponentProps) => {
       if (selectedNode && selectedNode.label !== '') {
         setCurrentNode(selectedNode);
         setXPosition(pointer.DOM.y - 100);
-        setYPosition(pointer.DOM.x);
+        setYPosition(pointer.DOM.x - 100);
         const { showNodeDetailPanel } = props;
         showNodeDetailPanel();
       }

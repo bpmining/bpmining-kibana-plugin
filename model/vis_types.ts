@@ -8,11 +8,12 @@ export interface VisNode{
   
     system?: string;
     typ?: 'process' | 'third-party';
-    contextInfo?: object | Array<any>;
+    contextInfo?: any;
 
     id: number;
     x?: number;
     y?: number;
+    color?: string;
     throughputTime?: Date;
     meanThroughputTime?: number;
     totalThroughputTime?: string;

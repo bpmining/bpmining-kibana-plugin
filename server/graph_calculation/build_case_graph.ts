@@ -22,7 +22,6 @@ export function buildCaseGraph(nodes: ProcessEvent[], layer: number) {
   if (nodes.length === 0) {
     return;
   }
-  /* const sortedNodes = sortNodes(nodes, 'timestamp'); */
   const nodesWithIds: VisNode[] = assignNodeIds(nodes);
 
   nodesWithIds.forEach((node, index) => {
@@ -50,17 +49,6 @@ export function buildCaseGraph(nodes: ProcessEvent[], layer: number) {
     if (node.thirdPartyData) {
       node.label += '|third-party-data';
       Object.assign(node, { drillDownGraph: buildCaseGraph(node.thirdPartyData, 2) });
-    }
-
-    if (node.contextInfo) {
-      const keys = Object.keys(node.contextInfo);
-      let contextInformation: string = '';
-      keys.forEach((key: string) => {
-        const value: string = node.contextInfo[key];
-        contextInformation += `${key}: ${value}
-        `;
-      });
-      node.contextInfo = contextInformation;
     }
 
     if (layer === 1) {
