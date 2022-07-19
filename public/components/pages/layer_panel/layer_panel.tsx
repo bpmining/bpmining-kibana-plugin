@@ -4,6 +4,7 @@ import { EuiPanel } from '@elastic/eui';
 import { RootReducer } from '../../../reducer/root_reducer';
 import { AnyAction, bindActionCreators, Dispatch } from 'redux';
 import { connect } from 'react-redux';
+import LayersIcon from '@mui/icons-material/Layers';
 
 import * as layerActions from '../../../reducer_actions/set_layer';
 import * as nodeDetailPanelActions from '../../../reducer_actions/node_detail_panel';
@@ -31,7 +32,9 @@ export function LayerPanelComponent(props: LayerPanelProps) {
   };
   return (
     <EuiPanel className="layer-panel" paddingSize="m">
-      <p>Layers</p>
+      <p>
+        Layers <LayersIcon />
+      </p>
       <br></br>
       <div className="layer-stack">
         <div className="layer-1" onClick={() => changeLayer(1)}></div>
