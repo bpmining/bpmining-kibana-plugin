@@ -101,7 +101,7 @@ export const fetchCaseGraph = (
   };
 };
 
-async function fetchProcessGraphCase(serverRequestData: ServerRequestData, caseId: string) {
+export async function fetchProcessGraphCase(serverRequestData: ServerRequestData, caseId: string) {
   const router = getSearchService();
   return await router
     .post(FETCH_PROCESS_DATA_CASE, {
