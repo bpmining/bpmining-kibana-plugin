@@ -13,6 +13,7 @@ import { CaseCounterComponent } from '../../lib/counter/case_counter';
 import { VariantCounterComponent } from '../../lib/counter/variant_counter';
 import { ServerRequestData } from '../../app';
 import { FilterTabs } from './filter_tabs/tabs';
+import * as filterActions from '../../../reducer_actions/get_cycle_times';
 
 interface PanelComponentState {
   rootReducer: RootReducer;
@@ -23,6 +24,7 @@ interface PanelComponentProps {
   caseCount: number;
   serverRequestData: ServerRequestData;
   rootReducer: RootReducer;
+  getCycleTimeGroups: Function;
 }
 
 const mapStateToProps = (state: PanelComponentState) => {
@@ -32,7 +34,10 @@ const mapStateToProps = (state: PanelComponentState) => {
 const PanelComponent = (props: PanelComponentProps) => {
   const [checked, setChecked] = useState(false);
 
-  useEffect(() => {}, [props.caseCount, props.caseIds, props.rootReducer.layer.selectedLayer]);
+  useEffect(() => {
+    const { getCycleTimeGroups } = props;
+    getCycleTimeGroups(props.serverRequestData);
+  }, [props.caseCount, props.caseIds, props.rootReducer.layer.selectedLayer]);
 
   const onChange = (e: any) => {
     setChecked(e.target.checked);
@@ -67,7 +72,7 @@ const PanelComponent = (props: PanelComponentProps) => {
         <div>
           <CaseSelector caseIds={props.caseIds} />
           <EuiSpacer />
-          <FilterTabs />
+          <FilterTabs serverRequestData={props.serverRequestData} />
         </div>
         <EuiSpacer />
         <img src={novatec_logo} alt="Novatec Logo" className="novatec-logo" />
@@ -77,7 +82,12 @@ const PanelComponent = (props: PanelComponentProps) => {
 };
 
 const mapDispatchToProps = (dispatch: Dispatch<AnyAction>) => {
-  return bindActionCreators({}, dispatch);
+  return bindActionCreators(
+    {
+      getCycleTimeGroups: filterActions.getCycleTimeData,
+    },
+    dispatch
+  );
 };
 
 const connectedPanelComponent = connect(mapStateToProps, mapDispatchToProps)(PanelComponent);

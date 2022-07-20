@@ -1,4 +1,5 @@
 import * as React from 'react';
+import './cycle_time_filter.scss';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -8,6 +9,9 @@ import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import { EuiSpacer } from '@elastic/eui';
+import { AnyAction, bindActionCreators, Dispatch } from 'redux';
+import { connect } from 'react-redux';
+import * as filterActions from '../../../../reducer_actions/get_cycle_times';
 
 interface Column {
   id: 'id' | 'cycletime' | 'hash';
@@ -38,11 +42,18 @@ function createData(id: number, cycletime: string, hash: number): Data {
   return { id, cycletime, hash };
 }
 
-const rows = [createData(1, '> 2 min', 1), createData(2, '< 2 min', 1)];
+const mapStateToProps = (state: any) => {
+  return state;
+};
 
-export const CycleTimeFilter = () => {
+const CycleTimeFilter = (props) => {
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [rows, setRows] = React.useState<Data[]>([]);
+
+  React.useEffect(() => {
+    formatRows();
+  }, [props.rootReducer.filter.cycleTimeGroups]);
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -53,13 +64,25 @@ export const CycleTimeFilter = () => {
     setPage(0);
   };
 
+  const formatRows = () => {
+    const dataRows: Data[] = [];
+    const cycleTimeGroups = props.rootReducer.filter.cycleTimeGroups;
+    cycleTimeGroups.forEach((item, i: number) => {
+      const id = i + 1;
+      const interval = item.interval;
+      const casesInInterval = item.cases;
+      dataRows.push(createData(id, interval, casesInInterval.length));
+    });
+    setRows(dataRows);
+  };
+
   return (
-    <>
+    <div className="cycle-time-table">
       <EuiSpacer />
       <Paper sx={{ width: '100%', overflow: 'hidden' }}>
         <TableContainer sx={{ maxHeight: 440 }}>
           <Table stickyHeader aria-label="sticky table">
-            <TableHead>
+            <TableHead style={{ fontWeight: 500 }}>
               <TableRow>
                 {columns.map((column) => (
                   <TableCell
@@ -102,6 +125,18 @@ export const CycleTimeFilter = () => {
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Paper>
-    </>
+    </div>
   );
 };
+
+const mapDispatchToProps = (dispatch: Dispatch<AnyAction>) => {
+  return bindActionCreators(
+    {
+      getCycleTimeGroups: filterActions.getCycleTimeData,
+    },
+    dispatch
+  );
+};
+
+const connectedCycleTimeFilter = connect(mapStateToProps, mapDispatchToProps)(CycleTimeFilter);
+export { connectedCycleTimeFilter as CycleTimeFilter };
