@@ -6,6 +6,8 @@ import { FETCH_CYCLE_TIME_DATA } from '../../common/routes';
 
 export const GET_CYCLE_TIME_DATA_SUCCESS = 'GET_CYCLE_TIME_DATA_SUCCESS';
 export const GET_CYCLE_TIME_DATA_ERROR = 'GET_CYCLE_TIME_DATA_ERROR';
+export const SELECT_CYCLE_TIME_CASES = 'SELECT_CYCLE_TIME_CASES';
+export const UNSELECT_CYCLE_TIME_CASES = 'UNSELECT_CYCLE_TIME_CASES';
 
 export interface CycleTimeGroup {
   caseIds: string[];
@@ -23,6 +25,19 @@ export function getCycleTimeDataErrorAction(error: Error) {
   return {
     type: GET_CYCLE_TIME_DATA_ERROR,
     error: error,
+  };
+}
+
+export function selectCaseAction(selectedCases: any) {
+  return {
+    type: SELECT_CYCLE_TIME_CASES,
+    selectedCycleTimeCases: selectedCases,
+  };
+}
+
+export function unselectCaseAction() {
+  return {
+    type: UNSELECT_CYCLE_TIME_CASES,
   };
 }
 

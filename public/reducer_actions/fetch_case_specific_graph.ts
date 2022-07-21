@@ -71,6 +71,7 @@ export const fetchCaseGraph = (
       fetchProcessGraphCase(serverRequestData, caseId)
         .then(
           function (data) {
+            console.log(data);
             const action = fetchCaseGraphSuccessAction(data);
             dispatch(action);
           },

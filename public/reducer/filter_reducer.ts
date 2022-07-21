@@ -3,11 +3,13 @@ import { CycleTimeGroup } from '../reducer_actions/get_cycle_times';
 
 export interface FilterReducer {
   cycleTimeGroups: CycleTimeGroup[];
+  selectedCycleTimeCases: any;
   error: Error | null;
 }
 
 const initialState = {
   cycleTimeGroups: [],
+  selectedCycleTimeCases: [],
   error: null,
 };
 
@@ -23,6 +25,16 @@ export const filterReducer = (state = initialState, action: any): FilterReducer 
         ...state,
         cycleTimeGroups: [],
         error: action.error,
+      };
+    case filterActions.SELECT_CYCLE_TIME_CASES:
+      return {
+        ...state,
+        selectedCycleTimeCases: action.selectedCycleTimeCases,
+      };
+    case filterActions.UNSELECT_CYCLE_TIME_CASES:
+      return {
+        ...state,
+        selectedCycleTimeCases: [],
       };
     default:
       return state;
