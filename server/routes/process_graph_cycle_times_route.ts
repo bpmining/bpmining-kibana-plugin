@@ -6,10 +6,7 @@ import { extractPossibleCaseIds } from '../helpers/extract_possible_case_ids';
 import { VisNode } from 'plugins/bpmining-kibana-plugin/model/vis_types';
 import { splitNodesByCase } from '../helpers/split_nodes_by_case';
 import { assignNodeIds } from '../graph_calculation/assign_node_ids';
-import {
-  calculateGraphThroughputTime,
-  formatTime,
-} from '../graph_calculation/calculate_throughput_time';
+import { calculateGraphThroughputTime } from '../graph_calculation/calculate_throughput_time';
 import _ from 'lodash';
 
 export function processGraphCycleTimesRoute(router: IRouter) {

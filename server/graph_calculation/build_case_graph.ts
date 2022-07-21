@@ -6,6 +6,7 @@ import { assignNodeIds } from './assign_node_ids';
 import { assignNodeCoordinates } from './build_aggregated_graph';
 import { calculateCaseGraphEdges } from './calculate_edges';
 import {
+  buildDateString,
   calculateGraphThroughputTime,
   calculateNodeThroughputTime,
   convertDateToSeconds,
@@ -24,7 +25,7 @@ export function buildCaseGraph(nodes: ProcessEvent[], layer: number) {
   }
   const nodesWithIds: VisNode[] = assignNodeIds(nodes);
 
-  nodesWithIds.forEach((node, index) => {
+  nodesWithIds.forEach(async (node, index) => {
     let throughputTime = undefined;
     if (!node.startTime || !node.endTime) {
       if (layer === 1) {
@@ -48,7 +49,8 @@ export function buildCaseGraph(nodes: ProcessEvent[], layer: number) {
 
     if (node.thirdPartyData) {
       node.label += '|third-party-data';
-      Object.assign(node, { drillDownGraph: buildCaseGraph(node.thirdPartyData, 2) });
+      const drillDownGraph = buildCaseGraph(node.thirdPartyData, 2);
+      Object.assign(node, { drillDownGraph: drillDownGraph });
     }
 
     if (layer === 1) {
@@ -100,11 +102,21 @@ export function buildCaseGraph(nodes: ProcessEvent[], layer: number) {
   const graphThroughputTime = calculateGraphThroughputTime(finalNodes);
 
   const nodesWithCoordinates = assignNodeCoordinates(finalNodes, finalEdges);
+  const caseId = nodesWithCoordinates[1].caseID;
+  const startTimestamp = buildDateString(
+    nodesWithIds[0].startTime ? nodesWithIds[0].startTime : nodesWithIds[0].timestamp
+  );
+  const endTimestamp = buildDateString(
+    nodesWithIds.pop().endTime ? nodesWithIds.pop().endTime : nodesWithIds.pop().timestamp
+  );
 
   const graph = {
     nodes: nodesWithCoordinates,
     edges: finalEdges,
     throughputTime: graphThroughputTime,
+    caseId: caseId,
+    startTimestamp: startTimestamp,
+    endTimestamp: endTimestamp,
   };
 
   return graph;

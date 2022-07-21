@@ -35,6 +35,7 @@ const LayoutComponent = (props: LayoutProps) => {
     props.rootReducer.layer.selectedLayer,
     props.serverRequestData,
     props.rootReducer.graph.drillDownGraph,
+    props.rootReducer.filter.selectedCycleTimeCases,
   ]);
 
   let graphBool = false;
@@ -42,12 +43,14 @@ const LayoutComponent = (props: LayoutProps) => {
   let edges: VisEdge[] = [];
 
   if (props.rootReducer.graph.graph !== undefined) {
+    console.log(props.rootReducer.graph.graph);
     graphBool = true;
     nodes = JSON.parse(JSON.stringify(props.rootReducer.graph.graph.nodes));
     edges = JSON.parse(JSON.stringify(props.rootReducer.graph.graph.edges));
   }
 
   if (props.rootReducer.graph.drillDownGraph) {
+    console.log(props.rootReducer.graph.drillDownGraph);
     graphBool = true;
     nodes = JSON.parse(JSON.stringify(props.rootReducer.graph.drillDownGraph.nodes));
     edges = JSON.parse(JSON.stringify(props.rootReducer.graph.drillDownGraph.edges));
@@ -59,8 +62,18 @@ const LayoutComponent = (props: LayoutProps) => {
     if (drillDown) {
       return;
     }
+
+    let selectedCase = props.rootReducer.case.selectedCase;
     // check filters
-    const selectedCase = props.rootReducer.case.selectedCase;
+    const selectedCycleTimeCases = props.rootReducer.filter.selectedCycleTimeCases;
+    if (selectedCycleTimeCases.length > 0) {
+      if (selectedCycleTimeCases.length === 1) {
+        selectedCase = selectedCycleTimeCases[0].caseId;
+        console.log(selectedCase);
+      } else {
+        //TODO
+      }
+    }
     if (selectedCase !== null) {
       const { fetchCaseGraphAction } = props;
       fetchCaseGraphAction(props.serverRequestData, selectedCase, layer);

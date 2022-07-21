@@ -33,4 +33,8 @@ export interface VisEdge {
   export interface VisGraph {
     nodes: VisNode[];
     edges: VisEdge[];
+    throughputTime?: number,
+    caseId?: string,
+    startTimestamp?: string,
+    endTimestamp?: string
   }

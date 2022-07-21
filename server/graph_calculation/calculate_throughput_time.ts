@@ -85,3 +85,25 @@ export function convertDateToSeconds(throughputTime: Date): number {
 
   return hours * 60 * 60 + minutes * 60 + seconds;
 }
+
+export function buildDateString(timestamp: Date | number): string {
+  if (typeof timestamp === 'number') {
+    console.log(timestamp);
+    timestamp = new Date(timestamp);
+    console.log(timestamp);
+  }
+  const year = timestamp.getFullYear();
+  let month = timestamp.getMonth().toString();
+  month = ('0' + month).slice(-2);
+  let day = timestamp.getDay().toString();
+  day = ('0' + day).slice(-2);
+
+  let hours = timestamp.getHours().toString();
+  hours = ('0' + hours).slice(-2);
+  let minutes = timestamp.getMinutes().toString();
+  minutes = ('0' + minutes).slice(-2);
+  let seconds = timestamp.getSeconds().toString();
+  seconds = ('0' + seconds).slice(-2);
+
+  return `${day}.${month}.${year}|${hours}:${minutes}:${seconds}`;
+}

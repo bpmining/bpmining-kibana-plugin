@@ -12,6 +12,7 @@ import { EuiSpacer } from '@elastic/eui';
 import { AnyAction, bindActionCreators, Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import * as filterActions from '../../../../reducer_actions/get_cycle_times';
+import { useEffect, useRef, useState } from 'react';
 
 interface Column {
   id: 'id' | 'cycletime' | 'hash';
@@ -47,11 +48,11 @@ const mapStateToProps = (state: any) => {
 };
 
 const CycleTimeFilter = (props) => {
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
-  const [rows, setRows] = React.useState<Data[]>([]);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [rows, setRows] = useState<Data[]>([]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     formatRows();
   }, [props.rootReducer.filter.cycleTimeGroups]);
 
@@ -76,6 +77,14 @@ const CycleTimeFilter = (props) => {
     setRows(dataRows);
   };
 
+  const selectRow = (row: Data) => {
+    const id = row.id;
+    const cycleTimeGroups = props.rootReducer.filter.cycleTimeGroups;
+    const selectedCases = cycleTimeGroups[id - 1].cases;
+    const { selectCycleTimeCases } = props;
+    selectCycleTimeCases(selectedCases);
+  };
+
   return (
     <div className="cycle-time-table">
       <EuiSpacer />
@@ -98,7 +107,13 @@ const CycleTimeFilter = (props) => {
             <TableBody>
               {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
                 return (
-                  <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
+                  <TableRow
+                    hover
+                    role="checkbox"
+                    tabIndex={-1}
+                    key={row.id}
+                    onClick={() => selectRow(row)}
+                  >
                     {columns.map((column) => {
                       const value = row[column.id];
                       return (
@@ -133,6 +148,7 @@ const mapDispatchToProps = (dispatch: Dispatch<AnyAction>) => {
   return bindActionCreators(
     {
       getCycleTimeGroups: filterActions.getCycleTimeData,
+      selectCycleTimeCases: filterActions.selectCaseAction,
     },
     dispatch
   );

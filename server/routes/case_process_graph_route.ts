@@ -59,7 +59,7 @@ export function caseProcessGraphRoute(router: IRouter) {
       const graph = buildCaseGraph(processNodes, layer);
       const caseIds = extractPossibleCaseIds(processNodes);
       const caseCount = caseIds.length;
-
+      console.log(graph);
       const data = {
         graph: graph,
         caseIds: caseIds,
