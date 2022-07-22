@@ -11,6 +11,18 @@
   float: right;
 }
 
+.start-date {
+  width: 20px;
+  height: 20px;
+  margin: 0px 10px 0px 0px;
+}
+
+.end-date {
+  width: 20px;
+  height: 20px;
+  margin: 0px 10px 0px 0px;
+}
+
 .counter-container {
   display: flex;
   flex-direction: row;
@@ -23,4 +35,17 @@
   justify-content: space-between;
   align-items: baseline;
   margin-top: 20px;
+}
+
+.date-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.time-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
