@@ -37,3 +37,8 @@ $font-size-small: 14px;
   font-weight: $font-weight-bold;
   font-size: $font-size-headline;
 }
+
+.badge-container {
+  position: absolute;
+  z-index: 1;
+}
