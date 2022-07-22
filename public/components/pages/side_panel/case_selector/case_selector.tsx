@@ -54,7 +54,7 @@ const CaseSelector = (props: CaseSelectorProps) => {
       disablePortal
       id="combo-box-demo"
       options={cases}
-      sx={{ width: 240 }}
+      sx={{ width: 260 }}
       onChange={(event, value) => handleChange(event, value)}
       renderInput={(params) => <TextField {...params} label="Select one case" />}
     />

@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { EuiPage, EuiResizableContainer } from '@elastic/eui';
+import React, { useEffect, useState } from 'react';
+import { EuiBadge, EuiFlexItem, EuiPage, EuiResizableContainer } from '@elastic/eui';
 import { PanelComponent } from './side_panel/panel';
 import { LayerPanel } from './layer_panel/layer_panel';
 import '../_base.scss';
@@ -8,9 +8,11 @@ import { connect } from 'react-redux';
 import { VisGraphComponent } from './process_graph/vis_graph';
 import { VisNode, VisEdge } from '../../../model/vis_types';
 import * as fetchCaseGraphActions from '../../reducer_actions/fetch_case_specific_graph';
-import * as fetcAggregatedGraphActions from '../../reducer_actions/fetch_aggregated_graph';
+import * as fetchAggregatedGraphActions from '../../reducer_actions/fetch_aggregated_graph';
+import * as badgeActions from '../../reducer_actions/badges';
 import { ServerRequestData } from '../app';
 import { RootReducer } from '../../reducer/root_reducer';
+import { createBadge } from '../lib/badge';
 
 interface LayoutState {
   rootReducer: RootReducer;
@@ -21,6 +23,8 @@ type LayoutProps = {
   rootReducer: RootReducer;
   fetchCaseGraphAction: Function;
   fetchAggregatedGraphAction: Function;
+  unselectCaseAction: Function;
+  addBadge: Function;
 };
 
 const mapStateToProps = (state: LayoutState) => {
@@ -41,16 +45,15 @@ const LayoutComponent = (props: LayoutProps) => {
   let graphBool = false;
   let nodes: VisNode[] = [];
   let edges: VisEdge[] = [];
+  const badges = props.rootReducer.filter.badges;
 
   if (props.rootReducer.graph.graph !== undefined) {
-    console.log(props.rootReducer.graph.graph);
     graphBool = true;
     nodes = JSON.parse(JSON.stringify(props.rootReducer.graph.graph.nodes));
     edges = JSON.parse(JSON.stringify(props.rootReducer.graph.graph.edges));
   }
 
   if (props.rootReducer.graph.drillDownGraph) {
-    console.log(props.rootReducer.graph.drillDownGraph);
     graphBool = true;
     nodes = JSON.parse(JSON.stringify(props.rootReducer.graph.drillDownGraph.nodes));
     edges = JSON.parse(JSON.stringify(props.rootReducer.graph.drillDownGraph.edges));
@@ -69,14 +72,19 @@ const LayoutComponent = (props: LayoutProps) => {
     if (selectedCycleTimeCases.length > 0) {
       if (selectedCycleTimeCases.length === 1) {
         selectedCase = selectedCycleTimeCases[0].caseId;
-        console.log(selectedCase);
       } else {
         //TODO
       }
     }
     if (selectedCase !== null) {
-      const { fetchCaseGraphAction } = props;
+      const { fetchCaseGraphAction, unselectCaseAction, addBadge } = props;
       fetchCaseGraphAction(props.serverRequestData, selectedCase, layer);
+      const newBadge = {
+        filterAction: `Filter Case ${selectedCase}`,
+        layer: layer,
+        badgeFunction: unselectCaseAction,
+      };
+      addBadge(badges, newBadge);
     } else {
       // no filters applied
       const { fetchAggregatedGraphAction } = props;
@@ -84,12 +92,13 @@ const LayoutComponent = (props: LayoutProps) => {
     }
   };
 
+  console.log(badges);
   return (
     <EuiPage paddingSize="none">
       <EuiResizableContainer style={{ height: 650, width: '100%' }}>
         {(EuiResizablePanel, EuiResizableButton) => (
           <>
-            <EuiResizablePanel mode="collapsible" initialSize={26} minSize="260px">
+            <EuiResizablePanel mode="collapsible" initialSize={28} minSize="330px">
               <PanelComponent
                 caseCount={props.rootReducer.graph.caseCount}
                 caseIds={props.rootReducer.graph.caseIds}
@@ -99,8 +108,14 @@ const LayoutComponent = (props: LayoutProps) => {
 
             <EuiResizableButton />
 
-            <EuiResizablePanel className="canvas" mode="main" initialSize={80} minSize="500px">
+            <EuiResizablePanel className="canvas" mode="main" initialSize={72} minSize="500px">
               <div className="design-scope">
+                <div className="badge-container">
+                  {badges.length > 0 &&
+                    badges.map((badge) => {
+                      return createBadge(badge.filterAction, badge.layer, badge.badgeFunction);
+                    })}
+                </div>
                 {graphBool && <VisGraphComponent nodes={nodes} edges={edges} />}
                 <div className="layer-container">
                   <LayerPanel />
@@ -118,7 +133,9 @@ const mapDispatchToProps = (dispatch: Dispatch<AnyAction>) => {
   return bindActionCreators(
     {
       fetchCaseGraphAction: fetchCaseGraphActions.fetchCaseGraph,
-      fetchAggregatedGraphAction: fetcAggregatedGraphActions.fetchAggregatedGraph,
+      fetchAggregatedGraphAction: fetchAggregatedGraphActions.fetchAggregatedGraph,
+      unselectCaseAction: fetchCaseGraphActions.unselectCaseAction,
+      addBadge: badgeActions.addBadgeAction,
     },
     dispatch
   );
