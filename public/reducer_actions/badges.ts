@@ -13,11 +13,15 @@ export function addBadgeAction(badges: BadgeItem[], newBadge: BadgeItem) {
 }
 
 export function removeBadgeAction(badges: BadgeItem[], badge: BadgeItem) {
-  const newBadges = JSON.parse(JSON.stringify(badges));
-  const index = newBadges.indexOf(badge);
+  const newBadges = [...badges];
+  const index = newBadges.findIndex((object) => {
+    return object.filterAction === badge.filterAction;
+  });
+
   if (index > -1) {
     newBadges.splice(index, 1);
   }
+
   return {
     type: REMOVE_BADGE,
     newBadges: newBadges,

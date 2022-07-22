@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { EuiBadge, EuiFlexItem, EuiPage, EuiResizableContainer } from '@elastic/eui';
+import React, { useEffect } from 'react';
+import { EuiPage, EuiResizableContainer } from '@elastic/eui';
 import { PanelComponent } from './side_panel/panel';
 import { LayerPanel } from './layer_panel/layer_panel';
 import '../_base.scss';
@@ -10,9 +10,11 @@ import { VisNode, VisEdge } from '../../../model/vis_types';
 import * as fetchCaseGraphActions from '../../reducer_actions/fetch_case_specific_graph';
 import * as fetchAggregatedGraphActions from '../../reducer_actions/fetch_aggregated_graph';
 import * as badgeActions from '../../reducer_actions/badges';
+import * as filterActions from '../../reducer_actions/get_cycle_times';
+
 import { ServerRequestData } from '../app';
 import { RootReducer } from '../../reducer/root_reducer';
-import { createBadge } from '../lib/badge';
+import { BadgeComponent } from '../lib/badge';
 
 interface LayoutState {
   rootReducer: RootReducer;
@@ -25,6 +27,7 @@ type LayoutProps = {
   fetchAggregatedGraphAction: Function;
   unselectCaseAction: Function;
   addBadge: Function;
+  unselectCycleTimeAction: Function;
 };
 
 const mapStateToProps = (state: LayoutState) => {
@@ -77,12 +80,14 @@ const LayoutComponent = (props: LayoutProps) => {
       }
     }
     if (selectedCase !== null) {
-      const { fetchCaseGraphAction, unselectCaseAction, addBadge } = props;
+      const { fetchCaseGraphAction, unselectCaseAction, unselectCycleTimeAction, addBadge } = props;
       fetchCaseGraphAction(props.serverRequestData, selectedCase, layer);
+      const badgeFunction =
+        selectedCycleTimeCases.length === 1 ? unselectCycleTimeAction : unselectCaseAction;
       const newBadge = {
         filterAction: `Filter Case ${selectedCase}`,
         layer: layer,
-        badgeFunction: unselectCaseAction,
+        badgeFunction: badgeFunction,
       };
       addBadge(badges, newBadge);
     } else {
@@ -92,7 +97,6 @@ const LayoutComponent = (props: LayoutProps) => {
     }
   };
 
-  console.log(badges);
   return (
     <EuiPage paddingSize="none">
       <EuiResizableContainer style={{ height: 650, width: '100%' }}>
@@ -113,7 +117,13 @@ const LayoutComponent = (props: LayoutProps) => {
                 <div className="badge-container">
                   {badges.length > 0 &&
                     badges.map((badge) => {
-                      return createBadge(badge.filterAction, badge.layer, badge.badgeFunction);
+                      return (
+                        <BadgeComponent
+                          filterAction={badge.filterAction}
+                          layer={badge.layer}
+                          badgeFunction={badge.badgeFunction}
+                        />
+                      );
                     })}
                 </div>
                 {graphBool && <VisGraphComponent nodes={nodes} edges={edges} />}
@@ -135,6 +145,7 @@ const mapDispatchToProps = (dispatch: Dispatch<AnyAction>) => {
       fetchCaseGraphAction: fetchCaseGraphActions.fetchCaseGraph,
       fetchAggregatedGraphAction: fetchAggregatedGraphActions.fetchAggregatedGraph,
       unselectCaseAction: fetchCaseGraphActions.unselectCaseAction,
+      unselectCycleTimeAction: filterActions.unselectCaseAction,
       addBadge: badgeActions.addBadgeAction,
     },
     dispatch
