@@ -12,7 +12,7 @@ import { EuiSpacer } from '@elastic/eui';
 import { AnyAction, bindActionCreators, Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import * as filterActions from '../../../../reducer_actions/get_cycle_times';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 interface Column {
   id: 'id' | 'cycletime' | 'hash';

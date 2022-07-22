@@ -103,7 +103,7 @@ export function buildCaseGraph(nodes: ProcessEvent[], layer: number) {
 
   const nodesWithCoordinates = assignNodeCoordinates(finalNodes, finalEdges);
   const caseId = nodesWithCoordinates[1].caseID;
-  console.log(nodesWithIds);
+
   const startTimestamp = buildDateString(
     nodesWithIds[0].startTime ? nodesWithIds[0].startTime : nodesWithIds[0].timestamp
   );
