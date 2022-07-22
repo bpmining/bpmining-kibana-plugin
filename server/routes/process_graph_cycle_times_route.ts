@@ -64,7 +64,7 @@ export function processGraphCycleTimesRoute(router: IRouter) {
       });
 
       const sortedCycleTimes = _.sortBy(cycleTimes, 'cycleTimeInSeconds');
-      const longestCycleTime = sortedCycleTimes.pop().cycleTimeInSeconds;
+      const longestCycleTime = sortedCycleTimes.pop()?.cycleTimeInSeconds;
       const shortestCycleTime = sortedCycleTimes[0].cycleTimeInSeconds;
 
       //TODO: Testarray erstellen und Cases richtig aufteilen

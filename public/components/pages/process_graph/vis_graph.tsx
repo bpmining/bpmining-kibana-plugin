@@ -34,7 +34,9 @@ const VisGraphComponent = (props: VisGraphComponentProps) => {
     edges: props.edges,
   };
 
-  const aggregated = props.rootReducer.case.selectedCase ? false : true;
+  const aggregated =
+    !props.rootReducer.case.selectedCase &&
+    props.rootReducer.filter.selectedCycleTimeCases.length !== 1;
 
   const options = {
     autoResize: true,
