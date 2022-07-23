@@ -89,7 +89,9 @@ const LayoutComponent = (props: LayoutProps) => {
         layer: layer,
         badgeFunction: badgeFunction,
       };
-      addBadge(badges, newBadge);
+      if (badges.filter((badge) => badge.filterAction === newBadge.filterAction).length === 0) {
+        addBadge(badges, newBadge);
+      }
     } else {
       // no filters applied
       const { fetchAggregatedGraphAction } = props;
