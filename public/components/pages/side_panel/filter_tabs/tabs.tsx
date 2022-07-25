@@ -35,6 +35,7 @@ const FilterTabs = (props: FilterTabProps) => {
     {
       id: 'cycletime',
       name: 'Cycle Time',
+      color: '#5B4897',
       disabled: false,
       content: (
         <Fragment>
@@ -50,7 +51,6 @@ const FilterTabs = (props: FilterTabProps) => {
         tabs={tabs}
         initialSelectedTab={tabs[1]}
         autoFocus="selected"
-        color="#5B4897"
         onTabClick={(tab) => {
           console.log('clicked tab', tab);
         }}
