@@ -84,6 +84,7 @@ const LayoutComponent = (props: LayoutProps) => {
       fetchCaseGraphAction(props.serverRequestData, selectedCase, layer);
       const badgeFunction =
         selectedCycleTimeCases.length === 1 ? unselectCycleTimeAction : unselectCaseAction;
+      const serializedBadgeFunction = badgeFunction.toString();
       const newBadge = {
         filterAction: `Filter Case ${selectedCase}`,
         layer: layer,

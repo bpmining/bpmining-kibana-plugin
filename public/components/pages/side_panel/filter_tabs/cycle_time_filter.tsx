@@ -13,6 +13,14 @@ import { AnyAction, bindActionCreators, Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import * as filterActions from '../../../../reducer_actions/get_cycle_times';
 import { useEffect, useState } from 'react';
+import { RootReducer } from '../../../../reducer/root_reducer';
+import { CycleTimeGroupItem } from 'plugins/bpmining-kibana-plugin/server/routes/process_graph_cycle_times_route';
+
+interface CycleTimeFilterProps {
+  rootReducer: RootReducer;
+  selectCycleTimeCases: Function;
+  getCycleTimeGroups: Function;
+}
 
 interface Column {
   id: 'id' | 'cycletime' | 'hash';
@@ -47,7 +55,7 @@ const mapStateToProps = (state: any) => {
   return state;
 };
 
-const CycleTimeFilter = (props) => {
+const CycleTimeFilter = (props: CycleTimeFilterProps) => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [rows, setRows] = useState<Data[]>([]);
@@ -67,7 +75,7 @@ const CycleTimeFilter = (props) => {
 
   const formatRows = () => {
     const dataRows: Data[] = [];
-    const cycleTimeGroups = props.rootReducer.filter.cycleTimeGroups;
+    const cycleTimeGroups: CycleTimeGroupItem[] = props.rootReducer.filter.cycleTimeGroups;
     cycleTimeGroups.forEach((item, i: number) => {
       const id = i + 1;
       const interval = item.interval;
@@ -88,8 +96,8 @@ const CycleTimeFilter = (props) => {
   return (
     <div className="cycle-time-table">
       <EuiSpacer />
-      <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-        <TableContainer sx={{ maxHeight: 440 }}>
+      <Paper sx={{ width: '100%', overflowX: 'auto' }}>
+        <TableContainer>
           <Table stickyHeader aria-label="sticky table">
             <TableHead style={{ fontWeight: 500 }}>
               <TableRow>
@@ -131,10 +139,10 @@ const CycleTimeFilter = (props) => {
           </Table>
         </TableContainer>
         <TablePagination
-          rowsPerPageOptions={[5, 10, 15]}
+          rowsPerPageOptions={[]}
           component="div"
           count={rows.length}
-          rowsPerPage={rowsPerPage}
+          rowsPerPage={5}
           page={page}
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}

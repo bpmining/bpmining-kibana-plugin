@@ -1,16 +1,21 @@
-import React, { useState, Fragment } from 'react';
+import React, { Fragment } from 'react';
 
 import { EuiSpacer, EuiTabbedContent } from '@elastic/eui';
 import { connect } from 'react-redux';
 import { AnyAction, bindActionCreators, Dispatch } from 'redux';
 import { CycleTimeFilter } from './cycle_time_filter';
 import Paper from '@mui/material/Paper';
+import { ServerRequestData } from 'plugins/bpmining-kibana-plugin/public/reducer_actions/fetch_case_specific_graph';
+
+interface FilterTabProps {
+  serverRequestData: ServerRequestData;
+}
 
 const mapStateToProps = (state: any) => {
   return state;
 };
 
-const FilterTabs = (props) => {
+const FilterTabs = (props: FilterTabProps) => {
   const tabs = [
     {
       id: 'variants',
@@ -20,7 +25,9 @@ const FilterTabs = (props) => {
         <Fragment>
           <EuiSpacer />
           <Paper sx={{ width: '100%', height: '250px', overflow: 'hidden' }}>
-            <p>Under Construction!</p>
+            <div style={{ display: 'flex', textAlign: 'center', padding: '70px' }}>
+              <p style={{ color: '#828282' }}>Under Construction!</p>
+            </div>
           </Paper>
         </Fragment>
       ),
@@ -31,7 +38,7 @@ const FilterTabs = (props) => {
       disabled: false,
       content: (
         <Fragment>
-          <CycleTimeFilter serverRequestData={props.serverRequestData} />
+          <CycleTimeFilter />
         </Fragment>
       ),
     },
@@ -43,6 +50,7 @@ const FilterTabs = (props) => {
         tabs={tabs}
         initialSelectedTab={tabs[1]}
         autoFocus="selected"
+        color="#5B4897"
         onTabClick={(tab) => {
           console.log('clicked tab', tab);
         }}

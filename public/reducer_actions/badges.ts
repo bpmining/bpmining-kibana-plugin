@@ -13,17 +13,17 @@ export function addBadgeAction(badges: BadgeItem[], newBadge: BadgeItem) {
 }
 
 export function removeBadgeAction(badges: BadgeItem[], badge: BadgeItem) {
-  const newBadges = [...badges];
-  const index = newBadges.findIndex((object) => {
+  const updatedBadges = [...badges];
+  const index = updatedBadges.findIndex((object) => {
     return object.filterAction === badge.filterAction;
   });
 
   if (index > -1) {
-    newBadges.splice(index, 1);
+    updatedBadges.splice(index, 1);
   }
 
   return {
     type: REMOVE_BADGE,
-    newBadges: newBadges,
+    updatedBadges: updatedBadges,
   };
 }
