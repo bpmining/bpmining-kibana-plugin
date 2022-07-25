@@ -48,7 +48,7 @@ export const filterReducer = (state = initialState, action: any): FilterReducer 
     case badgeActions.REMOVE_BADGE:
       return {
         ...state,
-        badges: action.newBadges,
+        badges: action.updatedBadges,
       };
     default:
       return state;

@@ -3,15 +3,22 @@ import { AnyAction, Dispatch } from 'redux';
 import { ServerRequestData } from './fetch_case_specific_graph';
 import { getSearchService } from '../services';
 import { FETCH_CYCLE_TIME_DATA } from '../../common/routes';
+import { VisNode } from 'plugins/bpmining-kibana-plugin/model/vis_types';
 
 export const GET_CYCLE_TIME_DATA_SUCCESS = 'GET_CYCLE_TIME_DATA_SUCCESS';
 export const GET_CYCLE_TIME_DATA_ERROR = 'GET_CYCLE_TIME_DATA_ERROR';
 export const SELECT_CYCLE_TIME_CASES = 'SELECT_CYCLE_TIME_CASES';
 export const UNSELECT_CYCLE_TIME_CASES = 'UNSELECT_CYCLE_TIME_CASES';
 
+export interface CycleTimeItem {
+  caseId: string;
+  cycleTimeInSeconds: number;
+  nodes: VisNode[];
+}
+
 export interface CycleTimeGroup {
-  caseIds: string[];
-  timeInterval: string;
+  cases: CycleTimeItem[];
+  interval: string;
 }
 
 export function getCycleTimeDataSuccessAction(cycleTimeGroups: CycleTimeGroup[]) {

@@ -2,12 +2,22 @@ import { schema } from '@kbn/config-schema';
 import { IRouter, SearchResponse } from '../../../../src/core/server';
 import { FETCH_CYCLE_TIME_DATA } from '../../common/routes';
 import { ProcessEvent } from '../../model/process_event';
-import { extractPossibleCaseIds } from '../helpers/extract_possible_case_ids';
 import { VisNode } from 'plugins/bpmining-kibana-plugin/model/vis_types';
 import { splitNodesByCase } from '../helpers/split_nodes_by_case';
 import { assignNodeIds } from '../graph_calculation/assign_node_ids';
 import { calculateGraphThroughputTime } from '../graph_calculation/calculate_throughput_time';
 import _ from 'lodash';
+
+export interface CycleTimeItem {
+  caseId: string;
+  cycleTimeInSeconds: number;
+  nodes: VisNode[];
+}
+
+export interface CycleTimeGroupItem {
+  cases: CycleTimeItem[];
+  interval: string;
+}
 
 export function processGraphCycleTimesRoute(router: IRouter) {
   router.post(
@@ -51,11 +61,10 @@ export function processGraphCycleTimesRoute(router: IRouter) {
       const hits = (res as SearchResponse<ProcessEvent>).hits.hits;
 
       const nodes: ProcessEvent[] = hits.map((hit) => ({ ...hit._source }));
-      const caseIds = extractPossibleCaseIds(nodes);
       const nodesWithIds: VisNode[] = assignNodeIds(nodes);
       const nodesPerCase: Array<VisNode[]> = splitNodesByCase(nodesWithIds);
 
-      const cycleTimes = [];
+      const cycleTimes: CycleTimeItem[] = [];
       nodesPerCase.forEach((oneCase) => {
         const caseId = oneCase[0].caseID;
         const nodes = oneCase;
@@ -63,19 +72,25 @@ export function processGraphCycleTimesRoute(router: IRouter) {
         cycleTimes.push({ caseId: caseId, cycleTimeInSeconds: cycleTime, nodes: nodes });
       });
 
-      const sortedCycleTimes = _.sortBy(cycleTimes, 'cycleTimeInSeconds');
-      const longestCycleTime = sortedCycleTimes.pop()?.cycleTimeInSeconds;
-      const shortestCycleTime = sortedCycleTimes[0].cycleTimeInSeconds;
+      const cycleTimeGroups: CycleTimeGroupItem[] = [];
+      if (cycleTimes.length > 0) {
+        const sortedCycleTimes = _.sortBy(cycleTimes, 'cycleTimeInSeconds');
 
-      //TODO: Testarray erstellen und Cases richtig aufteilen
-      const difference = longestCycleTime - shortestCycleTime;
-      const differenceInMinutes = difference / 60;
-      const intervals = ['< 6 min', '> 6 min'];
-      const cycleTimeGroups = [];
-      cycleTimes.forEach((item, i) => {
-        const timeInSeconds = item.cycleTimeInSeconds;
-        cycleTimeGroups.push({ cases: [item], interval: intervals[i] });
-      });
+        const longestCycleTime = sortedCycleTimes.pop()?.cycleTimeInSeconds;
+        const shortestCycleTime = sortedCycleTimes[0].cycleTimeInSeconds;
+
+        //TODO: Testarray erstellen und Cases richtig aufteilen
+        if (longestCycleTime && shortestCycleTime) {
+          /* const difference = longestCycleTime - shortestCycleTime;
+            const differenceInMinutes = difference / 60; */
+          const intervals = ['< 6 min', '> 6 min'];
+
+          cycleTimes.forEach((item, i) => {
+            // const timeInSeconds = item.cycleTimeInSeconds;
+            cycleTimeGroups.push({ cases: [item], interval: intervals[i] });
+          });
+        }
+      }
 
       const data = {
         cycleTimeGroups: cycleTimeGroups,

@@ -1,5 +1,5 @@
 import { EuiBadge } from '@elastic/eui';
-import { COLOR_LAYER_1, COLOR_LAYER_2 } from '../../../common/colors';
+import { NODE_COLOR_LAYER_1, NODE_COLOR_LAYER_2 } from '../../../common/colors';
 import React from 'react';
 import * as badgeActions from '../../reducer_actions/badges';
 import { AnyAction, bindActionCreators, Dispatch } from 'redux';
@@ -28,7 +28,7 @@ const mapStateToProps = (state: BadgeState) => {
 };
 
 const BadgeComponent = (props: BadgeProps) => {
-  const color = props.layer === 1 ? COLOR_LAYER_1 : COLOR_LAYER_2;
+  const color = props.layer === 1 ? NODE_COLOR_LAYER_1 : NODE_COLOR_LAYER_2;
   const { removeBadge } = props;
   const currentBadges = props.rootReducer.filter.badges;
   const badgeToRemove = {
@@ -37,8 +37,14 @@ const BadgeComponent = (props: BadgeProps) => {
     badgeFunction: props.badgeFunction,
   };
 
+  /* let badgeFunction = props.badgeFunction;
+  badgeFunction = badgeFunction.substring(badgeFunction.indexOf("{") + 1);
+  badgeFunction = badgeFunction.substring(0, badgeFunction.indexOf("}"));   
+  console.log(badgeFunction)
+  const deserializedBadgeFunction = Function(badgeFunction);
+  console.log(deserializedBadgeFunction) */
   return (
-    <div>
+    <div style={{ margin: '0px 5px' }}>
       <EuiBadge
         color={color}
         iconType="cross"
