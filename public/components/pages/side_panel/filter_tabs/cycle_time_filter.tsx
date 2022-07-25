@@ -98,39 +98,77 @@ const CycleTimeFilter = (props: CycleTimeFilterProps) => {
       <EuiSpacer />
       <Paper sx={{ width: '100%', overflowX: 'auto' }}>
         <TableContainer>
-          <Table stickyHeader aria-label="sticky table">
+          <Table>
             <TableHead style={{ fontWeight: 500 }}>
-              <TableRow>
-                {columns.map((column) => (
-                  <TableCell
-                    key={column.id}
-                    align={column.align}
-                    style={{ minWidth: column.minWidth }}
-                  >
-                    {column.label}
-                  </TableCell>
-                ))}
+              <TableRow sx={{ hover: { '&$root': { '&:hover': { backgroundColor: 'green' } } } }}>
+                {columns.map((column, i) =>
+                  columns[i + 1] ? (
+                    <TableCell
+                      key={column.id}
+                      align={column.align}
+                      style={{
+                        minWidth: column.minWidth,
+                        borderRightStyle: 'solid',
+                        borderRightColor: '#e0e0e0',
+                        borderRightWidth: '1pt',
+                        fontWeight: '600',
+                      }}
+                    >
+                      {column.label}
+                    </TableCell>
+                  ) : (
+                    <TableCell key={column.id} align={column.align}>
+                      {column.label}
+                    </TableCell>
+                  )
+                )}
               </TableRow>
             </TableHead>
             <TableBody>
               {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
                 return (
                   <TableRow
-                    hover
                     role="checkbox"
                     tabIndex={-1}
                     key={row.id}
                     onClick={() => selectRow(row)}
+                    sx={{ '&:hover': { backgroundColor: '#D6D1E5' } }}
                   >
-                    {columns.map((column) => {
+                    {columns.map((column, i) => {
                       const value = row[column.id];
-                      return (
-                        <TableCell key={column.id} align={column.align}>
+                      let cell = (
+                        <TableCell
+                          key={column.id}
+                          align={column.align}
+                          style={{
+                            borderRightStyle: 'solid',
+                            borderRightColor: '#e0e0e0',
+                            borderRightWidth: '1pt',
+                            borderBottom: 'none',
+                          }}
+                        >
                           {column.format && typeof value === 'number'
                             ? column.format(value)
                             : value}
                         </TableCell>
                       );
+
+                      if (columns[i + 1] === undefined) {
+                        cell = (
+                          <TableCell
+                            key={column.id}
+                            align={column.align}
+                            style={{
+                              borderBottom: 'none',
+                            }}
+                          >
+                            {column.format && typeof value === 'number'
+                              ? column.format(value)
+                              : value}
+                          </TableCell>
+                        );
+                      }
+                      return cell;
                     })}
                   </TableRow>
                 );
