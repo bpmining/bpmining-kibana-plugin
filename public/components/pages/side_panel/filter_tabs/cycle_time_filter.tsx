@@ -15,6 +15,7 @@ import * as filterActions from '../../../../reducer_actions/get_cycle_times';
 import { useEffect, useState } from 'react';
 import { RootReducer } from '../../../../reducer/root_reducer';
 import { CycleTimeGroupItem } from 'plugins/bpmining-kibana-plugin/server/routes/process_graph_cycle_times_route';
+import { NODE_COLOR_LAYER_1, NODE_COLOR_LAYER_2 } from '../../../../../common/colors';
 
 interface CycleTimeFilterProps {
   rootReducer: RootReducer;
@@ -93,6 +94,9 @@ const CycleTimeFilter = (props: CycleTimeFilterProps) => {
     selectCycleTimeCases(selectedCases);
   };
 
+  const hoverColor =
+    props.rootReducer.layer.selectedLayer === 1 ? NODE_COLOR_LAYER_1 : NODE_COLOR_LAYER_2;
+
   return (
     <div className="cycle-time-table">
       <EuiSpacer />
@@ -132,7 +136,7 @@ const CycleTimeFilter = (props: CycleTimeFilterProps) => {
                     tabIndex={-1}
                     key={row.id}
                     onClick={() => selectRow(row)}
-                    sx={{ '&:hover': { backgroundColor: '#D6D1E5' } }}
+                    sx={{ '&:hover': { backgroundColor: hoverColor } }}
                   >
                     {columns.map((column, i) => {
                       const value = row[column.id];

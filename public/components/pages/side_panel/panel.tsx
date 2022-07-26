@@ -18,6 +18,7 @@ import { FilterTabs } from './filter_tabs/tabs';
 import * as filterActions from '../../../reducer_actions/get_cycle_times';
 import { formatTime } from '../../../../server/graph_calculation/calculate_throughput_time';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import _ from 'lodash';
 
 interface PanelComponentState {
   rootReducer: RootReducer;
@@ -75,8 +76,22 @@ const PanelComponent = (props: PanelComponentProps) => {
         const endDate = endTimestamp?.split('|')[0];
         const endTime = endTimestamp?.split('|')[1];
 
+        const contextInfo: any = [];
+        graph?.nodes.map((node) => {
+          const context = node.contextInfo;
+          if (context !== undefined) {
+            Object.keys(context).map((key) => {
+              const item = { [key]: context[key] };
+              if (!contextInfo.find((i) => _.isEqual(i, item))) {
+                contextInfo.push(item);
+              }
+            });
+          }
+        });
+
         caseOverview = (
           <div>
+            <EuiSpacer />
             <p>Case Details: {caseId}</p>
             <div>
               <EuiSpacer />
@@ -106,6 +121,21 @@ const PanelComponent = (props: PanelComponentProps) => {
                 />{' '}
                 {throughputTime && formatTime(throughputTime)}
               </div>
+              <EuiSpacer />
+              <EuiSpacer />
+              <div>
+                {contextInfo.length > 0 && <p>Context Informations</p>}
+                <br />
+                {contextInfo.length > 0 &&
+                  contextInfo.map((item) => {
+                    const entries = Object.entries(item);
+                    return (
+                      <div className="node-panel-item">
+                        <b>{entries[0][0]}:</b> {entries[0][1]}
+                      </div>
+                    );
+                  })}
+              </div>
             </div>
           </div>
         );
@@ -114,7 +144,7 @@ const PanelComponent = (props: PanelComponentProps) => {
   }
 
   return (
-    <EuiPanel paddingSize="m" style={{ minHeight: '680px' }}>
+    <EuiPanel paddingSize="m" style={{ minHeight: '740px' }}>
       <div className="design-scope">
         <img src={logo} alt="Logo" className="logo" />
         <EuiSpacer />
