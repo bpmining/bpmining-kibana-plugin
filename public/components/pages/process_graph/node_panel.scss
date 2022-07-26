@@ -1,8 +1,10 @@
 @import '../../base';
 
-.node-panel {
-  position: relative;
-  z-index: 1;
-  width: 150px;
-  height: 160px;
+.node-panel-item {
+  margin: 5pt 0pt;
+}
+
+.centered-button {
+  display: flex;
+  justify-content: space-around;
 }

@@ -102,10 +102,15 @@ const LayoutComponent = (props: LayoutProps) => {
 
   return (
     <EuiPage paddingSize="none">
-      <EuiResizableContainer style={{ height: 650, width: '100%' }}>
+      <EuiResizableContainer style={{ height: '750', width: '100%' }}>
         {(EuiResizablePanel, EuiResizableButton) => (
           <>
-            <EuiResizablePanel mode="collapsible" initialSize={28} minSize="330px">
+            <EuiResizablePanel
+              mode="collapsible"
+              initialSize={20}
+              minSize="330px"
+              style={{ maxWidth: '250' }}
+            >
               <PanelComponent
                 caseCount={props.rootReducer.graph.caseCount}
                 caseIds={props.rootReducer.graph.caseIds}
@@ -115,7 +120,7 @@ const LayoutComponent = (props: LayoutProps) => {
 
             <EuiResizableButton />
 
-            <EuiResizablePanel className="canvas" mode="main" initialSize={72} minSize="500px">
+            <EuiResizablePanel className="canvas" mode="main" initialSize={80} minSize="500px">
               <div className="design-scope">
                 <div className="badge-container">
                   {badges.length > 0 &&
