@@ -62,13 +62,21 @@ export function formatTime(throughputTime: number): string {
   let timeString = '';
 
   const hours = Math.floor(throughputTime / 3600);
+  let stringHours = hours.toString();
+  stringHours = ('0' + stringHours).slice(-2);
+
   const minutes = Math.floor((throughputTime % 3600) / 60);
+  let stringMinutes = minutes.toString();
+  stringMinutes = ('0' + stringMinutes).slice(-2);
+
   const seconds = Math.floor(throughputTime % 60);
+  let stringSeconds = seconds.toString();
+  stringSeconds = ('0' + stringSeconds).slice(-2);
 
   if (hours > 0) {
-    timeString = `${hours}:${minutes} h`;
+    timeString = `${stringHours}:${stringMinutes} h`;
   } else if (minutes > 0) {
-    timeString = `${minutes}:${seconds} min`;
+    timeString = `${stringMinutes}:${stringSeconds} min`;
   } else if (seconds > 0) {
     timeString = `${seconds} s`;
   } else {
