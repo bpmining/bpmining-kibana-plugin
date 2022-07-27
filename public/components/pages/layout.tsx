@@ -69,15 +69,13 @@ const LayoutComponent = (props: LayoutProps) => {
       return;
     }
 
-    let selectedCase = props.rootReducer.case.selectedCase;
-    // check filters
+    const selectedCase = props.rootReducer.case.selectedCase;
     const selectedCycleTimeCases = props.rootReducer.filter.selectedCycleTimeCases;
     if (selectedCycleTimeCases.length > 0) {
-      if (selectedCycleTimeCases.length === 1) {
-        selectedCase = selectedCycleTimeCases[0].caseId;
-      } else {
-        //TODO
-      }
+      graphBool = true;
+      nodes = selectedCycleTimeCases.graph.nodes;
+      edges = selectedCycleTimeCases.graph.edges;
+      return;
     }
     if (selectedCase !== null) {
       const { fetchCaseGraphAction, unselectCaseAction, unselectCycleTimeAction, addBadge } = props;

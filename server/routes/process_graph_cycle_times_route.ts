@@ -90,10 +90,7 @@ export function processGraphCycleTimesRoute(router: IRouter) {
         { caseId: 'A-16', cycleTimeInSeconds: 155, nodes: [] },
         { caseId: 'A-17', cycleTimeInSeconds: 177, nodes: [] },
       ];
-      const cycleTimeBuckets: CycleTimeGroupItem[] = calculateCycleTimeBuckets(
-        testArrayCycleTimes,
-        1
-      );
+      const cycleTimeBuckets: CycleTimeGroupItem[] = calculateCycleTimeBuckets(cycleTimes, 1);
       const data = {
         cycleTimeGroups: cycleTimeBuckets,
       };
