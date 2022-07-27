@@ -19,6 +19,8 @@ import * as filterActions from '../../../reducer_actions/get_cycle_times';
 import { formatTime } from '../../../../server/graph_calculation/calculate_throughput_time';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import _ from 'lodash';
+import { CycleTimeItem } from '../../../reducer_actions/get_cycle_times';
+import { CaseGroupComponent } from '../../lib/case_group_item';
 
 interface PanelComponentState {
   rootReducer: RootReducer;
@@ -53,7 +55,7 @@ const PanelComponent = (props: PanelComponentProps) => {
     setChecked(e.target.checked);
   };
 
-  const selectedCases = props.rootReducer.filter.selectedCycleTimeCases;
+  const selectedCycleTimeCases = props.rootReducer.filter.selectedCycleTimeCases;
   const selectedCase = props.rootReducer.case.selectedCase;
   const graph = props.rootReducer.graph.drillDownGraph
     ? props.rootReducer.graph.drillDownGraph
@@ -62,85 +64,105 @@ const PanelComponent = (props: PanelComponentProps) => {
   let caseOverview = <div></div>;
 
   if (graph?.caseId) {
-    if (selectedCases.length > 0 || selectedCase) {
+    if (selectedCase) {
       isFilterSelected = true;
-      if (selectedCases.length === 1 || selectedCase) {
-        const caseId = graph?.caseId;
-        const throughputTime = graph?.throughputTime;
+      const caseId = graph?.caseId;
+      const throughputTime = graph?.throughputTime;
 
-        const startTimestamp = graph?.startTimestamp;
-        const startDate = startTimestamp?.split('|')[0];
-        const startTime = startTimestamp?.split('|')[1];
+      const startTimestamp = graph?.startTimestamp;
+      const startDate = startTimestamp?.split('|')[0];
+      const startTime = startTimestamp?.split('|')[1];
 
-        const endTimestamp = graph?.endTimestamp;
-        const endDate = endTimestamp?.split('|')[0];
-        const endTime = endTimestamp?.split('|')[1];
+      const endTimestamp = graph?.endTimestamp;
+      const endDate = endTimestamp?.split('|')[0];
+      const endTime = endTimestamp?.split('|')[1];
 
-        const contextInfo: any = [];
-        graph?.nodes.map((node) => {
-          const context = node.contextInfo;
-          if (context !== undefined) {
-            Object.keys(context).map((key) => {
-              const item = { [key]: context[key] };
-              if (!contextInfo.find((i) => _.isEqual(i, item))) {
-                contextInfo.push(item);
-              }
-            });
-          }
-        });
+      const contextInfo: any = [];
+      graph?.nodes.map((node) => {
+        const context = node.contextInfo;
+        if (context !== undefined) {
+          Object.keys(context).map((key) => {
+            const item = { [key]: context[key] };
+            if (!contextInfo.find((i) => _.isEqual(i, item))) {
+              contextInfo.push(item);
+            }
+          });
+        }
+      });
 
-        caseOverview = (
+      caseOverview = (
+        <div>
+          <EuiSpacer />
+          <p>Case Details: {caseId}</p>
           <div>
             <EuiSpacer />
-            <p>Case Details: {caseId}</p>
-            <div>
-              <EuiSpacer />
+            <div className="date-container">
               <div className="date-container">
-                <div className="date-container">
-                  <img src={startDateIcon} alt="Start Date" className="start-date" />
-                  <div>
-                    <b>{startDate}</b>
-                    <br></br>
-                    {startTime}
-                  </div>
+                <img src={startDateIcon} alt="Start Date" className="start-date" />
+                <div>
+                  <b>{startDate}</b>
+                  <br></br>
+                  {startTime}
                 </div>
+              </div>
 
-                <div className="date-container">
-                  <img src={endDateIcon} alt="End Date" className="end-date" />
-                  <div>
-                    <b>{endDate}</b>
-                    <br></br>
-                    {endTime}
-                  </div>
+              <div className="date-container">
+                <img src={endDateIcon} alt="End Date" className="end-date" />
+                <div>
+                  <b>{endDate}</b>
+                  <br></br>
+                  {endTime}
                 </div>
-              </div>
-              <EuiSpacer />
-              <div className="time-container">
-                <AccessTimeIcon
-                  style={{ width: '23px', height: '23px', margin: '0px 10px 0px 0px' }}
-                />{' '}
-                {throughputTime && formatTime(throughputTime)}
-              </div>
-              <EuiSpacer />
-              <EuiSpacer />
-              <div>
-                {contextInfo.length > 0 && <p>Context Informations</p>}
-                <br />
-                {contextInfo.length > 0 &&
-                  contextInfo.map((item) => {
-                    const entries = Object.entries(item);
-                    return (
-                      <div className="node-panel-item">
-                        <b>{entries[0][0]}:</b> {entries[0][1]}
-                      </div>
-                    );
-                  })}
               </div>
             </div>
+            <EuiSpacer />
+            <div className="time-container">
+              <AccessTimeIcon
+                style={{ width: '23px', height: '23px', margin: '0px 10px 0px 0px' }}
+              />{' '}
+              {throughputTime && formatTime(throughputTime)}
+            </div>
+            <EuiSpacer />
+            <EuiSpacer />
+            <div>
+              {contextInfo.length > 0 && <p>Context Informations</p>}
+              <br />
+              {contextInfo.length > 0 &&
+                contextInfo.map((item) => {
+                  const entries = Object.entries(item);
+                  return (
+                    <div className="node-panel-item">
+                      <b>{entries[0][0]}:</b> {entries[0][1]}
+                    </div>
+                  );
+                })}
+            </div>
           </div>
-        );
-      }
+        </div>
+      );
     }
+  }
+
+  if (selectedCycleTimeCases.id) {
+    isFilterSelected = true;
+    console.log('Here: ');
+    console.log(selectedCycleTimeCases);
+    const cycleTimeCases = selectedCycleTimeCases.cases;
+    caseOverview = (
+      <div>
+        <p>Cycle Time Group {selectedCycleTimeCases.id}</p>
+        Cycle Time: {selectedCycleTimeCases.interval}
+        {cycleTimeCases.map((cycleTimeCase: CycleTimeItem) => {
+          return (
+            <CaseGroupComponent
+              caseId={cycleTimeCase.caseId}
+              cycleTime={formatTime(cycleTimeCase.cycleTimeInSeconds)}
+              serverRequestData={props.serverRequestData}
+            />
+          );
+        })}
+      </div>
+    );
   }
 
   return (

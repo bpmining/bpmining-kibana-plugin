@@ -11,6 +11,7 @@ export interface RawCycleTimeGroupItem {
 }
 
 export interface CycleTimeGroupItem {
+  id: number;
   cases: CycleTimeItem[];
   graph: VisGraph | undefined;
   interval: string;
@@ -48,7 +49,7 @@ export function calculateCycleTimeBuckets(cycleTimes: CycleTimeItem[], layer: nu
         });
       }
 
-      cycleTimeGroups.forEach((item) => {
+      cycleTimeGroups.forEach((item, i) => {
         const numberOfCases = item.cases.length;
         if (numberOfCases > 1) {
           const cases = item.cases;
@@ -59,12 +60,14 @@ export function calculateCycleTimeBuckets(cycleTimes: CycleTimeItem[], layer: nu
           });
           const graph = buildAggregatedGraph(nodesOfAllCases, layer);
           cycleTimeGroupsWithGraphs.push({
+            id: i + 1,
             interval: item.interval,
             cases: item.cases,
             graph: graph,
           });
         } else {
           cycleTimeGroupsWithGraphs.push({
+            id: i + 1,
             interval: item.interval,
             cases: item.cases,
             graph: undefined,

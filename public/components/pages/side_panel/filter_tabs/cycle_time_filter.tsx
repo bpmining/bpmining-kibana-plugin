@@ -16,11 +16,13 @@ import { useEffect, useState } from 'react';
 import { RootReducer } from '../../../../reducer/root_reducer';
 import { NODE_COLOR_LAYER_1, NODE_COLOR_LAYER_2 } from '../../../../../common/colors';
 import { CycleTimeGroupItem } from 'plugins/bpmining-kibana-plugin/server/filter_calculation/calculate_cycle_time_buckets';
+import * as fetchCaseGraphActions from '../../../../reducer_actions/fetch_case_specific_graph';
 
 interface CycleTimeFilterProps {
   rootReducer: RootReducer;
   selectCycleTimeCases: Function;
   getCycleTimeGroups: Function;
+  selectCaseAction: Function;
 }
 
 interface Column {
@@ -78,7 +80,7 @@ const CycleTimeFilter = (props: CycleTimeFilterProps) => {
     const dataRows: Data[] = [];
     const cycleTimeGroups: CycleTimeGroupItem[] = props.rootReducer.filter.cycleTimeGroups;
     cycleTimeGroups.forEach((item, i: number) => {
-      const id = i + 1;
+      const id = item.id;
       const interval = item.interval;
       const casesInInterval = item.cases;
       dataRows.push(createData(id, interval, casesInInterval.length));
@@ -89,10 +91,15 @@ const CycleTimeFilter = (props: CycleTimeFilterProps) => {
   const selectRow = (row: Data) => {
     const id = row.id;
     const cycleTimeGroups = props.rootReducer.filter.cycleTimeGroups;
-    const selectedCases = cycleTimeGroups[id - 1].cases;
+    const selectedCases = cycleTimeGroups[id - 1];
     // Hier differenzieren ob 1 Case oder mehrere
-    const { selectCycleTimeCases } = props;
-    selectCycleTimeCases(selectedCases);
+    if (selectedCases.cases.length === 1) {
+      const { selectCaseAction } = props;
+      selectCaseAction({ label: selectedCases.cases[0].caseId });
+    } else {
+      const { selectCycleTimeCases } = props;
+      selectCycleTimeCases(selectedCases);
+    }
   };
 
   const hoverColor =
@@ -202,6 +209,7 @@ const mapDispatchToProps = (dispatch: Dispatch<AnyAction>) => {
     {
       getCycleTimeGroups: filterActions.getCycleTimeData,
       selectCycleTimeCases: filterActions.selectCaseAction,
+      selectCaseAction: fetchCaseGraphActions.selectCaseAction,
     },
     dispatch
   );
