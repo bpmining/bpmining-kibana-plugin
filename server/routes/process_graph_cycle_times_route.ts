@@ -7,16 +7,15 @@ import { splitNodesByCase } from '../helpers/split_nodes_by_case';
 import { assignNodeIds } from '../graph_calculation/assign_node_ids';
 import { calculateGraphThroughputTime } from '../graph_calculation/calculate_throughput_time';
 import _ from 'lodash';
+import {
+  calculateCycleTimeBuckets,
+  CycleTimeGroupItem,
+} from '../filter_calculation/calculate_cycle_time_buckets';
 
 export interface CycleTimeItem {
   caseId: string;
   cycleTimeInSeconds: number;
   nodes: VisNode[];
-}
-
-export interface CycleTimeGroupItem {
-  cases: CycleTimeItem[];
-  interval: string;
 }
 
 export function processGraphCycleTimesRoute(router: IRouter) {
@@ -72,28 +71,31 @@ export function processGraphCycleTimesRoute(router: IRouter) {
         cycleTimes.push({ caseId: caseId, cycleTimeInSeconds: cycleTime, nodes: nodes });
       });
 
-      const cycleTimeGroups: CycleTimeGroupItem[] = [];
-      if (cycleTimes.length > 0) {
-        const sortedCycleTimes = _.sortBy(cycleTimes, 'cycleTimeInSeconds');
-
-        const longestCycleTime = sortedCycleTimes.pop()?.cycleTimeInSeconds;
-        const shortestCycleTime = sortedCycleTimes[0].cycleTimeInSeconds;
-
-        //TODO: Testarray erstellen und Cases richtig aufteilen
-        if (longestCycleTime && shortestCycleTime) {
-          /* const difference = longestCycleTime - shortestCycleTime;
-            const differenceInMinutes = difference / 60; */
-          const intervals = ['< 6 min', '> 6 min'];
-
-          cycleTimes.forEach((item, i) => {
-            // const timeInSeconds = item.cycleTimeInSeconds;
-            cycleTimeGroups.push({ cases: [item], interval: intervals[i] });
-          });
-        }
-      }
-
+      const testArrayCycleTimes: CycleTimeItem[] = [
+        { caseId: 'A-1', cycleTimeInSeconds: 123, nodes: [] },
+        { caseId: 'A-2', cycleTimeInSeconds: 50, nodes: [] },
+        { caseId: 'A-3', cycleTimeInSeconds: 345, nodes: [] },
+        { caseId: 'A-4', cycleTimeInSeconds: 654, nodes: [] },
+        { caseId: 'A-5', cycleTimeInSeconds: 33, nodes: [] },
+        { caseId: 'A-6', cycleTimeInSeconds: 555, nodes: [] },
+        { caseId: 'A-7', cycleTimeInSeconds: 297, nodes: [] },
+        { caseId: 'A-8', cycleTimeInSeconds: 386, nodes: [] },
+        { caseId: 'A-9', cycleTimeInSeconds: 278, nodes: [] },
+        { caseId: 'A-10', cycleTimeInSeconds: 197, nodes: [] },
+        { caseId: 'A-11', cycleTimeInSeconds: 100, nodes: [] },
+        { caseId: 'A-12', cycleTimeInSeconds: 133, nodes: [] },
+        { caseId: 'A-13', cycleTimeInSeconds: 87, nodes: [] },
+        { caseId: 'A-14', cycleTimeInSeconds: 558, nodes: [] },
+        { caseId: 'A-15', cycleTimeInSeconds: 286, nodes: [] },
+        { caseId: 'A-16', cycleTimeInSeconds: 155, nodes: [] },
+        { caseId: 'A-17', cycleTimeInSeconds: 177, nodes: [] },
+      ];
+      const cycleTimeBuckets: CycleTimeGroupItem[] = calculateCycleTimeBuckets(
+        testArrayCycleTimes,
+        1
+      );
       const data = {
-        cycleTimeGroups: cycleTimeGroups,
+        cycleTimeGroups: cycleTimeBuckets,
       };
 
       return response.ok({

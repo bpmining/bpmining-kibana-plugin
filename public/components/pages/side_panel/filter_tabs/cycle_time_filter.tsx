@@ -14,8 +14,8 @@ import { connect } from 'react-redux';
 import * as filterActions from '../../../../reducer_actions/get_cycle_times';
 import { useEffect, useState } from 'react';
 import { RootReducer } from '../../../../reducer/root_reducer';
-import { CycleTimeGroupItem } from 'plugins/bpmining-kibana-plugin/server/routes/process_graph_cycle_times_route';
 import { NODE_COLOR_LAYER_1, NODE_COLOR_LAYER_2 } from '../../../../../common/colors';
+import { CycleTimeGroupItem } from 'plugins/bpmining-kibana-plugin/server/filter_calculation/calculate_cycle_time_buckets';
 
 interface CycleTimeFilterProps {
   rootReducer: RootReducer;
@@ -90,6 +90,7 @@ const CycleTimeFilter = (props: CycleTimeFilterProps) => {
     const id = row.id;
     const cycleTimeGroups = props.rootReducer.filter.cycleTimeGroups;
     const selectedCases = cycleTimeGroups[id - 1].cases;
+    // Hier differenzieren ob 1 Case oder mehrere
     const { selectCycleTimeCases } = props;
     selectCycleTimeCases(selectedCases);
   };
@@ -104,7 +105,7 @@ const CycleTimeFilter = (props: CycleTimeFilterProps) => {
         <TableContainer>
           <Table>
             <TableHead style={{ fontWeight: 500 }}>
-              <TableRow sx={{ hover: { '&$root': { '&:hover': { backgroundColor: 'green' } } } }}>
+              <TableRow>
                 {columns.map((column, i) =>
                   columns[i + 1] ? (
                     <TableCell
@@ -149,6 +150,7 @@ const CycleTimeFilter = (props: CycleTimeFilterProps) => {
                             borderRightColor: '#e0e0e0',
                             borderRightWidth: '1pt',
                             borderBottom: 'none',
+                            padding: '5px 16px',
                           }}
                         >
                           {column.format && typeof value === 'number'
@@ -164,6 +166,7 @@ const CycleTimeFilter = (props: CycleTimeFilterProps) => {
                             align={column.align}
                             style={{
                               borderBottom: 'none',
+                              padding: '10px 16px',
                             }}
                           >
                             {column.format && typeof value === 'number'
