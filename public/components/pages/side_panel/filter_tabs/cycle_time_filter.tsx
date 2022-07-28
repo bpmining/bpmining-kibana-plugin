@@ -92,11 +92,13 @@ const CycleTimeFilter = (props: CycleTimeFilterProps) => {
     const id = row.id;
     const cycleTimeGroups = props.rootReducer.filter.cycleTimeGroups;
     const selectedCases = cycleTimeGroups[id - 1];
-    // Hier differenzieren ob 1 Case oder mehrere
+
     if (selectedCases.cases.length === 1) {
+      console.log('One Case in Casegroup');
       const { selectCaseAction } = props;
       selectCaseAction({ label: selectedCases.cases[0].caseId });
     } else {
+      console.log('Multiple Cases in Casegroup');
       const { selectCycleTimeCases } = props;
       selectCycleTimeCases(selectedCases);
     }

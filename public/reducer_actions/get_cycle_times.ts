@@ -4,6 +4,7 @@ import { ServerRequestData } from './fetch_case_specific_graph';
 import { getSearchService } from '../services';
 import { FETCH_CYCLE_TIME_DATA } from '../../common/routes';
 import { VisGraph } from 'plugins/bpmining-kibana-plugin/model/vis_types';
+import { CycleTimeGroupItem } from 'plugins/bpmining-kibana-plugin/server/filter_calculation/calculate_cycle_time_buckets';
 
 export const GET_CYCLE_TIME_DATA_SUCCESS = 'GET_CYCLE_TIME_DATA_SUCCESS';
 export const GET_CYCLE_TIME_DATA_ERROR = 'GET_CYCLE_TIME_DATA_ERROR';
@@ -21,7 +22,7 @@ export interface CycleTimeGroup {
   interval: string;
 }
 
-export function getCycleTimeDataSuccessAction(cycleTimeGroups: CycleTimeGroup[]) {
+export function getCycleTimeDataSuccessAction(cycleTimeGroups: CycleTimeGroupItem[]) {
   return {
     type: GET_CYCLE_TIME_DATA_SUCCESS,
     cycleTimeGroups: cycleTimeGroups,
