@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { EuiPanel, EuiSpacer, EuiSwitch } from '@elastic/eui';
+import { EuiPanel, EuiSpacer } from '@elastic/eui';
+import { FormControlLabel, Switch, SwitchProps } from '@mui/material';
+import { createTheme, styled, ThemeProvider } from '@mui/material/styles';
 import logo from '../../../../common/logo/bpmining.svg';
 import novatec_logo from '../../../../common/logo/NOVATEC-schwarz-violett-rot.png';
 import startDateIcon from '../../../../common/icons/start_date.png';
@@ -57,6 +59,7 @@ const PanelComponent = (props: PanelComponentProps) => {
 
   const selectedCycleTimeCases = props.rootReducer.filter.selectedCycleTimeCases;
   const selectedCase = props.rootReducer.case.selectedCase;
+  const color = calculateColorValue(props.rootReducer.layer.selectedLayer);
   const graph = props.rootReducer.graph.drillDownGraph
     ? props.rootReducer.graph.drillDownGraph
     : props.rootReducer.graph.graph;
@@ -83,7 +86,7 @@ const PanelComponent = (props: PanelComponentProps) => {
         if (context !== undefined) {
           Object.keys(context).map((key) => {
             const item = { [key]: context[key] };
-            if (!contextInfo.find((i) => _.isEqual(i, item))) {
+            if (!contextInfo.find((i: any) => _.isEqual(i, item))) {
               contextInfo.push(item);
             }
           });
@@ -128,7 +131,7 @@ const PanelComponent = (props: PanelComponentProps) => {
               {contextInfo.length > 0 && <p>Context Informations</p>}
               <br />
               {contextInfo.length > 0 &&
-                contextInfo.map((item) => {
+                contextInfo.map((item: any) => {
                   const entries = Object.entries(item);
                   return (
                     <div className="node-panel-item">
@@ -144,26 +147,75 @@ const PanelComponent = (props: PanelComponentProps) => {
   }
 
   if (selectedCycleTimeCases.id) {
-    isFilterSelected = true;
-    console.log('Here: ');
-    console.log(selectedCycleTimeCases);
-    const cycleTimeCases = selectedCycleTimeCases.cases;
-    caseOverview = (
-      <div>
-        <p>Cycle Time Group {selectedCycleTimeCases.id}</p>
-        Cycle Time: {selectedCycleTimeCases.interval}
-        {cycleTimeCases.map((cycleTimeCase: CycleTimeItem) => {
-          return (
-            <CaseGroupComponent
-              caseId={cycleTimeCase.caseId}
-              cycleTime={formatTime(cycleTimeCase.cycleTimeInSeconds)}
-              serverRequestData={props.serverRequestData}
-            />
-          );
-        })}
-      </div>
-    );
+    if (!selectedCase) {
+      isFilterSelected = true;
+      const cycleTimeCases = selectedCycleTimeCases.cases;
+
+      caseOverview = (
+        <div>
+          <p>Cycle Time Group {selectedCycleTimeCases.id}</p>
+          Cycle Time: {selectedCycleTimeCases.interval}
+          {cycleTimeCases.map((cycleTimeCase: CycleTimeItem) => {
+            return (
+              <CaseGroupComponent
+                caseId={cycleTimeCase.caseId}
+                cycleTime={formatTime(cycleTimeCase.cycleTimeInSeconds)}
+                serverRequestData={props.serverRequestData}
+              />
+            );
+          })}
+        </div>
+      );
+    }
   }
+
+  const IOSSwitch = styled((props: SwitchProps) => (
+    <Switch focusVisibleClassName=".Mui-focusVisible" disableRipple {...props} />
+  ))(({ theme }) => ({
+    width: 42,
+    height: 26,
+    padding: 0,
+    '& .MuiSwitch-switchBase': {
+      padding: 0,
+      margin: 2,
+      transitionDuration: '300ms',
+      '&.Mui-checked': {
+        transform: 'translateX(16px)',
+        color: '#fff',
+        '& + .MuiSwitch-track': {
+          backgroundColor: theme.palette.mode === 'dark' ? color : color,
+          opacity: 1,
+          border: 0,
+        },
+        '&.Mui-disabled + .MuiSwitch-track': {
+          opacity: 0.5,
+        },
+      },
+      '&.Mui-focusVisible .MuiSwitch-thumb': {
+        color: '#33cf4d',
+        border: '6px solid #fff',
+      },
+      '&.Mui-disabled .MuiSwitch-thumb': {
+        color: theme.palette.mode === 'light' ? theme.palette.grey[100] : theme.palette.grey[600],
+      },
+      '&.Mui-disabled + .MuiSwitch-track': {
+        opacity: theme.palette.mode === 'light' ? 0.7 : 0.3,
+      },
+    },
+    '& .MuiSwitch-thumb': {
+      boxSizing: 'border-box',
+      width: 22,
+      height: 22,
+    },
+    '& .MuiSwitch-track': {
+      borderRadius: 26 / 2,
+      backgroundColor: theme.palette.mode === 'light' ? '#E9E9EA' : '#39393D',
+      opacity: 1,
+      transition: theme.transitions.create(['background-color'], {
+        duration: 500,
+      }),
+    },
+  }));
 
   return (
     <EuiPanel paddingSize="m" style={{ minHeight: '740px' }}>
@@ -171,24 +223,17 @@ const PanelComponent = (props: PanelComponentProps) => {
         <img src={logo} alt="Logo" className="logo" />
         <EuiSpacer />
         <div className="counter-container">
-          <CaseCounterComponent
-            cases={props.caseCount}
-            color={calculateColorValue(props.rootReducer.layer.selectedLayer)}
-          />
-          <VariantCounterComponent
-            variants={1}
-            color={calculateColorValue(props.rootReducer.layer.selectedLayer)}
-          />
+          <div className="counter-item">
+            <CaseCounterComponent cases={props.caseCount} color={color} />
+          </div>
+          <div className="counter-item">
+            <VariantCounterComponent variants={1} color={color} />
+          </div>
         </div>
 
         <div className="frequency-map-container">
           <p>Frequency Map</p>
-          <EuiSwitch
-            showLabel={false}
-            label="Frequency Map"
-            checked={checked}
-            onChange={(e) => onChange(e)}
-          />
+          <FormControlLabel control={<IOSSwitch sx={{ m: 1 }} />} label="" />
         </div>
         <EuiSpacer />
         {isFilterSelected ? (

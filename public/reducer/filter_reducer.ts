@@ -1,10 +1,10 @@
 import * as filterActions from '../reducer_actions/get_cycle_times';
 import * as badgeActions from '../reducer_actions/badges';
-import { CycleTimeGroup } from '../reducer_actions/get_cycle_times';
 import { BadgeItem } from '../components/lib/badge';
+import { CycleTimeGroupItem } from 'plugins/bpmining-kibana-plugin/server/filter_calculation/calculate_cycle_time_buckets';
 
 export interface FilterReducer {
-  cycleTimeGroups: CycleTimeGroup[];
+  cycleTimeGroups: CycleTimeGroupItem[];
   selectedCycleTimeCases: any;
   badges: BadgeItem[];
   error: Error | null;

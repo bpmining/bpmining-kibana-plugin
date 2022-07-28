@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { EuiPage, EuiResizableContainer } from '@elastic/eui';
+import { EuiBadge, EuiPage, EuiResizableContainer } from '@elastic/eui';
 import { PanelComponent } from './side_panel/panel';
 import { LayerPanel } from './layer_panel/layer_panel';
 import '../_base.scss';
@@ -71,27 +71,40 @@ const LayoutComponent = (props: LayoutProps) => {
 
     const selectedCase = props.rootReducer.case.selectedCase;
     const selectedCycleTimeCases = props.rootReducer.filter.selectedCycleTimeCases;
-    if (selectedCycleTimeCases.length > 0) {
+
+    if (selectedCycleTimeCases.id) {
+      const { addBadge } = props;
+
       graphBool = true;
-      nodes = selectedCycleTimeCases.graph.nodes;
-      edges = selectedCycleTimeCases.graph.edges;
-      return;
-    }
-    if (selectedCase !== null) {
-      const { fetchCaseGraphAction, unselectCaseAction, unselectCycleTimeAction, addBadge } = props;
-      fetchCaseGraphAction(props.serverRequestData, selectedCase, layer);
-      const badgeFunction =
-        selectedCycleTimeCases.length === 1 ? unselectCycleTimeAction : unselectCaseAction;
+      nodes = selectedCycleTimeCases.graph?.nodes;
+      edges = selectedCycleTimeCases.graph?.edges;
+
+      const action = 'Filter Cycle Time Group';
+      const id = selectedCycleTimeCases.id;
       const newBadge = {
-        filterAction: `Filter Case ${selectedCase}`,
+        filterAction: `${action} ${id}`,
         layer: layer,
-        badgeFunction: badgeFunction,
       };
-      if (badges.filter((badge) => badge.filterAction === newBadge.filterAction).length === 0) {
+
+      if (badges.filter((badge) => badge.filterAction.includes(action)).length === 0) {
+        addBadge(badges, newBadge);
+      }
+    }
+
+    if (selectedCase !== null) {
+      const { fetchCaseGraphAction, addBadge } = props;
+      fetchCaseGraphAction(props.serverRequestData, selectedCase, layer);
+
+      const action = 'Filter Case';
+      const newBadge = {
+        filterAction: `${action} ${selectedCase}`,
+        layer: layer,
+      };
+
+      if (badges.filter((badge) => badge.filterAction.includes(action)).length === 0) {
         addBadge(badges, newBadge);
       }
     } else {
-      // no filters applied
       const { fetchAggregatedGraphAction } = props;
       fetchAggregatedGraphAction(props.serverRequestData, layer);
     }
@@ -123,13 +136,12 @@ const LayoutComponent = (props: LayoutProps) => {
                   {badges.length > 0 &&
                     badges.map((badge) => {
                       return (
-                        <BadgeComponent
-                          filterAction={badge.filterAction}
-                          layer={badge.layer}
-                          badgeFunction={badge.badgeFunction}
-                        />
+                        <BadgeComponent filterAction={badge.filterAction} layer={badge.layer} />
                       );
                     })}
+                  <EuiBadge color={'hollow'}>
+                    <div style={{ margin: '7pt' }}>Add Filter</div>
+                  </EuiBadge>
                 </div>
                 {graphBool && <VisGraphComponent nodes={nodes} edges={edges} />}
                 <div className="layer-container">
