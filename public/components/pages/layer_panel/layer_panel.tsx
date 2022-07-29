@@ -5,7 +5,6 @@ import { RootReducer } from '../../../reducer/root_reducer';
 import { AnyAction, bindActionCreators, Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import LayersIcon from '@mui/icons-material/Layers';
-
 import * as layerActions from '../../../reducer_actions/set_layer';
 import * as nodeDetailPanelActions from '../../../reducer_actions/node_detail_panel';
 

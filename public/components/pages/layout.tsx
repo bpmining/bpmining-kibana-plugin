@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { EuiBadge, EuiPage, EuiResizableContainer } from '@elastic/eui';
+import { EuiPage, EuiResizableContainer } from '@elastic/eui';
 import { PanelComponent } from './side_panel/panel';
 import { LayerPanel } from './layer_panel/layer_panel';
 import '../_base.scss';
@@ -15,6 +15,7 @@ import * as filterActions from '../../reducer_actions/get_cycle_times';
 import { ServerRequestData } from '../app';
 import { RootReducer } from '../../reducer/root_reducer';
 import { BadgeComponent } from '../lib/badge';
+import { Chip } from '@mui/material';
 
 interface LayoutState {
   rootReducer: RootReducer;
@@ -48,7 +49,9 @@ const LayoutComponent = (props: LayoutProps) => {
   let graphBool = false;
   let nodes: VisNode[] = [];
   let edges: VisEdge[] = [];
+
   const badges = props.rootReducer.filter.badges;
+  const layer = props.rootReducer.layer.selectedLayer;
 
   if (props.rootReducer.graph.graph !== undefined) {
     graphBool = true;
@@ -63,7 +66,6 @@ const LayoutComponent = (props: LayoutProps) => {
   }
 
   const fetchGraph = async () => {
-    const layer = props.rootReducer.layer.selectedLayer;
     const drillDown = props.rootReducer.graph.drillDownGraph;
     if (drillDown) {
       return;
@@ -139,9 +141,17 @@ const LayoutComponent = (props: LayoutProps) => {
                         <BadgeComponent filterAction={badge.filterAction} layer={badge.layer} />
                       );
                     })}
-                  <EuiBadge color={'hollow'}>
-                    <div style={{ margin: '7pt' }}>Add Filter</div>
-                  </EuiBadge>
+                  <div style={{ margin: '0px 5px' }}>
+                    <Chip
+                      variant="outlined"
+                      sx={{
+                        border: `1px dashed grey`,
+                        color: 'grey',
+                        '& .MuiChip-label': { fontSize: '10pt' },
+                      }}
+                      label="Add Filter"
+                    />
+                  </div>
                 </div>
                 {graphBool && <VisGraphComponent nodes={nodes} edges={edges} />}
                 <div className="layer-container">

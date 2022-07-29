@@ -30,7 +30,7 @@ const CaseGroupComponent = (props: CaseGroupProps) => {
   const layer = props.rootReducer.layer.selectedLayer;
 
   return (
-    <div style={{ margin: '10px 0px' }}>
+    <div style={{ margin: '15px 0px' }}>
       <EuiPanel
         onClick={() => {
           fetchCaseGraphAction(props.serverRequestData, caseId, layer);

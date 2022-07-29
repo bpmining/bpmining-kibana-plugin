@@ -1,14 +1,21 @@
 @import '../../base';
 
 .logo {
-  width: 75%;
+  width: 180px;
   height: auto;
 }
 
+.design-scope {
+  display: block;
+  height: 680px;
+  width: 100%;
+}
+
 .novatec-logo {
-  width: 50%;
+  width: 106px;
   height: auto;
   float: right;
+  position: relative;
 }
 
 .start-date {
@@ -35,9 +42,13 @@
 .frequency-map-container {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
   margin-top: 20px;
+}
+
+.frequency-map-container p {
+  margin-right: 50px;
 }
 
 .date-container {
@@ -51,4 +62,8 @@
   display: flex;
   flex-direction: row;
   align-items: center;
+}
+
+.cylce-time-group-container p {
+  margin-bottom: 5px;
 }
