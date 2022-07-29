@@ -153,7 +153,7 @@ const VisGraphComponent = (props: VisGraphComponentProps) => {
       if (selectedNode && selectedNode.label !== '') {
         setCurrentNode(selectedNode);
         setXPosition(pointer.DOM.y - 100);
-        setYPosition(pointer.DOM.x - 100);
+        setYPosition(pointer.DOM.x);
         const { showNodeDetailPanel } = props;
         showNodeDetailPanel();
       }

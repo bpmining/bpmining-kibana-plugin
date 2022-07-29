@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { EuiPanel, EuiSpacer } from '@elastic/eui';
 import { FormControlLabel, Switch, SwitchProps } from '@mui/material';
-import { createTheme, styled, ThemeProvider } from '@mui/material/styles';
+import { styled } from '@mui/material/styles';
 import logo from '../../../../common/logo/bpmining.svg';
 import novatec_logo from '../../../../common/logo/NOVATEC-schwarz-violett-rot.png';
 import startDateIcon from '../../../../common/icons/start_date.png';
@@ -41,8 +41,6 @@ const mapStateToProps = (state: PanelComponentState) => {
 };
 
 const PanelComponent = (props: PanelComponentProps) => {
-  const [checked, setChecked] = useState(false);
-
   useEffect(() => {
     const { getCycleTimeGroups } = props;
     getCycleTimeGroups(props.serverRequestData);
@@ -52,10 +50,6 @@ const PanelComponent = (props: PanelComponentProps) => {
     props.rootReducer.layer.selectedLayer,
     props.rootReducer.graph.graph,
   ]);
-
-  const onChange = (e: any) => {
-    setChecked(e.target.checked);
-  };
 
   const selectedCycleTimeCases = props.rootReducer.filter.selectedCycleTimeCases;
   const selectedCase = props.rootReducer.case.selectedCase;
@@ -95,7 +89,6 @@ const PanelComponent = (props: PanelComponentProps) => {
 
       caseOverview = (
         <div>
-          <EuiSpacer />
           <p>Case Details: {caseId}</p>
           <div>
             <EuiSpacer />
@@ -126,7 +119,6 @@ const PanelComponent = (props: PanelComponentProps) => {
               {throughputTime && formatTime(throughputTime)}
             </div>
             <EuiSpacer />
-            <EuiSpacer />
             <div>
               {contextInfo.length > 0 && <p>Context Informations</p>}
               <br />
@@ -152,9 +144,10 @@ const PanelComponent = (props: PanelComponentProps) => {
       const cycleTimeCases = selectedCycleTimeCases.cases;
 
       caseOverview = (
-        <div>
+        <div className="cylce-time-group-container">
           <p>Cycle Time Group {selectedCycleTimeCases.id}</p>
           Cycle Time: {selectedCycleTimeCases.interval}
+          <EuiSpacer size={'s'} />
           {cycleTimeCases.map((cycleTimeCase: CycleTimeItem) => {
             return (
               <CaseGroupComponent
@@ -242,12 +235,11 @@ const PanelComponent = (props: PanelComponentProps) => {
           <div>
             <CaseSelector caseIds={props.caseIds} />
             <EuiSpacer />
-            <FilterTabs serverRequestData={props.serverRequestData} />
+            <FilterTabs color={color} />
           </div>
         )}
-        <EuiSpacer />
-        <img src={novatec_logo} alt="Novatec Logo" className="novatec-logo" />
       </div>
+      <img src={novatec_logo} alt="Novatec Logo" className="novatec-logo" />
     </EuiPanel>
   );
 };

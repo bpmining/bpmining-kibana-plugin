@@ -1,5 +1,9 @@
-import { EuiBadge } from '@elastic/eui';
-import { NODE_COLOR_LAYER_1, NODE_COLOR_LAYER_2 } from '../../../common/colors';
+import {
+  NODE_COLOR_LAYER_1,
+  NODE_COLOR_LAYER_2,
+  COLOR_LAYER_1,
+  COLOR_LAYER_2,
+} from '../../../common/colors';
 import React from 'react';
 import * as badgeActions from '../../reducer_actions/badges';
 import * as fetchCaseGraphActions from '../../reducer_actions/fetch_case_specific_graph';
@@ -7,6 +11,7 @@ import * as filterActions from '../../reducer_actions/get_cycle_times';
 import { AnyAction, bindActionCreators, Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { RootReducer } from '../../reducer/root_reducer';
+import { Chip } from '@mui/material';
 
 export interface BadgeItem {
   filterAction: string;
@@ -31,7 +36,9 @@ const mapStateToProps = (state: BadgeState) => {
 };
 
 const BadgeComponent = (props: BadgeProps) => {
-  const color = props.layer === 1 ? NODE_COLOR_LAYER_1 : NODE_COLOR_LAYER_2;
+  const bgColor = props.layer === 1 ? NODE_COLOR_LAYER_1 : NODE_COLOR_LAYER_2;
+  const color = props.layer === 1 ? COLOR_LAYER_1 : COLOR_LAYER_2;
+
   const { removeBadge } = props;
   const currentBadges = props.rootReducer.filter.badges;
   const action = props.filterAction;
@@ -49,21 +56,23 @@ const BadgeComponent = (props: BadgeProps) => {
     const { unselectCycleTimeAction } = props;
     badgeFunction = unselectCycleTimeAction;
   }
-  console.log(currentBadges);
+
   return (
     <div style={{ margin: '0px 5px' }}>
-      <EuiBadge
-        color={color}
-        iconType="cross"
-        iconSide="right"
-        iconOnClick={() => {
+      <Chip
+        variant="outlined"
+        sx={{
+          bgcolor: bgColor,
+          borderColor: color,
+          '& .MuiChip-label': { color: 'black', fontSize: '10pt' },
+          '& .MuiChip-deleteIcon': { color: color },
+        }}
+        label={props.filterAction}
+        onDelete={() => {
           badgeFunction();
           removeBadge(currentBadges, badgeToRemove);
         }}
-        iconOnClickAriaLabel="Remove Filter"
-      >
-        <div style={{ margin: '7pt' }}>{props.filterAction}</div>
-      </EuiBadge>
+      />
     </div>
   );
 };

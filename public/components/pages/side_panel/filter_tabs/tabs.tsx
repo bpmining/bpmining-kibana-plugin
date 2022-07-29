@@ -1,67 +1,49 @@
-import React, { Fragment } from 'react';
-
-import { EuiSpacer, EuiTabbedContent } from '@elastic/eui';
-import { connect } from 'react-redux';
-import { AnyAction, bindActionCreators, Dispatch } from 'redux';
-import { CycleTimeFilter } from './cycle_time_filter';
+import React, { Fragment, useState } from 'react';
+import { EuiSpacer } from '@elastic/eui';
 import Paper from '@mui/material/Paper';
-import { ServerRequestData } from 'plugins/bpmining-kibana-plugin/public/reducer_actions/fetch_case_specific_graph';
+import { CycleTimeFilter } from './cycle_time_filter';
+import { Box, Tab, Tabs } from '@mui/material';
 
-interface FilterTabProps {
-  serverRequestData: ServerRequestData;
+interface FilterTabsProps {
+  color: string;
 }
 
-const mapStateToProps = (state: any) => {
-  return state;
-};
+export const FilterTabs = (props: FilterTabsProps) => {
+  const [value, setValue] = useState<number>(1);
 
-const FilterTabs = (props: FilterTabProps) => {
   const tabs = [
-    {
-      id: 'variants',
-      name: 'Variants',
-      disabled: false,
-      content: (
-        <Fragment>
-          <EuiSpacer />
-          <Paper sx={{ width: '100%', height: '250px', overflow: 'hidden' }}>
-            <div style={{ display: 'flex', textAlign: 'center', padding: '70px' }}>
-              <p style={{ color: '#828282' }}>Under Construction!</p>
-            </div>
-          </Paper>
-        </Fragment>
-      ),
-    },
-    {
-      id: 'cycletime',
-      name: 'Cycle Time',
-      color: '#5B4897',
-      disabled: false,
-      content: (
-        <Fragment>
-          <CycleTimeFilter />
-        </Fragment>
-      ),
-    },
+    <Fragment>
+      <CycleTimeFilter />
+    </Fragment>,
+    <Fragment>
+      <EuiSpacer />
+      <Paper sx={{ width: '100%', height: '250px', overflow: 'hidden' }}>
+        <div style={{ display: 'flex', textAlign: 'center', padding: '70px' }}>
+          <p style={{ color: '#828282' }}> Coming soon! </p>
+        </div>
+      </Paper>
+    </Fragment>,
   ];
 
   return (
-    <Fragment>
-      <EuiTabbedContent
-        tabs={tabs}
-        initialSelectedTab={tabs[1]}
-        autoFocus="selected"
-        onTabClick={(tab) => {
-          console.log('clicked tab', tab);
-        }}
-      />
-    </Fragment>
+    <div>
+      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+        <Tabs
+          value={value}
+          onChange={(e, v) => {
+            setValue(v);
+          }}
+          TabIndicatorProps={{ style: { background: props.color } }}
+          sx={{
+            '& .MuiTab-root': { fontSize: '13pt', fontWeight: '600', textTransform: 'none' },
+            '& .MuiTab-root.Mui-selected': { color: props.color },
+          }}
+        >
+          <Tab value={1} label="Cycle Time"></Tab>
+          <Tab value={2} label="Variants" disabled></Tab>
+        </Tabs>
+      </Box>
+      {tabs[value - 1]}
+    </div>
   );
 };
-
-const mapDispatchToProps = (dispatch: Dispatch<AnyAction>) => {
-  return bindActionCreators({}, dispatch);
-};
-
-const connectedTabs = connect(mapStateToProps, mapDispatchToProps)(FilterTabs);
-export { connectedTabs as FilterTabs };
