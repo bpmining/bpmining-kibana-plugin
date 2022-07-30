@@ -89,6 +89,7 @@ const PanelComponent = (props: PanelComponentProps) => {
 
       caseOverview = (
         <div>
+          <br />
           <p>Case Details: {caseId}</p>
           <div>
             <EuiSpacer />
@@ -119,6 +120,7 @@ const PanelComponent = (props: PanelComponentProps) => {
               {throughputTime && formatTime(throughputTime)}
             </div>
             <EuiSpacer />
+            <EuiSpacer />
             <div>
               {contextInfo.length > 0 && <p>Context Informations</p>}
               <br />
@@ -145,6 +147,7 @@ const PanelComponent = (props: PanelComponentProps) => {
 
       caseOverview = (
         <div className="cylce-time-group-container">
+          <br />
           <p>Cycle Time Group {selectedCycleTimeCases.id}</p>
           Cycle Time: {selectedCycleTimeCases.interval}
           <EuiSpacer size={'s'} />

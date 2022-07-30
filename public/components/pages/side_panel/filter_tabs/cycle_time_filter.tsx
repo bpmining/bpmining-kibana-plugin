@@ -8,7 +8,6 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
-import { EuiSpacer } from '@elastic/eui';
 import { AnyAction, bindActionCreators, Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import * as filterActions from '../../../../reducer_actions/get_cycle_times';
@@ -94,11 +93,9 @@ const CycleTimeFilter = (props: CycleTimeFilterProps) => {
     const selectedCases = cycleTimeGroups[id - 1];
 
     if (selectedCases.cases.length === 1) {
-      console.log('One Case in Casegroup');
       const { selectCaseAction } = props;
       selectCaseAction({ label: selectedCases.cases[0].caseId });
     } else {
-      console.log('Multiple Cases in Casegroup');
       const { selectCycleTimeCases } = props;
       selectCycleTimeCases(selectedCases);
     }
@@ -109,8 +106,7 @@ const CycleTimeFilter = (props: CycleTimeFilterProps) => {
 
   return (
     <div className="cycle-time-table">
-      <EuiSpacer />
-      <Paper sx={{ width: '100%', overflowX: 'auto' }}>
+      <Paper sx={{ width: '100%', overflowX: 'auto', marginTop: '22px' }}>
         <TableContainer>
           <Table>
             <TableHead style={{ fontWeight: 500 }}>

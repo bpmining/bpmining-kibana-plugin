@@ -31,9 +31,10 @@ export function LayerPanelComponent(props: LayerPanelProps) {
   };
   return (
     <EuiPanel className="layer-panel" paddingSize="m">
-      <p>
-        Layers <LayersIcon />
-      </p>
+      <div className="headline-container">
+        <p> Layers </p>
+        <LayersIcon />
+      </div>
       <br></br>
       <div className="layer-stack">
         <div className="layer-1" onClick={() => changeLayer(1)}></div>

@@ -1,5 +1,4 @@
 import React, { Fragment, useState } from 'react';
-import { EuiSpacer } from '@elastic/eui';
 import Paper from '@mui/material/Paper';
 import { CycleTimeFilter } from './cycle_time_filter';
 import { Box, Tab, Tabs } from '@mui/material';
@@ -16,7 +15,7 @@ export const FilterTabs = (props: FilterTabsProps) => {
       <CycleTimeFilter />
     </Fragment>,
     <Fragment>
-      <EuiSpacer />
+      <br />
       <Paper sx={{ width: '100%', height: '250px', overflow: 'hidden' }}>
         <div style={{ display: 'flex', textAlign: 'center', padding: '70px' }}>
           <p style={{ color: '#828282' }}> Coming soon! </p>
@@ -36,7 +35,7 @@ export const FilterTabs = (props: FilterTabsProps) => {
           TabIndicatorProps={{ style: { background: props.color } }}
           sx={{
             '& .MuiTab-root': { fontSize: '13pt', fontWeight: '600', textTransform: 'none' },
-            '& .MuiTab-root.Mui-selected': { color: props.color },
+            '& .MuiTab-root.Mui-selected': { color: '#2C2C2C' },
           }}
         >
           <Tab value={1} label="Cycle Time"></Tab>
