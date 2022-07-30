@@ -145,8 +145,8 @@ const LayoutComponent = (props: LayoutProps) => {
                     <Chip
                       variant="outlined"
                       sx={{
-                        border: `1px dashed grey`,
-                        color: 'grey',
+                        border: `1px dashed #2C2C2C`,
+                        color: '#2C2C2C',
                         '& .MuiChip-label': { fontSize: '10pt' },
                       }}
                       label="Add Filter"

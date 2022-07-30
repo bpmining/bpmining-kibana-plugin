@@ -1,5 +1,14 @@
 @import '../../base';
 
+.headline-container {
+  display: flex;
+  align-items: center;
+}
+
+.headline-container p {
+  margin-right: 6pt;
+}
+
 .layer-container {
   position: absolute;
   top: 10px;

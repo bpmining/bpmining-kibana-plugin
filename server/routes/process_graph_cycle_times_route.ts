@@ -90,8 +90,10 @@ export function processGraphCycleTimesRoute(router: IRouter) {
         { caseId: 'A-16', cycleTimeInSeconds: 155, nodes: [] },
         { caseId: 'A-17', cycleTimeInSeconds: 177, nodes: [] },
       ];
+      let sortedCycleTimes = _.sortBy(testArrayCycleTimes, 'cycleTimeInSeconds');
+
       const cycleTimeBuckets: CycleTimeGroupItem[] = calculateCycleTimeBuckets(
-        testArrayCycleTimes,
+        sortedCycleTimes.reverse(),
         1
       );
       const data = {

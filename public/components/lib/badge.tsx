@@ -5,13 +5,14 @@ import {
   COLOR_LAYER_2,
 } from '../../../common/colors';
 import React from 'react';
-import * as badgeActions from '../../reducer_actions/badges';
-import * as fetchCaseGraphActions from '../../reducer_actions/fetch_case_specific_graph';
-import * as filterActions from '../../reducer_actions/get_cycle_times';
 import { AnyAction, bindActionCreators, Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { RootReducer } from '../../reducer/root_reducer';
 import { Chip } from '@mui/material';
+
+import * as badgeActions from '../../reducer_actions/badges';
+import * as fetchCaseGraphActions from '../../reducer_actions/fetch_case_specific_graph';
+import * as filterActions from '../../reducer_actions/get_cycle_times';
 
 export interface BadgeItem {
   filterAction: string;
@@ -64,7 +65,7 @@ const BadgeComponent = (props: BadgeProps) => {
         sx={{
           bgcolor: bgColor,
           borderColor: color,
-          '& .MuiChip-label': { color: 'black', fontSize: '10pt' },
+          '& .MuiChip-label': { color: '#2C2C2C', fontSize: '10pt' },
           '& .MuiChip-deleteIcon': { color: color },
         }}
         label={props.filterAction}

@@ -1,4 +1,4 @@
-import { EuiPanel, EuiSpacer } from '@elastic/eui';
+import { EuiPanel } from '@elastic/eui';
 import { Button } from '@mui/material';
 import { COLOR_LAYER_1 } from '../../../../common/colors';
 import { VisNode } from 'plugins/bpmining-kibana-plugin/model/vis_types';
@@ -50,6 +50,13 @@ const NodePanel = (props: NodePanelProps) => {
 
   let panel;
   if (props.aggregated) {
+    let minThroughputTime = node.minThroughputTime;
+    let maxThroughputTime = node.maxThroughputTime;
+    if (minThroughputTime === '0 s' && maxThroughputTime === '0 s') {
+      minThroughputTime = '-';
+      maxThroughputTime = '-';
+    }
+
     panel = (
       <EuiPanel className="node-panel">
         <p>{title}</p>
@@ -64,12 +71,12 @@ const NodePanel = (props: NodePanelProps) => {
           <b>Mean Duration:</b> {meanThroughputTime}
         </div>
         <div className="node-panel-item">
-          <b>Min. Duration:</b> {node.minThroughputTime}
+          <b>Min. Duration:</b> {minThroughputTime}
         </div>
         <div className="node-panel-item">
-          <b>Max. Duration:</b> {node.maxThroughputTime}
+          <b>Max. Duration:</b> {maxThroughputTime}
         </div>
-        <EuiSpacer />
+        <br />
         <div className="centered-button">
           {drillDown && (
             <Button
@@ -112,7 +119,7 @@ const NodePanel = (props: NodePanelProps) => {
               );
             })}
         </div>
-        <EuiSpacer />
+        <br />
         <div className="centered-button">
           {drillDown && (
             <Button
@@ -148,9 +155,3 @@ const mapDispatchToProps = (dispatch: Dispatch<AnyAction>) => {
 
 const connectedNodePanel = connect(mapStateToProps, mapDispatchToProps)(NodePanel);
 export { connectedNodePanel as NodePanel };
-
-/* function extractContextInfo(contextInfo: any): any{
-  for (const [key, value] of Object.entries(contextInfo)) {
-    return(<p>{key}: {value}</p>);
-  }
-} */

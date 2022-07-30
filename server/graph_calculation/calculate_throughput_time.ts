@@ -26,16 +26,16 @@ export function calculateEdgeThroughputTime(firstNode: VisNode, secondNode: VisN
 }
 
 export function calculateGraphThroughputTime(nodes: VisNode[]) {
-  const lastIndex = nodes.length - 3;
+  let lastIndex = nodes.length - 1;
+  if (nodes[lastIndex].timestamp === undefined) {
+    lastIndex = nodes.length - 3;
+  }
   const sortedNodes = sortNodes(nodes, 'timestamp');
 
   const throughputTimeMilliseconds = sortedNodes[lastIndex].timestamp - sortedNodes[0].timestamp;
   const throughputTimeSeconds = throughputTimeMilliseconds / 1000;
 
-  const throughputTime = new Date(0, 0);
-  throughputTime.setSeconds(+throughputTimeSeconds);
-
-  return convertDateToSeconds(throughputTime);
+  return throughputTimeSeconds;
 }
 
 export function formatDateTime(throughputTime: Date): string {
