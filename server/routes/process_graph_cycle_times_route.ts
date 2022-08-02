@@ -71,26 +71,7 @@ export function processGraphCycleTimesRoute(router: IRouter) {
         cycleTimes.push({ caseId: caseId, cycleTimeInSeconds: cycleTime, nodes: nodes });
       });
 
-      const testArrayCycleTimes: CycleTimeItem[] = [
-        { caseId: 'A-1', cycleTimeInSeconds: 123, nodes: [] },
-        { caseId: 'A-2', cycleTimeInSeconds: 50, nodes: [] },
-        { caseId: 'A-3', cycleTimeInSeconds: 345, nodes: [] },
-        { caseId: 'A-4', cycleTimeInSeconds: 654, nodes: [] },
-        { caseId: 'A-5', cycleTimeInSeconds: 33, nodes: [] },
-        { caseId: 'A-6', cycleTimeInSeconds: 555, nodes: [] },
-        { caseId: 'A-7', cycleTimeInSeconds: 297, nodes: [] },
-        { caseId: 'A-8', cycleTimeInSeconds: 386, nodes: [] },
-        { caseId: 'A-9', cycleTimeInSeconds: 278, nodes: [] },
-        { caseId: 'A-10', cycleTimeInSeconds: 197, nodes: [] },
-        { caseId: 'A-11', cycleTimeInSeconds: 100, nodes: [] },
-        { caseId: 'A-12', cycleTimeInSeconds: 133, nodes: [] },
-        { caseId: 'A-13', cycleTimeInSeconds: 87, nodes: [] },
-        { caseId: 'A-14', cycleTimeInSeconds: 558, nodes: [] },
-        { caseId: 'A-15', cycleTimeInSeconds: 286, nodes: [] },
-        { caseId: 'A-16', cycleTimeInSeconds: 155, nodes: [] },
-        { caseId: 'A-17', cycleTimeInSeconds: 177, nodes: [] },
-      ];
-      let sortedCycleTimes = _.sortBy(testArrayCycleTimes, 'cycleTimeInSeconds');
+      let sortedCycleTimes = _.sortBy(cycleTimes, 'cycleTimeInSeconds');
 
       const cycleTimeBuckets: CycleTimeGroupItem[] = calculateCycleTimeBuckets(
         sortedCycleTimes.reverse(),
