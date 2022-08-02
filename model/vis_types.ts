@@ -30,7 +30,7 @@ export interface VisEdge {
     label?: string;
   }
 
-  export interface VisGraph {
+export interface VisGraph {
     nodes: VisNode[];
     edges: VisEdge[];
     throughputTime?: number,

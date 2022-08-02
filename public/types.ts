@@ -1,11 +1,11 @@
-import { VisNode } from '../model/vis_types';
+import { ResponseData } from './reducer_actions/fetch_case_specific_graph';
 
 export interface ProcessGraphVisParams {
   indexPatternId: string;
 }
 
 export interface VisData {
-  data: VisNode[];
+  data: ResponseData;
   index: string;
   filter: any;
   timeFieldName: string;
