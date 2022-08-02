@@ -1,7 +1,6 @@
 import React, { Fragment, useState } from 'react';
-import Paper from '@mui/material/Paper';
+import { Box, Tab, Tabs, Paper } from '@mui/material';
 import { CycleTimeFilter } from './cycle_time_filter';
-import { Box, Tab, Tabs } from '@mui/material';
 
 interface FilterTabsProps {
   color: string;

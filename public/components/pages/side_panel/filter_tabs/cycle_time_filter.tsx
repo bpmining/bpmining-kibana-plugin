@@ -1,27 +1,34 @@
 import * as React from 'react';
-import './cycle_time_filter.scss';
-import Paper from '@mui/material/Paper';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TablePagination from '@mui/material/TablePagination';
-import TableRow from '@mui/material/TableRow';
-import { AnyAction, bindActionCreators, Dispatch } from 'redux';
-import { connect } from 'react-redux';
-import * as filterActions from '../../../../reducer_actions/get_cycle_times';
 import { useEffect, useState } from 'react';
-import { RootReducer } from '../../../../reducer/root_reducer';
+import { connect } from 'react-redux';
+import { AnyAction, bindActionCreators, Dispatch } from 'redux';
+import './cycle_time_filter.scss';
+import {
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableRow,
+  TableContainer,
+  TableHead,
+  TablePagination,
+} from '@mui/material';
 import { NODE_COLOR_LAYER_1, NODE_COLOR_LAYER_2 } from '../../../../../common/colors';
 import { CycleTimeGroupItem } from 'plugins/bpmining-kibana-plugin/server/filter_calculation/calculate_cycle_time_buckets';
+import { RootReducer } from '../../../../reducer/root_reducer';
+
 import * as fetchCaseGraphActions from '../../../../reducer_actions/fetch_case_specific_graph';
+import * as filterActions from '../../../../reducer_actions/get_cycle_times';
 
 interface CycleTimeFilterProps {
   rootReducer: RootReducer;
   selectCycleTimeCases: Function;
   getCycleTimeGroups: Function;
   selectCaseAction: Function;
+}
+
+interface CycleTimeFilterState {
+  rootReducer: RootReducer;
 }
 
 interface Column {
@@ -53,7 +60,7 @@ function createData(id: number, cycletime: string, hash: number): Data {
   return { id, cycletime, hash };
 }
 
-const mapStateToProps = (state: any) => {
+const mapStateToProps = (state: CycleTimeFilterState) => {
   return state;
 };
 
