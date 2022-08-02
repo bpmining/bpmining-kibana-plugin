@@ -114,7 +114,7 @@ const LayoutComponent = (props: LayoutProps) => {
 
   return (
     <EuiPage paddingSize="none">
-      <EuiResizableContainer style={{ height: '750', width: '100%' }}>
+      <EuiResizableContainer style={{ height: '100%', width: '100%' }}>
         {(EuiResizablePanel, EuiResizableButton) => (
           <>
             <EuiResizablePanel

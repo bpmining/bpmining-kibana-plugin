@@ -214,35 +214,39 @@ const PanelComponent = (props: PanelComponentProps) => {
   }));
 
   return (
-    <EuiPanel paddingSize="m" style={{ minHeight: '740px' }}>
-      <div className="design-scope">
-        <img src={logo} alt="Logo" className="logo" />
-        <EuiSpacer />
-        <div className="counter-container">
-          <div className="counter-item">
-            <CaseCounterComponent cases={props.caseCount} color={color} />
+    <EuiPanel paddingSize="m" style={{ height: '100%' }}>
+      <div className="grid-container">
+        <div className="design-scope">
+          <img src={logo} alt="Logo" className="logo" />
+          <EuiSpacer />
+          <div className="counter-container">
+            <div className="counter-item">
+              <CaseCounterComponent cases={props.caseCount} color={color} />
+            </div>
+            <div className="counter-item">
+              <VariantCounterComponent variants={1} color={color} />
+            </div>
           </div>
-          <div className="counter-item">
-            <VariantCounterComponent variants={1} color={color} />
-          </div>
-        </div>
 
-        <div className="frequency-map-container">
-          <p>Frequency Map</p>
-          <FormControlLabel control={<IOSSwitch sx={{ m: 1 }} />} label="" />
-        </div>
-        <EuiSpacer />
-        {isFilterSelected ? (
-          <div>{caseOverview}</div>
-        ) : (
-          <div>
-            <CaseSelector caseIds={props.caseIds} />
-            <EuiSpacer />
-            <FilterTabs color={color} />
+          <div className="frequency-map-container">
+            <p>Frequency Map</p>
+            <FormControlLabel control={<IOSSwitch sx={{ m: 1 }} />} label="" />
           </div>
-        )}
+          <EuiSpacer />
+          {isFilterSelected ? (
+            <div>{caseOverview}</div>
+          ) : (
+            <div>
+              <CaseSelector caseIds={props.caseIds} />
+              <EuiSpacer />
+              <FilterTabs color={color} />
+            </div>
+          )}
+        </div>
+        <div className="novatec-logo-container ">
+          <img src={novatec_logo} alt="Novatec Logo" className="novatec-logo" />
+        </div>
       </div>
-      <img src={novatec_logo} alt="Novatec Logo" className="novatec-logo" />
     </EuiPanel>
   );
 };
