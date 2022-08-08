@@ -11,9 +11,17 @@ Kibana Plugin to analyse your business processes.
 
 ## ✨Features
 
+Process Mining via a Kibana Plugin.  
+
+bpmining allows you to visualize your mined process data through multiple layers. 
+
+![Analysing Business Processes](./assets/screenshot-layer-1.png "Business Process analysis")
+
+![Analysing Business Processes on multiple layers](./assets/screenshot-layer-2.png "Business Process analysis on multiple layers")
+
 ## 🚀Getting Started
 
-tbd
+Download a specific [release](https://github.com/bpmining/bpmining-kibana-plugin/releases) or start directly via [development](#-development).
 
 ### 🏗 Install the Kibana Plugin
 
