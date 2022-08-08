@@ -1,21 +1,20 @@
 import React, { useEffect } from 'react';
-import { EuiPage, EuiResizableContainer } from '@elastic/eui';
-import { PanelComponent } from './side_panel/panel';
-import { LayerPanel } from './layer_panel/layer_panel';
-import '../_base.scss';
 import { AnyAction, bindActionCreators, Dispatch } from 'redux';
 import { connect } from 'react-redux';
+import { RootReducer } from '../../reducer/root_reducer';
+import '../_base.scss';
+import { PanelComponent } from './side_panel/panel';
+import { LayerPanel } from './layer_panel/layer_panel';
 import { VisGraphComponent } from './process_graph/vis_graph';
 import { VisNode, VisEdge } from '../../../model/vis_types';
+import { ServerRequestData } from '../app';
+import { BadgeComponent } from '../lib/badge';
+import { Chip } from '@mui/material';
+
 import * as fetchCaseGraphActions from '../../reducer_actions/fetch_case_specific_graph';
 import * as fetchAggregatedGraphActions from '../../reducer_actions/fetch_aggregated_graph';
 import * as badgeActions from '../../reducer_actions/badges';
 import * as filterActions from '../../reducer_actions/get_cycle_times';
-
-import { ServerRequestData } from '../app';
-import { RootReducer } from '../../reducer/root_reducer';
-import { BadgeComponent } from '../lib/badge';
-import { Chip } from '@mui/material';
 
 interface LayoutState {
   rootReducer: RootReducer;
@@ -113,56 +112,41 @@ const LayoutComponent = (props: LayoutProps) => {
   };
 
   return (
-    <EuiPage paddingSize="none">
-      <EuiResizableContainer style={{ height: '100%', width: '100%' }}>
-        {(EuiResizablePanel, EuiResizableButton) => (
-          <>
-            <EuiResizablePanel
-              mode="collapsible"
-              initialSize={20}
-              minSize="330px"
-              style={{ maxWidth: '250' }}
-            >
-              <PanelComponent
-                caseCount={props.rootReducer.graph.caseCount}
-                caseIds={props.rootReducer.graph.caseIds}
-                serverRequestData={props.serverRequestData}
+    <div className="main-container">
+      <div className="panel-container">
+        <PanelComponent
+          caseCount={props.rootReducer.graph.caseCount}
+          caseIds={props.rootReducer.graph.caseIds}
+          serverRequestData={props.serverRequestData}
+        />
+      </div>
+
+      <div className="canvas">
+        <div className="main-design-scope">
+          <div className="badge-container">
+            {badges.length > 0 &&
+              badges.map((badge) => {
+                return <BadgeComponent filterAction={badge.filterAction} layer={badge.layer} />;
+              })}
+            <div style={{ margin: '0px 5px' }}>
+              <Chip
+                variant="outlined"
+                sx={{
+                  border: `1px dashed #2C2C2C`,
+                  color: '#2C2C2C',
+                  '& .MuiChip-label': { fontSize: '10pt' },
+                }}
+                label="Add Filter"
               />
-            </EuiResizablePanel>
-
-            <EuiResizableButton />
-
-            <EuiResizablePanel className="canvas" mode="main" initialSize={80} minSize="500px">
-              <div className="design-scope">
-                <div className="badge-container">
-                  {badges.length > 0 &&
-                    badges.map((badge) => {
-                      return (
-                        <BadgeComponent filterAction={badge.filterAction} layer={badge.layer} />
-                      );
-                    })}
-                  <div style={{ margin: '0px 5px' }}>
-                    <Chip
-                      variant="outlined"
-                      sx={{
-                        border: `1px dashed #2C2C2C`,
-                        color: '#2C2C2C',
-                        '& .MuiChip-label': { fontSize: '10pt' },
-                      }}
-                      label="Add Filter"
-                    />
-                  </div>
-                </div>
-                {graphBool && <VisGraphComponent nodes={nodes} edges={edges} />}
-                <div className="layer-container">
-                  <LayerPanel />
-                </div>
-              </div>
-            </EuiResizablePanel>
-          </>
-        )}
-      </EuiResizableContainer>
-    </EuiPage>
+            </div>
+          </div>
+          {graphBool && <VisGraphComponent nodes={nodes} edges={edges} />}
+          <div className="layer-container">
+            <LayerPanel />
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 

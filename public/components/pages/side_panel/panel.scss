@@ -49,6 +49,7 @@
 .counter-container {
   display: flex;
   flex-direction: row;
+  margin-top: 25px;
 }
 
 .counter-item {
@@ -73,12 +74,15 @@
   justify-content: flex-start;
   align-items: center;
   margin-right: 30px;
+  margin-top: 13px;
 }
 
 .time-container {
   display: flex;
   flex-direction: row;
   align-items: center;
+  margin-top: 25px;
+  margin-bottom: 45px;
 }
 
 .cylce-time-group-container p {

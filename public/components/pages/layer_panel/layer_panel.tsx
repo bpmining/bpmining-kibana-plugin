@@ -1,10 +1,11 @@
 import React from 'react';
 import './layers.scss';
-import { EuiPanel } from '@elastic/eui';
 import { RootReducer } from '../../../reducer/root_reducer';
 import { AnyAction, bindActionCreators, Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import LayersIcon from '@mui/icons-material/Layers';
+import { Paper } from '@mui/material';
+
 import * as layerActions from '../../../reducer_actions/set_layer';
 import * as nodeDetailPanelActions from '../../../reducer_actions/node_detail_panel';
 
@@ -30,7 +31,7 @@ export function LayerPanelComponent(props: LayerPanelProps) {
     setLayerAction(layer);
   };
   return (
-    <EuiPanel className="layer-panel" paddingSize="m">
+    <Paper className="layer-panel" elevation={2}>
       <div className="headline-container">
         <p> Layers </p>
         <LayersIcon />
@@ -40,7 +41,7 @@ export function LayerPanelComponent(props: LayerPanelProps) {
         <div className="layer-1" onClick={() => changeLayer(1)}></div>
         <div className="layer-2" onClick={() => changeLayer(2)}></div>
       </div>
-    </EuiPanel>
+    </Paper>
   );
 }
 

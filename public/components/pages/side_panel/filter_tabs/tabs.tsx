@@ -25,7 +25,7 @@ export const FilterTabs = (props: FilterTabsProps) => {
 
   return (
     <div>
-      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+      <Box sx={{ borderBottom: 1, borderColor: 'divider', width: '100%' }}>
         <Tabs
           value={value}
           onChange={(e, v) => {

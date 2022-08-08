@@ -1,14 +1,14 @@
-import { EuiPanel } from '@elastic/eui';
-import { Button } from '@mui/material';
-import { COLOR_LAYER_1 } from '../../../../common/colors';
-import { VisNode } from 'plugins/bpmining-kibana-plugin/model/vis_types';
-import { RootReducer } from 'plugins/bpmining-kibana-plugin/public/reducer/root_reducer';
 import React from 'react';
 import { connect } from 'react-redux';
 import { AnyAction, bindActionCreators, Dispatch } from 'redux';
+import { RootReducer } from 'plugins/bpmining-kibana-plugin/public/reducer/root_reducer';
+import './node_panel.scss';
+import { Button, Paper } from '@mui/material';
+import { COLOR_LAYER_1 } from '../../../../common/colors';
+import { VisNode } from 'plugins/bpmining-kibana-plugin/model/vis_types';
+
 import * as nodeDetailPanelActions from '../../../reducer_actions/node_detail_panel';
 import * as layerActions from '../../../reducer_actions/set_layer';
-import './node_panel.scss';
 
 export interface NodePanelState {
   rootReducer: RootReducer;
@@ -58,7 +58,7 @@ const NodePanel = (props: NodePanelProps) => {
     }
 
     panel = (
-      <EuiPanel className="node-panel">
+      <Paper className="node-panel" elevation={2}>
         <p>{title}</p>
         <br />
         <div className="node-panel-item">
@@ -92,11 +92,11 @@ const NodePanel = (props: NodePanelProps) => {
             </Button>
           )}
         </div>
-      </EuiPanel>
+      </Paper>
     );
   } else {
     panel = (
-      <EuiPanel className="node-panel">
+      <Paper className="node-panel">
         <p>{title}</p>
         <br />
         <div className="node-panel-item">
@@ -135,7 +135,7 @@ const NodePanel = (props: NodePanelProps) => {
             </Button>
           )}
         </div>
-      </EuiPanel>
+      </Paper>
     );
   }
   return panel;

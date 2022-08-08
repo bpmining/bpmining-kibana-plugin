@@ -32,7 +32,13 @@ $font-size-headline: 20px;
 $font-size-regular: 18px;
 $font-size-small: 14px;
 
-.design-scope p {
+.main-design-scope {
+  width: 100%;
+  height: 100%;
+  margin-bottom: 10px;
+}
+
+.main-design-scope p {
   font-family: $font-family;
   font-weight: $font-weight-bold;
   font-size: $font-size-headline;
@@ -43,4 +49,26 @@ $font-size-small: 14px;
   z-index: 1;
   display: flex;
   flex-direction: row;
+  padding: 15px;
+}
+
+.main-container {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  background-color: #f8fafd;
+}
+
+.panel-container {
+  flex: 0 0 320px;
+  padding: 15px 0px 15px 15px;
+}
+
+.layer-container {
+  padding: 10px 0px 0px 0px;
+}
+
+.canvas {
+  width: 100%;
+  position: relative;
 }
