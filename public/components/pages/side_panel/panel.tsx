@@ -1,6 +1,8 @@
 import React, { useEffect } from 'react';
-import { EuiPanel, EuiSpacer } from '@elastic/eui';
-import { FormControlLabel, Switch, SwitchProps } from '@mui/material';
+import { AnyAction, bindActionCreators, Dispatch } from 'redux';
+import { connect } from 'react-redux';
+import { RootReducer } from '../../../reducer/root_reducer';
+import { FormControlLabel, Paper, Switch, SwitchProps } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import logo from '../../../../common/logo/bpmining.svg';
 import novatec_logo from '../../../../common/logo/NOVATEC-schwarz-violett-rot.png';
@@ -9,20 +11,18 @@ import endDateIcon from '../../../../common/icons/end_date.png';
 import '../../_base.scss';
 import './panel.scss';
 import { CaseSelector } from './case_selector/case_selector';
-import { AnyAction, bindActionCreators, Dispatch } from 'redux';
-import { connect } from 'react-redux';
-import { RootReducer } from '../../../reducer/root_reducer';
 import { calculateColorValue } from '../../../services';
 import { CaseCounterComponent } from '../../lib/counter/case_counter';
 import { VariantCounterComponent } from '../../lib/counter/variant_counter';
 import { ServerRequestData } from '../../app';
 import { FilterTabs } from './filter_tabs/tabs';
-import * as filterActions from '../../../reducer_actions/get_cycle_times';
 import { formatTime } from '../../../../server/graph_calculation/calculate_throughput_time';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import _ from 'lodash';
 import { CycleTimeItem } from '../../../reducer_actions/get_cycle_times';
 import { CaseGroupComponent } from '../../lib/case_group_item';
+
+import * as filterActions from '../../../reducer_actions/get_cycle_times';
 
 interface PanelComponentState {
   rootReducer: RootReducer;
@@ -92,7 +92,6 @@ const PanelComponent = (props: PanelComponentProps) => {
           <br />
           <p>Case Details: {caseId}</p>
           <div>
-            <EuiSpacer />
             <div className="date-container">
               <div className="date-container">
                 <img src={startDateIcon} alt="Start Date" className="start-date" />
@@ -112,15 +111,12 @@ const PanelComponent = (props: PanelComponentProps) => {
                 </div>
               </div>
             </div>
-            <EuiSpacer />
             <div className="time-container">
               <AccessTimeIcon
                 style={{ width: '23px', height: '23px', margin: '0px 10px 0px 0px' }}
               />{' '}
               {throughputTime && formatTime(throughputTime)}
             </div>
-            <EuiSpacer />
-            <EuiSpacer />
             <div>
               {contextInfo.length > 0 && <p>Context Informations</p>}
               <br />
@@ -150,7 +146,7 @@ const PanelComponent = (props: PanelComponentProps) => {
           <br />
           <p>Cycle Time Group {selectedCycleTimeCases.id}</p>
           Cycle Time: {selectedCycleTimeCases.interval}
-          <EuiSpacer size={'s'} />
+          <br />
           {cycleTimeCases.map((cycleTimeCase: CycleTimeItem) => {
             return (
               <CaseGroupComponent
@@ -214,11 +210,13 @@ const PanelComponent = (props: PanelComponentProps) => {
   }));
 
   return (
-    <EuiPanel paddingSize="m" style={{ height: '100%' }}>
+    <Paper
+      elevation={2}
+      style={{ padding: '15px', height: '100%', width: '315px', minHeight: '746px' }}
+    >
       <div className="grid-container">
         <div className="design-scope">
           <img src={logo} alt="Logo" className="logo" />
-          <EuiSpacer />
           <div className="counter-container">
             <div className="counter-item">
               <CaseCounterComponent cases={props.caseCount} color={color} />
@@ -232,13 +230,13 @@ const PanelComponent = (props: PanelComponentProps) => {
             <p>Frequency Map</p>
             <FormControlLabel control={<IOSSwitch sx={{ m: 1 }} />} label="" />
           </div>
-          <EuiSpacer />
+          <br />
           {isFilterSelected ? (
             <div>{caseOverview}</div>
           ) : (
             <div>
               <CaseSelector caseIds={props.caseIds} />
-              <EuiSpacer />
+              <br />
               <FilterTabs color={color} />
             </div>
           )}
@@ -247,7 +245,7 @@ const PanelComponent = (props: PanelComponentProps) => {
           <img src={novatec_logo} alt="Novatec Logo" className="novatec-logo" />
         </div>
       </div>
-    </EuiPanel>
+    </Paper>
   );
 };
 

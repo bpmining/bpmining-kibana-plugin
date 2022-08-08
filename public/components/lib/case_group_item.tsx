@@ -1,11 +1,13 @@
-import { EuiPanel } from '@elastic/eui';
 import React from 'react';
 import { AnyAction, bindActionCreators, Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { RootReducer } from '../../reducer/root_reducer';
-import AccessTimeIcon from '@mui/icons-material/AccessTime';
-import * as fetchCaseGraphActions from '../../reducer_actions/fetch_case_specific_graph';
 import { ServerRequestData } from '../app';
+import { Paper } from '@mui/material';
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import { NODE_COLOR_LAYER_1, NODE_COLOR_LAYER_2 } from '../../../common/colors';
+
+import * as fetchCaseGraphActions from '../../reducer_actions/fetch_case_specific_graph';
 
 interface CaseGroupProps {
   serverRequestData: ServerRequestData;
@@ -28,10 +30,21 @@ const CaseGroupComponent = (props: CaseGroupProps) => {
   const cycleTime = props.cycleTime;
   const { fetchCaseGraphAction, selectCaseAction } = props;
   const layer = props.rootReducer.layer.selectedLayer;
+  let color = NODE_COLOR_LAYER_1;
+  if (layer === 2) {
+    color = NODE_COLOR_LAYER_2;
+  }
 
   return (
     <div style={{ margin: '15px 0px' }}>
-      <EuiPanel
+      <Paper
+        elevation={2}
+        style={{ padding: '20px 15px' }}
+        sx={{
+          '&:hover': {
+            background: color,
+          },
+        }}
         onClick={() => {
           fetchCaseGraphAction(props.serverRequestData, caseId, layer);
           selectCaseAction({ label: caseId });
@@ -44,7 +57,7 @@ const CaseGroupComponent = (props: CaseGroupProps) => {
             {cycleTime}
           </div>
         </div>
-      </EuiPanel>
+      </Paper>
     </div>
   );
 };

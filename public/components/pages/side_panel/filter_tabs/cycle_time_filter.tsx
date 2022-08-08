@@ -113,7 +113,10 @@ const CycleTimeFilter = (props: CycleTimeFilterProps) => {
 
   return (
     <div className="cycle-time-table">
-      <Paper sx={{ width: '100%', overflowX: 'auto', marginTop: '22px' }}>
+      <Paper
+        elevation={2}
+        sx={{ width: '100%', overflowX: 'auto', marginTop: '22px', padding: '10px 10px 0px 10px' }}
+      >
         <TableContainer>
           <Table>
             <TableHead style={{ fontWeight: 500 }}>
