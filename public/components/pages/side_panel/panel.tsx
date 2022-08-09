@@ -215,7 +215,7 @@ const PanelComponent = (props: PanelComponentProps) => {
       style={{ padding: '15px', height: '100%', width: '315px', minHeight: '746px' }}
     >
       <div className="grid-container">
-        <div className="design-scope">
+        <div className="main-design-scope">
           <img src={logo} alt="Logo" className="logo" />
           <div className="counter-container">
             <div className="counter-item">
