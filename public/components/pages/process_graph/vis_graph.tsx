@@ -140,7 +140,7 @@ const VisGraphComponent = (props: VisGraphComponentProps) => {
       },
       arrowStrikethrough: false,
     },
-    height: '980px',
+    height: '1080px',
     physics: {
       enabled: false,
     },

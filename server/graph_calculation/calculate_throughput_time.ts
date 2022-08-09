@@ -32,7 +32,10 @@ export function calculateGraphThroughputTime(nodes: VisNode[]) {
   }
   const sortedNodes = sortNodes(nodes, 'timestamp');
 
-  const throughputTimeMilliseconds = sortedNodes[lastIndex].timestamp - sortedNodes[0].timestamp;
+  const throughputTimeMilliseconds =
+    (sortedNodes[lastIndex].endTime
+      ? sortedNodes[lastIndex].endTime
+      : sortedNodes[lastIndex].timestamp) - sortedNodes[0].timestamp;
   const throughputTimeSeconds = throughputTimeMilliseconds / 1000;
 
   return throughputTimeSeconds;
