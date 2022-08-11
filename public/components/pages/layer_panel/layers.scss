@@ -39,6 +39,18 @@
   opacity: 50%;
 }
 
+.layer-1-selected {
+  position: absolute;
+  z-index: 3;
+  top: 50px;
+  right: 46px;
+  width: 60px;
+  height: 60px;
+  transform: rotate(-45deg) skew(20deg, 20deg);
+  background: $color-violett-100;
+  opacity: 50%;
+}
+
 .layer-2 {
   position: absolute;
   z-index: 2;
@@ -52,6 +64,18 @@
 }
 
 .layer-2:hover {
+  background: $color-orange-100;
+  opacity: 50%;
+}
+
+.layer-2-selected {
+  position: absolute;
+  z-index: 2;
+  top: 75px;
+  right: 46px;
+  width: 60px;
+  height: 60px;
+  transform: rotate(-45deg) skew(20deg, 20deg);
   background: $color-orange-100;
   opacity: 50%;
 }
