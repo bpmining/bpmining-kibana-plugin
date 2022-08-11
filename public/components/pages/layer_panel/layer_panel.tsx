@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './layers.scss';
 import { RootReducer } from '../../../reducer/root_reducer';
 import { AnyAction, bindActionCreators, Dispatch } from 'redux';
@@ -24,12 +24,28 @@ const mapStateToProps = (state: LayerPanelState) => {
 };
 
 export function LayerPanelComponent(props: LayerPanelProps) {
+  const [currentLayer, setCurrentLayer] = useState<number>(1);
+
   const changeLayer = (layer: number) => {
     const { setLayerAction, hideDrillDownGraph, hideNodeDetailPanel } = props;
+    setCurrentLayer(layer);
     hideDrillDownGraph();
     hideNodeDetailPanel();
     setLayerAction(layer);
   };
+
+  let layer1Component = <div className="layer-1-selected" onClick={() => changeLayer(1)}></div>;
+  let layer2Component = (
+    <div className="layer-2" onClick={() => changeLayer(2)}>
+      {' '}
+    </div>
+  );
+
+  if (currentLayer === 2) {
+    layer1Component = <div className="layer-1" onClick={() => changeLayer(1)}></div>;
+    layer2Component = <div className="layer-2-selected" onClick={() => changeLayer(2)}></div>;
+  }
+
   return (
     <Paper className="layer-panel" elevation={2}>
       <div className="headline-container">
@@ -38,8 +54,8 @@ export function LayerPanelComponent(props: LayerPanelProps) {
       </div>
       <br></br>
       <div className="layer-stack">
-        <div className="layer-1" onClick={() => changeLayer(1)}></div>
-        <div className="layer-2" onClick={() => changeLayer(2)}></div>
+        {layer1Component}
+        {layer2Component}
       </div>
     </Paper>
   );
