@@ -9,7 +9,6 @@ import { VisGraphComponent } from './process_graph/vis_graph';
 import { VisNode, VisEdge } from '../../../model/vis_types';
 import { ServerRequestData } from '../app';
 import { BadgeComponent } from '../lib/badge';
-import { Chip } from '@mui/material';
 
 import * as fetchCaseGraphActions from '../../reducer_actions/fetch_case_specific_graph';
 import * as fetchAggregatedGraphActions from '../../reducer_actions/fetch_aggregated_graph';
@@ -128,17 +127,6 @@ const LayoutComponent = (props: LayoutProps) => {
               badges.map((badge) => {
                 return <BadgeComponent filterAction={badge.filterAction} layer={badge.layer} />;
               })}
-            <div style={{ margin: '0px 5px' }}>
-              <Chip
-                variant="outlined"
-                sx={{
-                  border: `1px dashed #2C2C2C`,
-                  color: '#2C2C2C',
-                  '& .MuiChip-label': { fontSize: '10pt' },
-                }}
-                label="Add Filter"
-              />
-            </div>
           </div>
           {graphBool && <VisGraphComponent nodes={nodes} edges={edges} />}
           <div className="layer-container">
