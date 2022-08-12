@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './layers.scss';
 import { RootReducer } from '../../../reducer/root_reducer';
 import { AnyAction, bindActionCreators, Dispatch } from 'redux';
@@ -17,6 +17,7 @@ interface LayerPanelProps {
   setLayerAction: Function;
   hideDrillDownGraph: Function;
   hideNodeDetailPanel: Function;
+  rootReducer: RootReducer;
 }
 
 const mapStateToProps = (state: LayerPanelState) => {
@@ -25,6 +26,10 @@ const mapStateToProps = (state: LayerPanelState) => {
 
 export function LayerPanelComponent(props: LayerPanelProps) {
   const [currentLayer, setCurrentLayer] = useState<number>(1);
+
+  useEffect(() => {
+    setCurrentLayer(props.rootReducer.layer.selectedLayer);
+  }, [props.rootReducer.layer.selectedLayer]);
 
   const changeLayer = (layer: number) => {
     const { setLayerAction, hideDrillDownGraph, hideNodeDetailPanel } = props;
