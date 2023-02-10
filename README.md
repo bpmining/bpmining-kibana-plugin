@@ -2,14 +2,16 @@
 
 Kibana Plugin to analyse your business processes.
 
-- [✨Features](#features)
-- [🚀Getting Started](#getting-started)
+- [✨ Features](#-features)
+- [🚀 Getting Started](#-getting-started)
   - [🏗 Install the Kibana Plugin](#-install-the-kibana-plugin)
-  - [🔨 Development](#-development)
+  - [📀 Start Elasticsearch](#-start-elasticsearch)
+  - [🪧 Add the sample data](#-add-the-sample-data)
+- [🔨 Development](#-development)
     - [🤖 Setup](#-setup)
     - [📝 Scripts](#-scripts)
 
-## ✨Features
+## ✨ Features
 
 Process Mining via a Kibana Plugin.  
 
@@ -19,13 +21,18 @@ bpmining allows you to visualize your mined process data through multiple layers
 
 ![Analysing Business Processes on multiple layers](./assets/screenshot-layer-2.png "Business Process analysis on multiple layers")
 
-## 🚀Getting Started
+## 🚀 Getting Started
 
 Download a specific [release](https://github.com/bpmining/bpmining-kibana-plugin/releases) or start directly via [development](#-development).
 
 ### 🏗 Install the Kibana Plugin
 
-To [install the plugin](https://www.elastic.co/guide/en/kibana/current/kibana-plugins.html) you have to execute the following command:
+Download [Kibana 8.2.1](https://www.elastic.co/de/downloads/past-releases/kibana-8-2-1) (currently we support only this specific version).
+
+Navigate into the unzipped Kibana directory `cd kibana-8.2.1`.
+
+To [install the plugin](https://www.elastic.co/guide/en/kibana/current/kibana-plugins.html) you have to execute one the following command:
+
 ```bash
 $ bin/kibana-plugin install <package name or URL>
 ```
@@ -33,12 +40,30 @@ You can install a plugin from a local file:
 ```bash
 $ bin/kibana-plugin install file:///local/path/to/custom_plugin.zip
 ```
-or from an online source:
+or from an online source, directly from our releases:
 ```bash
-$ bin/kibana-plugin install https://artifacts.elastic.co/downloads/packs/x-pack/x-pack-8.2.2.zip
+$ bin/kibana-plugin install https://github.com/bpmining/bpmining-kibana-plugin/releases/download/v1.1.1/bpmining-8.2.1.zip
 ```
 
-### 🔨 Development
+### 📀 Start Elasticsearch
+
+For development and testing you could use the following options to start a docker container without any security:
+
+```bash
+docker run --name es01 -p 9200:9200 -e xpack.security.enabled=false -e discovery.type=single-node -e ES_JAVA_OPTS='-Xms750m -Xmx750m' -it docker.elastic.co/elasticsearch/elasticsearch:8.2.1
+```
+
+### 🪧 Add the sample data
+
+Start up Kibana (`bin/kibana`).
+
+Add the sample data we provide via the Kibana UI:
+
+Navigate to Add data > Upload file to upload your the `sample_data/sample-data-diff-proc.json` file.
+
+You are ready to go! Create a Visualization and use it on your dashboards 📈
+
+## 🔨 Development
 
 #### 🤖 Setup
 
