@@ -5,7 +5,6 @@ import { RootReducer } from '../../../reducer/root_reducer';
 import { FormControlLabel, Paper, Switch, SwitchProps } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import logo from '../../../../common/logo/bpmining.svg';
-import novatec_logo from '../../../../common/logo/NOVATEC-schwarz-violett-rot.png';
 import startDateIcon from '../../../../common/icons/start_date.png';
 import endDateIcon from '../../../../common/icons/end_date.png';
 import '../../_base.scss';
@@ -241,8 +240,8 @@ const PanelComponent = (props: PanelComponentProps) => {
             </div>
           )}
         </div>
-        <div className="novatec-logo-container ">
-          <img src={novatec_logo} alt="Novatec Logo" className="novatec-logo" />
+        <div className="homepage-container">
+          <a class="homepage" href="https://github.com/bpmining" target="_blank">bpmining</a>
         </div>
       </div>
     </Paper>
